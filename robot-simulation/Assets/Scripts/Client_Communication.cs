@@ -8,6 +8,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.IO;
 
+
+[Serializable]
+public class JSONObject
+{
+    public byte[] screenshotPNG;
+}
+
 /**
  * Creates a client, connects to a server, handles communications.
  **/
@@ -28,6 +35,7 @@ public class Client_Communication : MonoBehaviour
     // From System.Net.Sockets, to initialize a data stream.
     private NetworkStream stream;
 
+    public string screenshotBase64;
 
 
     /**
@@ -53,18 +61,20 @@ public class Client_Communication : MonoBehaviour
         RenderTexture.active = null;
         Destroy(renderTexture);
 
-        // Convert the screenshot to a base64-encoded string
+        // Convert the screenshot to a byte array
         byte[] screenshotBytes = screenshot.EncodeToPNG();
-        string screenshotBase64 = Convert.ToBase64String(screenshotBytes);
 
-        // Create a JSON object to send to the server
-        Dictionary<string, string> jsonPayload = new Dictionary<string, string>
+        var jsonObject = new JSONObject
         {
-            { "screenshot", screenshotBase64 }
+            screenshotPNG = screenshotBytes
         };
 
+        Debug.Log(screenshotBase64);
+
         // Convert the JSON object to a JSON string
-        string jsonPayloadString = JsonUtility.ToJson(jsonPayload);
+        string jsonPayloadString = JsonUtility.ToJson(jsonObject);
+
+        Debug.Log(jsonPayloadString);
 
         return jsonPayloadString;
     }
@@ -102,6 +112,7 @@ public class Client_Communication : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             string screenshot_json = CaptureScreenshot();
+
             SendMessageToServer(screenshot_json);
         }
     }
@@ -128,8 +139,6 @@ public class Client_Communication : MonoBehaviour
             // Write the serialized message to the stream.
             stream.Write(data, 0, data.Length);
 
-
-            Debug.Log($"Sent message to server: {message}");
 
             // Read the response from the server
             data = new byte[1024];
