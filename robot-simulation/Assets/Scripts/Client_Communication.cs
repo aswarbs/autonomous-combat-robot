@@ -7,11 +7,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.IO;
+   
 
-
+/**
+JSON Schema with attributes to send to the server.
+*/
 [Serializable]
 public class JSONObject
 {
+    // Screenshot from robot in PNG format represented as bytes.
     public byte[] screenshotPNG;
 }
 
@@ -35,8 +39,8 @@ public class Client_Communication : MonoBehaviour
     // From System.Net.Sockets, to initialize a data stream.
     private NetworkStream stream;
 
-    public string screenshotBase64;
-
+    private RenderTexture renderTexture;
+    private Texture2D screenshot;
 
     /**
      * Code that is run as the unity application is started.
@@ -44,40 +48,62 @@ public class Client_Communication : MonoBehaviour
      */
     private void Start()
     {
-        Debug.Log("Connecting to Server!");
+        // Initialise the camera settings to be used in the communication.
+        initialize_camera_settings();
+
+        // Attempt to initialise the connection between client and server.
         ConnectToServer();
     }
 
+    /**
+    Initialise the camera settings such as capture resolution, number of colour channels, etc.
+    */
+    private void initialize_camera_settings()
+    {
+        // Initialise the render texture, with resolution as screen size, number of colour channels = 24
+        renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+
+        // Set the target texture of the camera to the render texture to ensure the correct image settings are captured.
+        captureCamera.targetTexture = renderTexture;
+
+        // Initialise a Texture2D to hold the screenshot with the same resolution and colour channels as the render texture, set compression to false.
+        screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+    }
+
+    /**
+        Capture the screenshot from the specified camera.
+        Returns: The screenshot in JSON format.
+    */
     public string CaptureScreenshot()
     {
-        // Capture the screenshot from the specified camera
-        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        captureCamera.targetTexture = renderTexture;
-        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        
+        // Capture the screenshot on the target camera.
         captureCamera.Render();
-        RenderTexture.active = renderTexture;
-        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        captureCamera.targetTexture = null;
-        RenderTexture.active = null;
-        Destroy(renderTexture);
 
-        // Convert the screenshot to a byte array
+        // Set the active render texture to the render texture declared.
+        RenderTexture.active = renderTexture;
+
+        // Record the screenshot in the screenshot variable.
+        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+
+        // Convert the screenshot to a byte array.
         byte[] screenshotBytes = screenshot.EncodeToPNG();
 
+        // Create an instance of the JSONObject class to store the variables in a schema.
         var jsonObject = new JSONObject
         {
             screenshotPNG = screenshotBytes
         };
 
-        Debug.Log(screenshotBase64);
-
         // Convert the JSON object to a JSON string
-        string jsonPayloadString = JsonUtility.ToJson(jsonObject);
+        // Add new line delimiter so the server can determine the end of an image
+        string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
 
-        Debug.Log(jsonPayloadString);
-
+        // Return the JSON string
         return jsonPayloadString;
     }
+
 
     /**
      * Attempt to connect to the given server.
@@ -111,8 +137,10 @@ public class Client_Communication : MonoBehaviour
         // If the user presses space, send a message to the server.
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // Retrieve the JSON encoded string of the screenshot.
             string screenshot_json = CaptureScreenshot();
 
+            // Send the JSON String to the server.
             SendMessageToServer(screenshot_json);
         }
     }
@@ -122,43 +150,32 @@ public class Client_Communication : MonoBehaviour
      * message = message to be sent.
      */
     private void SendMessageToServer(string message)
+{
+    // If no stream is detected, the client is not connected to the server.
+    if (stream == null)
     {
-        // If no stream is detected, the client is not connected to the server.
-        if (stream == null)
-        {
-            Debug.LogError("Not connected to the server.");
-            return;
-        }
-
-        // The client is connected to the server.
-        try
-        {
-            // Convert the message to bytes.
-            byte[] data = Encoding.ASCII.GetBytes(message);
-
-            // Write the serialized message to the stream.
-            stream.Write(data, 0, data.Length);
-
-
-            // Read the response from the server
-            data = new byte[1024];
-
-            // Store the serialized response from the server in a variable.
-            int bytesRead = stream.Read(data, 0, data.Length);
-
-            // Retrieve the value of the response.
-            string response = Encoding.ASCII.GetString(data, 0, bytesRead);
-
-            // Print the server response.
-            Debug.Log($"Server response: {response}");
-        }
-
-        // Throw any problems with sending the message to the server.
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error sending message: {ex.Message}");
-        }
+        Debug.LogError("Not connected to the server.");
+        return;
     }
+
+    // The client is connected to the server.
+    try
+    {
+        // Convert the message to bytes.
+        byte[] data = Encoding.UTF8.GetBytes(message);
+
+        // Write the serialized message to the stream.
+        stream.Write(data, 0, data.Length);
+        
+    }
+
+    // Throw any problems with sending the message to the server.
+    catch (Exception ex)
+    {
+        Debug.LogError($"Error sending message: {ex.Message}");
+    }
+}
+
 
     /**
      * If the object is being destroyed, cleanly close the client.
