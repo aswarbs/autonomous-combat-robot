@@ -1,187 +1,140 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
-using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.IO;
-   
+using System.Threading;
+using UnityEngine;
 
-/**
-JSON Schema with attributes to send to the server.
-*/
 [Serializable]
 public class JSONObject
 {
-    // Screenshot from robot in PNG format represented as bytes.
     public byte[] screenshotPNG;
 }
 
-/**
- * Creates a client, connects to a server, handles communications.
- **/
+[Serializable]
+public class ServerResponse
+{
+    public string status;
+}
+
 public class Client_Communication : MonoBehaviour
 {
-    // The IP of the server to connect to.
     public string serverIP = "127.0.0.1";
-
-    // The port of the server to connect to.
     public int serverPort = 2345;
-
-    // The camera to receive images from.
     public Camera captureCamera;
 
-    // from System.Net.Sockets, to create an instance of the client.
     private TcpClient client;
-
-    // From System.Net.Sockets, to initialize a data stream.
     private NetworkStream stream;
+    private float updateInterval = 0.25f;
+    private float timeSinceLastUpdate = 0f;
 
-    private RenderTexture renderTexture;
-    private Texture2D screenshot;
+    private Thread clientThread;
 
-    /**
-     * Code that is run as the unity application is started.
-     * Initialise the connection to the server.
-     */
+    private bool isRunning = true;
+
+    private string lastScreenshotJson = null;
+
     private void Start()
     {
-        // Initialise the camera settings to be used in the communication.
-        initialize_camera_settings();
-
-        // Attempt to initialise the connection between client and server.
+        timeSinceLastUpdate = updateInterval;
         ConnectToServer();
+
+        // Start a separate thread for client communication.
+        clientThread = new Thread(ClientThreadFunction);
+        clientThread.Start();
     }
 
-    /**
-    Initialise the camera settings such as capture resolution, number of colour channels, etc.
-    */
-    private void initialize_camera_settings()
+    private void ClientThreadFunction()
     {
-        // Initialise the render texture, with resolution as screen size, number of colour channels = 24
-        renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-
-        // Set the target texture of the camera to the render texture to ensure the correct image settings are captured.
-        captureCamera.targetTexture = renderTexture;
-
-        // Initialise a Texture2D to hold the screenshot with the same resolution and colour channels as the render texture, set compression to false.
-        screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-
+        while (isRunning)
+        {
+            if (lastScreenshotJson != null)
+            {
+                SendMessageToServer(lastScreenshotJson);
+                lastScreenshotJson = null;
+            }
+        }
     }
 
-    /**
-        Capture the screenshot from the specified camera.
-        Returns: The screenshot in JSON format.
-    */
     public string CaptureScreenshot()
     {
-        
-        // Capture the screenshot on the target camera.
+        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        captureCamera.targetTexture = renderTexture;
+        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, true);
         captureCamera.Render();
-
-        // Set the active render texture to the render texture declared.
         RenderTexture.active = renderTexture;
-
-        // Record the screenshot in the screenshot variable.
         screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-
-        // Convert the screenshot to a byte array.
         byte[] screenshotBytes = screenshot.EncodeToPNG();
-
-        // Create an instance of the JSONObject class to store the variables in a schema.
-        var jsonObject = new JSONObject
-        {
-            screenshotPNG = screenshotBytes
-        };
-
-        // Convert the JSON object to a JSON string
-        // Add new line delimiter so the server can determine the end of an image
+        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes };
         string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
-
-        // Return the JSON string
+        captureCamera.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(renderTexture);
         return jsonPayloadString;
     }
 
-
-    /**
-     * Attempt to connect to the given server.
-     */
     private void ConnectToServer()
     {
         try
         {
-            // Initialise a client to connect to the given server ip and port.
             client = new TcpClient(serverIP, serverPort);
-
-            // Retrieve a stream of data to determine whether the client successfully connected to the server.
             stream = client.GetStream();
-            Debug.Log("Connected to server.");
         }
-        // If the client failed to connect to the server,
         catch (Exception ex)
         {
-            // Throw the exception.
             Debug.LogError($"Error: {ex.Message}");
         }
-
-        
     }
 
-    /**
-     * Function called every frame, to send messages to the server if the user presses space.
-     */
     private void Update()
     {
-        // If the user presses space, send a message to the server.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // Retrieve the JSON encoded string of the screenshot.
-            string screenshot_json = CaptureScreenshot();
+        timeSinceLastUpdate += Time.deltaTime;
 
-            // Send the JSON String to the server.
-            SendMessageToServer(screenshot_json);
+        if (timeSinceLastUpdate >= updateInterval)
+        {
+            lastScreenshotJson = CaptureScreenshot();
+            timeSinceLastUpdate = 0f;
         }
     }
 
-    /**
-     * Send a message to the server.
-     * message = message to be sent.
-     */
     private void SendMessageToServer(string message)
-{
-    // If no stream is detected, the client is not connected to the server.
-    if (stream == null)
     {
-        Debug.LogError("Not connected to the server.");
-        return;
+        if (stream == null)
+        {
+            return;
+        }
+
+        try
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            stream.Write(data, 0, data.Length);
+            HandleServerResponse(message);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error sending message: {ex.Message}");
+        }
     }
 
-    // The client is connected to the server.
-    try
+    private void HandleServerResponse(string message)
     {
-        // Convert the message to bytes.
-        byte[] data = Encoding.UTF8.GetBytes(message);
+        byte[] responseBuffer = new byte[1024];
+        int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
+        string response = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
+        ServerResponse serverResponse = JsonUtility.FromJson<ServerResponse>(response);
 
-        // Write the serialized message to the stream.
-        stream.Write(data, 0, data.Length);
-        
+        if (serverResponse.status == "failure")
+        {
+            // Handle failure as needed.
+        }
     }
 
-    // Throw any problems with sending the message to the server.
-    catch (Exception ex)
-    {
-        Debug.LogError($"Error sending message: {ex.Message}");
-    }
-}
-
-
-    /**
-     * If the object is being destroyed, cleanly close the client.
-     */
     private void OnDestroy()
     {
+        isRunning = false;
+
         if (client != null)
         {
             client.Close();
