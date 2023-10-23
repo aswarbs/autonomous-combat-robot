@@ -20,12 +20,13 @@ class ObjectDetection():
         self.class_names = self.model.model.names
 
         self.colour_ranges = {
-            'white': [[180, 18, 255], [0, 0, 231]],
-            'red': [[180, 255, 255], [159, 50, 70]],
-            'green': [[89, 255, 255], [55, 100, 100]],
-            'blue': [[128, 255, 255], [90, 200, 70]],
-            'yellow': [[35, 255, 255], [25, 50, 70]],
-            'orange': [[24, 255, 255], [10, 50, 70]],
+            'white': [[180, 30, 255], [0, 0, 200]],
+            'red1': [[10,255,255], [0, 150, 150]],
+            'red2':[[179,255,255], [160, 150, 150]],
+            'green': [[89, 255, 255], [55, 150, 150]],
+            'blue': [[128, 255, 255], [90, 150, 150]],
+            'yellow': [[35, 255, 255], [25, 150, 150]],
+            'orange': [[20, 255, 255], [10, 150, 150]],
         }
 
     # load the desired model
@@ -81,34 +82,69 @@ class ObjectDetection():
     
     def detect_whole_color_contour(self, roi):
 
-        for colour, range in  self.colour_ranges.items():
-            # Convert the isolated face to the HSV color space for better color filtering
-            hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+        # Convert the isolated face to the HSV color space for better color filtering
+        hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+
+        contours_dict = {}  # Create a dictionary to store contours and their colors
+
+        for color, ranges in self.colour_ranges.items():
 
             # Define the HSV range for the desired face color
-            lower = np.array(self.colour_ranges["green"][1], dtype=np.uint8)
-            upper = np.array(self.colour_ranges["green"][0], dtype=np.uint8)
+            lower = np.array(ranges[1], dtype=np.uint8)
+            upper = np.array(ranges[0], dtype=np.uint8)
 
-            # Create a mask to is   olate the target color
+            # Create a mask to isolate the target color
             mask = cv2.inRange(hsv, lower, upper)
-            
-            # Apply closing to fill the gap between adjacent white regions
-            kernel = np.ones((10, 10), np.uint8)  # Adjust the kernel size as needed
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-            cv2.imshow("mask", mask)
+            mask = self.refine_mask(mask)
 
             # Find contours in the mask
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+            if len(contours) > 0:
+                largest_contour = max(contours, key=cv2.contourArea)
+                # Approximate the contour with a polygon
+                epsilon = 0.02 * cv2.arcLength(largest_contour, True)
+                approx_polygon = cv2.approxPolyDP(largest_contour, epsilon, True)
+                approx_polygon = cv2.convexHull(approx_polygon)
 
-            # Draw the grouped face contours on the original image
-            cv2.drawContours(roi, contours, -1, (0, 0, 255), 2)
-
-            if(contours is not None):
-                return
+                # Add the largest face contour and its color to the dictionary
+                contours_dict[color] = approx_polygon
 
 
+        if "red1" in contours_dict and "red2" in contours_dict:
+            merged_red_contour = np.vstack((contours_dict["red1"], contours_dict["red2"]))
+
+            # Find the convex hull of the merged contours
+            merged_red_contour = cv2.convexHull(merged_red_contour)
+
+            # Add the merged "red" contour to the dictionary
+            contours_dict["red"] = merged_red_contour
+
+        # find the largest contour in the contours_dict dictionary
+        largest_color_contour = max(contours_dict, key=lambda k: cv2.contourArea(contours_dict[k]))
+        print(largest_color_contour)
+
+        largest_contour_area = contours_dict[largest_color_contour]
+
+
+        # draw the largest contour
+        for contour in contours_dict.values():
+            cv2.drawContours(roi, [largest_contour_area], -1, (0, 255, 0), 2)
+
+        
+
+                
+
+
+            
+    def refine_mask(self, mask):
+
+        # Apply closing to fill the gap between adjacent white regions
+        kernel = np.ones((8, 8), np.uint8)  # Adjust the kernel size as needed
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
+        return mask
 
     
     # retrieve the image and run the model, output the image with bounding boxes
@@ -138,28 +174,48 @@ class ObjectDetection():
         # Show the resulting image with labelled colours
         cv2.imshow('Image', frames)
 
-        while True:
-            if cv2.waitKey(1) == ord('q'):
-                pass
 
-# create an instance of the object detection class.
+# Specify the folder path containing the images
+image_folder = r'datasets\rubiks_cube_model\test\images'
+
+# Create a list of image files in the folder
+image_files = [os.path.join(image_folder, filename) for filename in os.listdir(image_folder) if filename.endswith(('.jpg', '.png'))]
+
+# Create an instance of the ObjectDetection class
 detector = ObjectDetection()
 
+for image_file in image_files:
+    try:
+        # Read the image from the current file
+        img = cv2.imread(image_file)
+        
+        # Run image recognition on the image
+        detector.run(img)
 
-try:
-    # Read the image from the file
-    img = cv2.imread('test_image_recognition/saved_image.png')
-    
-    # run image recognition on the image
-    detector.run(img)
+        while True:
+            # Wait for user input to move to the next image or quit
+            key = cv2.waitKey(0)
+            if key == ord('q'):
+                cv2.destroyAllWindows()  # Close the current image window
+                break
+            elif key == ord('n'):
+                break  # Move to the next image
+    except Exception as e:
+        print(e)
 
-except Exception as e:
-    print(e)
 
 """
-try:
-    img = cv2.imread('test_image_recognition/saved_image.png')
-    detector.run(img)
-except Exception as e:
-    print(e)
-    """
+img = r"test_image_recognition/saved_image.png"
+image_file = cv2.imread(img)
+
+detector.run(image_file)
+
+while True:
+    # Wait for user input to move to the next image or quit
+    key = cv2.waitKey(0)
+    if key == ord('q'):
+        cv2.destroyAllWindows()  # Close the current image window
+        break
+    elif key == ord('n'):
+        break  # Move to the next image
+"""
