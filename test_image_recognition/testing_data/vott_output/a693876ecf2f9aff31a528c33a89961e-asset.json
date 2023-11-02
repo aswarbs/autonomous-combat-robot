@@ -1,0 +1,48 @@
+{
+    "asset": {
+        "format": "jpg",
+        "id": "a693876ecf2f9aff31a528c33a89961e",
+        "name": "frame_13.00.jpg",
+        "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_13.00.jpg",
+        "size": {
+            "width": 1532,
+            "height": 678
+        },
+        "state": 2,
+        "type": 1
+    },
+    "regions": [
+        {
+            "id": "KPS6F3THY",
+            "type": "RECTANGLE",
+            "tags": [
+                "cube"
+            ],
+            "boundingBox": {
+                "height": 131.0033635284941,
+                "width": 167.70161954241595,
+                "left": 369.57524896852306,
+                "top": 315.6039856086343
+            },
+            "points": [
+                {
+                    "x": 369.57524896852306,
+                    "y": 315.6039856086343
+                },
+                {
+                    "x": 537.276868510939,
+                    "y": 315.6039856086343
+                },
+                {
+                    "x": 537.276868510939,
+                    "y": 446.6073491371284
+                },
+                {
+                    "x": 369.57524896852306,
+                    "y": 446.6073491371284
+                }
+            ]
+        }
+    ],
+    "version": "2.2.0"
+}

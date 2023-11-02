@@ -2,11 +2,17 @@ import socket
 import json
 import io
 from PIL import Image
+from computer_vision.detect_rubik import ObjectDetection
+from decision_making.decision_maker import DecisionMaker
+import numpy as np
 
 # Set host as localhost to receive messages on this machine.
 HOST = "127.0.0.1"
 # Set well known port for the client to use.
 PORT = 2345
+
+detector = ObjectDetection()
+decider = DecisionMaker()
 
 def bind_socket():
     # Create a socket
@@ -24,9 +30,38 @@ def bind_socket():
         while True:
             received_data = receive_data(conn)
             parsed_data = parse_data(received_data)
+
             image = convert_bytes_to_image(parsed_data)
-            save_image(image)
+
+            image_information = recognise_image(image)
+
+            process_information(image_information)
+
+
+            
             send_response(conn)
+
+
+
+def recognise_image(image):
+    """
+    Pass the image retrieved from the client to the computer vision model.
+    Retrieve useful information from the image to use in the decision making.
+    image: The image to be processed.
+    returns: Information gathered from the image during image processing.
+    """
+    image_information = detector.run(image)
+    return image_information
+
+def process_information(image_information):
+    """
+    Pass information gathered about an image to the decision making model.
+    image_information: The information about the image.
+    """
+    
+    robot_movements = decider.run(image_information)
+
+
         
 def receive_data(conn):
     # Initialize an empty byte string to accumulate data
@@ -63,14 +98,17 @@ def convert_bytes_to_image(parsed_data):
     # Open the image using PIL (Pillow)
     image = Image.open(image_stream)
 
+    # PIL images into NumPy arrays
+    image = np.asarray(image)
+
     return image
 
-def save_image(image):
+"""def save_image(image):
     # Define a filename for the saved PNG image
-    filename = 'test_image_recognition/saved_image.png'
+    filename = 'computer_vision/saved_image.png'
 
     # Save the image as a PNG file
-    image.save(filename, 'PNG')
+    image.save(filename, 'PNG')"""
 
 
 

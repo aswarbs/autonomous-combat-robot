@@ -1,0 +1,960 @@
+{
+    "name": "rubiks_sim",
+    "securityToken": "rubiks_sim Token",
+    "sourceConnection": {
+        "name": "sfsdf",
+        "description": "lkdsjalksdn",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+            "encrypted": "eyJjaXBoZXJ0ZXh0IjoiY2Q2ODA2OTI0MTVmZTBjYmM3ZWVjMmE2NzZmYmQ2ZTc1YzFlZDE3MWI2MDU5OTc2NWZlYzNlMGIwYzQ5ODM3NTMyODdjMTc1ZjAzZDBiMmM3MGM4ZTU5ZmM5MzY4ZGE3ZWRmZGE4ZmYwZWJiYTczY2ViZTk3YWY2OGY0NjEyYWQzZDBkMjY3OGJjNGY3OWNlODdhYjdjNTE5NjMwM2VlZmM0MWUzMzhiYWQzZGM0OTY3NTNmZTU2MGYzYzQ4ZDBhMTE2OWYzYWZkNmRkYTRhMGQ1MDA5ZmZkZjM4NDE2MDQxYmY2ZjJjNGUxOTZhMzA5OWI3ZGFlYzc4NTAxYzE1MGY4NWYxMjgzM2JjYjU5NDBjMDI0NTRiZDQ0ZWI0ZWRjIiwiaXYiOiIzMjkyYmYzYTZlY2NlMDQwMzVmNmM4MTA5NGE0MGQ3YjRkOWFjNjk4NjE4ZjZlNDAifQ=="
+        },
+        "id": "9G48f-CMR"
+    },
+    "targetConnection": {
+        "name": "sjdnajdn",
+        "description": "owkdpqowkd",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+            "encrypted": "eyJjaXBoZXJ0ZXh0IjoiYjgwYWVjZWM3MGY3MzczMmZmZjY1ZWE5ODg1OTUwZGI0YWQ3NWJkZWY3NzlmYTU2ODg0YWJjYTE1YTVlNzQ5NjRhMjRhODQ1YzA3YTZiZTlmMDZhN2E0NjdjZDlmN2VkZjA3NjVhY2QxMTUyMTgzZTI5NjBlMDNlZWI5ZTYxZmI2NmU4NjgyODU2OGYzMDk4YTZlOGVmZTA0ZThhOGJhYTUyZThkNWIzNDBiM2MyOTU0NGM4Y2RjZTM1NTdmZGM1MTAzNzJjNmZjN2NiYzM4YTcyMjA1NDU0MjIxNTc4OTA4ODBmOGJjOTE5ZmY2NTc2YzFjZjFlYWUwYTBhNmFhNTMzZTkzYWZkODcwY2Q0NTBhY2Y5YWU1ZGZmMTFjNWYyIiwiaXYiOiIzODAxMjE0OTUxMzkwYjNlNGZlZmVhMTJjNmJiZjhjYTY3NWJhMzc3NDk1NjY0NTcifQ=="
+        },
+        "id": "FJ930bV9H"
+    },
+    "description": "asmdlkasnd",
+    "videoSettings": {
+        "frameExtractionRate": 15
+    },
+    "tags": [
+        {
+            "name": "cube",
+            "color": "#5db300"
+        }
+    ],
+    "id": "0GOW8kUNG",
+    "activeLearningSettings": {
+        "autoDetect": false,
+        "predictTag": true,
+        "modelPathType": "coco"
+    },
+    "exportFormat": {
+        "providerType": "csv",
+        "providerOptions": {
+            "encrypted": "eyJjaXBoZXJ0ZXh0IjoiNjYyNTdiOTRkMWQwMDEwYmQ1NWY5OWQ4MTA2ODRlZTQ3NGIxZDI1YTk1ODFjMzdhYmIxYTNlYTQxMjljMDNkYWFkYWE1ZjZhNzY3NTNiYjA4MDIzZDMyNWYzNmY4MTc2IiwiaXYiOiI5YzQxZDUzZTUyZDYzMDU5Y2ZlNzdiMTkzZWU3NzU3ZWJjYjZmMDE0NjFiOTAzNzQifQ=="
+        }
+    },
+    "version": "2.2.0",
+    "lastVisitedAssetId": "1e50f7324dd21bc70c3fbee5b1414a36",
+    "assets": {
+        "9297c9cdf9a8bad7a55c40da7282f29b": {
+            "format": "jpg",
+            "id": "9297c9cdf9a8bad7a55c40da7282f29b",
+            "name": "frame_0.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_0.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "7a446e372b50b9d41cabbf3633f3e99a": {
+            "format": "jpg",
+            "id": "7a446e372b50b9d41cabbf3633f3e99a",
+            "name": "frame_0.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_0.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "491143351b3f00623f15e5b3a4c61ad4": {
+            "format": "jpg",
+            "id": "491143351b3f00623f15e5b3a4c61ad4",
+            "name": "frame_1.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_1.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "bb023abcdb60b95bd4701041fc082b0c": {
+            "format": "jpg",
+            "id": "bb023abcdb60b95bd4701041fc082b0c",
+            "name": "frame_1.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_1.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "aa2642faa6d1171c7b912216332394f7": {
+            "format": "jpg",
+            "id": "aa2642faa6d1171c7b912216332394f7",
+            "name": "frame_10.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_10.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "4664d90e3e399c8486296ed4d466d99b": {
+            "format": "jpg",
+            "id": "4664d90e3e399c8486296ed4d466d99b",
+            "name": "frame_10.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_10.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "42147a73c96545089f506de3b136e010": {
+            "format": "jpg",
+            "id": "42147a73c96545089f506de3b136e010",
+            "name": "frame_11.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_11.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "a10e372f612a6ce6cd03261e583bd929": {
+            "format": "jpg",
+            "id": "a10e372f612a6ce6cd03261e583bd929",
+            "name": "frame_11.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_11.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "5dd0b0c504d0ba34a2ab3f21258c5c2d": {
+            "format": "jpg",
+            "id": "5dd0b0c504d0ba34a2ab3f21258c5c2d",
+            "name": "frame_12.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_12.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "cb90654b6750e17b06011b31b7df99ba": {
+            "format": "jpg",
+            "id": "cb90654b6750e17b06011b31b7df99ba",
+            "name": "frame_12.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_12.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "a693876ecf2f9aff31a528c33a89961e": {
+            "format": "jpg",
+            "id": "a693876ecf2f9aff31a528c33a89961e",
+            "name": "frame_13.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_13.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "24bc6f33e8b8f623c886cfb9cbea7107": {
+            "format": "jpg",
+            "id": "24bc6f33e8b8f623c886cfb9cbea7107",
+            "name": "frame_13.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_13.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "06c914b69e2a9f9a66c807542e7b9f82": {
+            "format": "jpg",
+            "id": "06c914b69e2a9f9a66c807542e7b9f82",
+            "name": "frame_14.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_14.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "1a0450261ffbfcdc7e26f9f03e6e003a": {
+            "format": "jpg",
+            "id": "1a0450261ffbfcdc7e26f9f03e6e003a",
+            "name": "frame_14.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_14.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "17bbee4aa5b0a6a5901febb344083659": {
+            "format": "jpg",
+            "id": "17bbee4aa5b0a6a5901febb344083659",
+            "name": "frame_15.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_15.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "5ee11567c86b447536e16f77e199b6a5": {
+            "format": "jpg",
+            "id": "5ee11567c86b447536e16f77e199b6a5",
+            "name": "frame_15.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_15.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "53175f2280ad33a82bc15316f1ab6e9c": {
+            "format": "jpg",
+            "id": "53175f2280ad33a82bc15316f1ab6e9c",
+            "name": "frame_16.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_16.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "5431275f8e9e9ed90f384ee08f32e5e1": {
+            "format": "jpg",
+            "id": "5431275f8e9e9ed90f384ee08f32e5e1",
+            "name": "frame_16.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_16.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "f2922f9e5f7a30bde84ca9412bbf25ac": {
+            "format": "jpg",
+            "id": "f2922f9e5f7a30bde84ca9412bbf25ac",
+            "name": "frame_17.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_17.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "f5cd1000d48dbdee2e05172d35a9db5c": {
+            "format": "jpg",
+            "id": "f5cd1000d48dbdee2e05172d35a9db5c",
+            "name": "frame_17.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_17.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "643827fc10fe0f0e92e9f342bb003c29": {
+            "format": "jpg",
+            "id": "643827fc10fe0f0e92e9f342bb003c29",
+            "name": "frame_18.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_18.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "e140c06fa0e2bbd7856638e98cf9b801": {
+            "format": "jpg",
+            "id": "e140c06fa0e2bbd7856638e98cf9b801",
+            "name": "frame_18.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_18.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "816429fa2ff8742ac0cfe58273a9d02c": {
+            "format": "jpg",
+            "id": "816429fa2ff8742ac0cfe58273a9d02c",
+            "name": "frame_19.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_19.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "f06ba5bbb2a06f1f3e5f9e7bb887b8bd": {
+            "format": "jpg",
+            "id": "f06ba5bbb2a06f1f3e5f9e7bb887b8bd",
+            "name": "frame_19.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_19.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "e4c42e24e5fa1958bb1557a359a437fd": {
+            "format": "jpg",
+            "id": "e4c42e24e5fa1958bb1557a359a437fd",
+            "name": "frame_2.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_2.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "fdd6e936d078105286db064f39d92767": {
+            "format": "jpg",
+            "id": "fdd6e936d078105286db064f39d92767",
+            "name": "frame_2.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_2.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "2a1ffb0065e9ff73db6157961ccdbd72": {
+            "format": "jpg",
+            "id": "2a1ffb0065e9ff73db6157961ccdbd72",
+            "name": "frame_20.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_20.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "527fcc6132a608a4192cebbf97bd9de1": {
+            "format": "jpg",
+            "id": "527fcc6132a608a4192cebbf97bd9de1",
+            "name": "frame_20.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_20.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "26929316b87bbae1bc7a37e734bec60b": {
+            "format": "jpg",
+            "id": "26929316b87bbae1bc7a37e734bec60b",
+            "name": "frame_21.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_21.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "b4f99f4304f9777b2464a0db40533d63": {
+            "format": "jpg",
+            "id": "b4f99f4304f9777b2464a0db40533d63",
+            "name": "frame_21.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_21.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "74af6f6e401e1835c4355bb921a90ed4": {
+            "format": "jpg",
+            "id": "74af6f6e401e1835c4355bb921a90ed4",
+            "name": "frame_22.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_22.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "2c0b5e472114cc02e0970f84c66b1e31": {
+            "format": "jpg",
+            "id": "2c0b5e472114cc02e0970f84c66b1e31",
+            "name": "frame_22.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_22.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "1f0020719b599d9d45ddeeb8f0e1630b": {
+            "format": "jpg",
+            "id": "1f0020719b599d9d45ddeeb8f0e1630b",
+            "name": "frame_23.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_23.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "9c173f1a932dab156459edb39dca6871": {
+            "format": "jpg",
+            "id": "9c173f1a932dab156459edb39dca6871",
+            "name": "frame_23.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_23.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "f476aa9584d3a05cfd92210c433c6194": {
+            "format": "jpg",
+            "id": "f476aa9584d3a05cfd92210c433c6194",
+            "name": "frame_24.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_24.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "b9edca1a51d75f518c1aa0f3946b9d46": {
+            "format": "jpg",
+            "id": "b9edca1a51d75f518c1aa0f3946b9d46",
+            "name": "frame_24.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_24.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "a2971695840e8fea9ee3c31bbe19bfb1": {
+            "format": "jpg",
+            "id": "a2971695840e8fea9ee3c31bbe19bfb1",
+            "name": "frame_25.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_25.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "b311e47730ba493577487c057b4c2a6e": {
+            "format": "jpg",
+            "id": "b311e47730ba493577487c057b4c2a6e",
+            "name": "frame_25.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_25.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "7d3b4bb97ac326f46355b6ff8b6cdcfe": {
+            "format": "jpg",
+            "id": "7d3b4bb97ac326f46355b6ff8b6cdcfe",
+            "name": "frame_26.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_26.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "4756b27af7d94d0914ec296040602459": {
+            "format": "jpg",
+            "id": "4756b27af7d94d0914ec296040602459",
+            "name": "frame_26.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_26.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "520ea872d959c6dcb98f048e1e4dd431": {
+            "format": "jpg",
+            "id": "520ea872d959c6dcb98f048e1e4dd431",
+            "name": "frame_27.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_27.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "6f1d0799b5a60f7499d74ce25b3df9ff": {
+            "format": "jpg",
+            "id": "6f1d0799b5a60f7499d74ce25b3df9ff",
+            "name": "frame_27.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_27.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "ae69f2cb7ffc6c44ae0f16cef5ecd65a": {
+            "format": "jpg",
+            "id": "ae69f2cb7ffc6c44ae0f16cef5ecd65a",
+            "name": "frame_28.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_28.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "7f2c6703f3337b34ee60cfed94be811f": {
+            "format": "jpg",
+            "id": "7f2c6703f3337b34ee60cfed94be811f",
+            "name": "frame_28.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_28.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "4c14e69482c769ee5e6a612746ac53f5": {
+            "format": "jpg",
+            "id": "4c14e69482c769ee5e6a612746ac53f5",
+            "name": "frame_29.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_29.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "67b636fa23ff00a747e42ebd5e2a64ef": {
+            "format": "jpg",
+            "id": "67b636fa23ff00a747e42ebd5e2a64ef",
+            "name": "frame_29.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_29.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "c1f23b6dbfe34c277799586593fca4e5": {
+            "format": "jpg",
+            "id": "c1f23b6dbfe34c277799586593fca4e5",
+            "name": "frame_3.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_3.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "1d188cf8faf81ed379baeb412e8c0b6c": {
+            "format": "jpg",
+            "id": "1d188cf8faf81ed379baeb412e8c0b6c",
+            "name": "frame_3.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_3.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "70b980a6c19e1674a4d22bca586bb7c4": {
+            "format": "jpg",
+            "id": "70b980a6c19e1674a4d22bca586bb7c4",
+            "name": "frame_30.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_30.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "d3f262d9db753c10a653e0e6530bd302": {
+            "format": "jpg",
+            "id": "d3f262d9db753c10a653e0e6530bd302",
+            "name": "frame_30.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_30.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "cb99c0d17a4dc4f264247dd3816b3b55": {
+            "format": "jpg",
+            "id": "cb99c0d17a4dc4f264247dd3816b3b55",
+            "name": "frame_31.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_31.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "cb60df78b344339f293e5057b82b8748": {
+            "format": "jpg",
+            "id": "cb60df78b344339f293e5057b82b8748",
+            "name": "frame_31.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_31.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "cb7f7233c56a4cef8af1f0374575caae": {
+            "format": "jpg",
+            "id": "cb7f7233c56a4cef8af1f0374575caae",
+            "name": "frame_32.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_32.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "497184082a9de2ccf8c436073de5fa74": {
+            "format": "jpg",
+            "id": "497184082a9de2ccf8c436073de5fa74",
+            "name": "frame_32.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_32.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "f708c42fb57bdd8ff2f13ef63f80c9e2": {
+            "format": "jpg",
+            "id": "f708c42fb57bdd8ff2f13ef63f80c9e2",
+            "name": "frame_33.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_33.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "a8f81d3cbcd9dd0168e770fe7d6e9a8c": {
+            "format": "jpg",
+            "id": "a8f81d3cbcd9dd0168e770fe7d6e9a8c",
+            "name": "frame_33.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_33.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "80d79b663d7fdff0937a75c55e672000": {
+            "format": "jpg",
+            "id": "80d79b663d7fdff0937a75c55e672000",
+            "name": "frame_34.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_34.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "6f0947d786de495a6c6c8cb8037b4b83": {
+            "format": "jpg",
+            "id": "6f0947d786de495a6c6c8cb8037b4b83",
+            "name": "frame_34.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_34.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "82a32207e974f01bc818ede17115c82e": {
+            "format": "jpg",
+            "id": "82a32207e974f01bc818ede17115c82e",
+            "name": "frame_35.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_35.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "6e399fa196ba07c32f5adcaeb2019cdc": {
+            "format": "jpg",
+            "id": "6e399fa196ba07c32f5adcaeb2019cdc",
+            "name": "frame_35.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_35.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "7cb34ebfb66d532e2c30d0230d4775c0": {
+            "format": "jpg",
+            "id": "7cb34ebfb66d532e2c30d0230d4775c0",
+            "name": "frame_36.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_36.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "f5409f604068d9abeedd520e820ea384": {
+            "format": "jpg",
+            "id": "f5409f604068d9abeedd520e820ea384",
+            "name": "frame_36.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_36.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "652a6b1653465f3dbf3404d072fca01e": {
+            "format": "jpg",
+            "id": "652a6b1653465f3dbf3404d072fca01e",
+            "name": "frame_37.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_37.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "13b58463703a261d4e1247b9b9b500c2": {
+            "format": "jpg",
+            "id": "13b58463703a261d4e1247b9b9b500c2",
+            "name": "frame_37.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_37.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "033ceaf8b32a92fa31a8d415e93abff2": {
+            "format": "jpg",
+            "id": "033ceaf8b32a92fa31a8d415e93abff2",
+            "name": "frame_4.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_4.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "e069033a819b6e0fe673d97f8b188bff": {
+            "format": "jpg",
+            "id": "e069033a819b6e0fe673d97f8b188bff",
+            "name": "frame_4.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_4.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "17d83dcb20bb88e998abf9c162c8738d": {
+            "format": "jpg",
+            "id": "17d83dcb20bb88e998abf9c162c8738d",
+            "name": "frame_5.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_5.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "7fb6850aa82d3ab45068062946f580e9": {
+            "format": "jpg",
+            "id": "7fb6850aa82d3ab45068062946f580e9",
+            "name": "frame_5.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_5.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "1268e8bc5fc2b3a002be4d3a466f8d28": {
+            "format": "jpg",
+            "id": "1268e8bc5fc2b3a002be4d3a466f8d28",
+            "name": "frame_6.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_6.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "1a9af7c6aa27a7e0896295e40ba7ac22": {
+            "format": "jpg",
+            "id": "1a9af7c6aa27a7e0896295e40ba7ac22",
+            "name": "frame_6.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_6.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "1abc7bbec6f86b1dbfa9b0c413abf898": {
+            "format": "jpg",
+            "id": "1abc7bbec6f86b1dbfa9b0c413abf898",
+            "name": "frame_7.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_7.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 2,
+            "type": 1
+        },
+        "5b8b43fd574d4b615aa396ed1e91e48a": {
+            "format": "jpg",
+            "id": "5b8b43fd574d4b615aa396ed1e91e48a",
+            "name": "frame_7.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_7.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "1e50f7324dd21bc70c3fbee5b1414a36": {
+            "format": "jpg",
+            "id": "1e50f7324dd21bc70c3fbee5b1414a36",
+            "name": "frame_8.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_8.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "670285ffe985056f8bab1d4a0a09f3eb": {
+            "format": "jpg",
+            "id": "670285ffe985056f8bab1d4a0a09f3eb",
+            "name": "frame_8.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_8.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "858b1f78da5da09a5c967fdd67ec4adf": {
+            "format": "jpg",
+            "id": "858b1f78da5da09a5c967fdd67ec4adf",
+            "name": "frame_9.00.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_9.00.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        },
+        "23ddd267114b20a7e565f794aa9db91c": {
+            "format": "jpg",
+            "id": "23ddd267114b20a7e565f794aa9db91c",
+            "name": "frame_9.50.jpg",
+            "path": "file:C:/Users/amber/Documents/Dissertation/autonomous-combat-robot/test_image_recognition/testing_data/output_images/frame_9.50.jpg",
+            "size": {
+                "width": 1532,
+                "height": 678
+            },
+            "state": 1,
+            "type": 1
+        }
+    }
+}

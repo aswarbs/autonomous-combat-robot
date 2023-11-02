@@ -27,7 +27,7 @@ public class Client_Communication : MonoBehaviour
 
     private TcpClient client;
     private NetworkStream stream;
-    private float updateInterval = 0.25f;
+    private float updateInterval = 0.05f;
     private float timeSinceLastUpdate = 0f;
 
     private Thread clientThread;
