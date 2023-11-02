@@ -1,6 +1,7 @@
 import cv2
 import os
 
+
 def sample_images_from_video(video_path, output_folder, sample_rate=2):
     # Create the output folder if it doesn't exist
     if not os.path.exists(output_folder):
@@ -43,3 +44,4 @@ if __name__ == "__main__":
     sample_rate = 2
 
     sample_images_from_video(video_path, output_folder, sample_rate)
+

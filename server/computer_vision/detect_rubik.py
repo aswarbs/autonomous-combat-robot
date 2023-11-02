@@ -1,6 +1,7 @@
 # detect the rubiks cube in the image
 # draw a bounding box around the rubiks cube in the image
 
+import csv
 import cv2
 from ultralytics import YOLO
 import math
@@ -8,12 +9,11 @@ import os
 import numpy as np
 
 # Specify the folder path containing the images
-image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
+#image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
+image_folder = r'test_image_recognition\testing_data\output_images'
 
 # Create a list of image files in the folder
 image_files = [os.path.join(image_folder, filename) for filename in os.listdir(image_folder) if filename.endswith(('.jpg', '.png'))]
-
-
 
 class ObjectDetection():
 
@@ -72,7 +72,7 @@ class ObjectDetection():
         
     # load the desired model
     def load_model(self):
-        model = YOLO(r'computer_vision\runs\detect\yolov8n_v8_50e32\weights\best.pt')
+        model = YOLO(r'server\computer_vision\runs\detect\yolov8n_v8_50e32\weights\best.pt')
         # model.fuse()
         return model
     
@@ -301,6 +301,43 @@ class ObjectDetection():
 
         # Return the dictionary containing information for each Rubik's cube
         return rubiks_cubes_info
+    
+"""   def store_bounding_boxes_in_csv(self, image_files, csv_filename):
+        # Create a list to store information about all bounding boxes
+        all_bounding_boxes_info = []
 
+        for image_file in image_files:
+            # Convert the screenshot to BGR format if needed.
+            screenshot = cv2.cvtColor(cv2.imread(image_file), cv2.COLOR_RGB2BGR)
 
+            # Retrieve the results from the object detection model.
+            results = self.predict(screenshot)
 
+            # Retrieve the image with the bounding boxes drawn and the location of the bounding boxes.
+            frames, bounding_boxes = self.draw_bounding_boxes(results, screenshot)
+
+            # For every object detected in the image.
+            for idx, box in enumerate(bounding_boxes):
+                # Retrieve the coordinates of the current bounding box
+                x1, y1, x2, y2 = box.xyxy[0]
+                x1, y1, x2, y2 = float(x1), float(y1), float(x2), float(y2)
+
+                file_name = os.path.basename(image_file)
+
+                # Append bounding box coordinates to the list
+                all_bounding_boxes_info.append([file_name, x1, y1, x2, y2])
+
+        # Save all bounding box information to a single CSV file
+        with open(csv_filename, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(['image', 'xmin', 'ymin', 'xmax', 'ymax'])  # Write header
+            csv_writer.writerows(all_bounding_boxes_info)
+
+# Create an instance of the ObjectDetection class
+od = ObjectDetection()
+
+# Specify the CSV filename to store all bounding box information
+csv_filename = r"test_image_recognition\testing_data\pred_bounding_boxes.csv"
+
+# Process each image and store bounding box information in the same CSV file
+od.store_bounding_boxes_in_csv(image_files, csv_filename)"""
