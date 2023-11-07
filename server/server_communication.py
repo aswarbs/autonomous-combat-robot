@@ -27,6 +27,8 @@ def bind_socket():
         # Accept the message on the socket, addr = the client host and port, conn = the connection.
         conn, addr = s.accept()
 
+        print("connected")
+
         while True:
             received_data = receive_data(conn)
             parsed_data = parse_data(received_data)
@@ -35,11 +37,11 @@ def bind_socket():
 
             image_information = recognise_image(image)
 
-            process_information(image_information)
+            robot_movements = process_information(image_information)
 
 
             
-            send_response(conn)
+            send_response(conn, robot_movements)
 
 
 
@@ -60,6 +62,7 @@ def process_information(image_information):
     """
     
     robot_movements = decider.run(image_information)
+    return robot_movements
 
 
         
@@ -83,10 +86,11 @@ def parse_data(received_data):
     try:
         # Attempt to parse the message with JSON. Agreed encoding = UTF8
         parsed_data = json.loads(received_data.decode('utf-8'))
+        return parsed_data
     except:
         print("failed to parse")
 
-    return parsed_data
+   
 
 def convert_bytes_to_image(parsed_data):
     # Retrieve the screenshot field of the JSON message
@@ -112,8 +116,9 @@ def convert_bytes_to_image(parsed_data):
 
 
 
-def send_response(conn):
-    success_response = {"status": "success"}
+def send_response(conn, robot_movements):
+
+    success_response = {"status": "success", "movements": robot_movements}
     conn.send(json.dumps(success_response).encode('utf-8') + b'\n')
 
 

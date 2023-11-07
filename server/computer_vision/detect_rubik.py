@@ -287,10 +287,12 @@ class ObjectDetection():
             if orientation is not None:
                 self.draw_arrow(orientation, width, height, roi)
 
+
             # Store information about the Rubik's cube in the dictionary
             rubiks_cubes_info[idx] = {
-                "bounding_box": (x1, y1, x2, y2),
-                "orientation": orientation
+                "position": (x1, y1, x2, y2),
+                "orientation": orientation,
+                "bounding_box_area": width * height
             }
 
         # Show the resulting image with labelled colors

@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 
+
+
 [Serializable]
 public class JSONObject
 {
@@ -17,6 +19,7 @@ public class JSONObject
 public class ServerResponse
 {
     public string status;
+    public float[] movements;
 }
 
 public class Client_Communication : MonoBehaviour
@@ -24,6 +27,7 @@ public class Client_Communication : MonoBehaviour
     public string serverIP = "127.0.0.1";
     public int serverPort = 2345;
     public Camera captureCamera;
+    public Robot_Script robotScript;
 
     private TcpClient client;
     private NetworkStream stream;
@@ -35,6 +39,9 @@ public class Client_Communication : MonoBehaviour
     private bool isRunning = true;
 
     private string lastScreenshotJson = null;
+
+    private float[] robot_movements = null;
+    private bool updated_robot_movements = false;
 
     private void Start()
     {
@@ -97,6 +104,17 @@ public class Client_Communication : MonoBehaviour
             lastScreenshotJson = CaptureScreenshot();
             timeSinceLastUpdate = 0f;
         }
+
+        lock(this)
+        {
+            if(updated_robot_movements)
+            {
+                // transfer these movements to the main thread
+                Debug.Log("moving");
+                robotScript.Move(robot_movements);
+                updated_robot_movements = false;
+            }
+        }
     }
 
     private void SendMessageToServer(string message)
@@ -124,6 +142,16 @@ public class Client_Communication : MonoBehaviour
         int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
         string response = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
         ServerResponse serverResponse = JsonUtility.FromJson<ServerResponse>(response);
+
+        lock(this)
+        {
+            robot_movements = serverResponse.movements;
+            updated_robot_movements = true;
+        }
+        
+
+        
+        
 
         if (serverResponse.status == "failure")
         {

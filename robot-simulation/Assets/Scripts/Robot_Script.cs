@@ -40,4 +40,14 @@ public class Robot_Script : MonoBehaviour
             transform.position += moveDirection;
         }
     }
+
+    public void Move(float[] movement_and_rotation)
+    {   
+        Vector3 moveDirection = transform.forward * movement_and_rotation[0] * Time.deltaTime;
+        transform.position += moveDirection;
+        transform.Rotate(Vector3.up * movement_and_rotation[1] * Time.deltaTime);
+    }
+
+
+
 }
