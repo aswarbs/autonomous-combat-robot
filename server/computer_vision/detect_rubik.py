@@ -10,11 +10,11 @@ import numpy as np
 
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
-image_folder = r'test_image_recognition\testing_data\output_images'
+"""image_folder = r'test_image_recognition\testing_data\output_images'
 
 # Create a list of image files in the folder
 image_files = [os.path.join(image_folder, filename) for filename in os.listdir(image_folder) if filename.endswith(('.jpg', '.png'))]
-
+"""
 class ObjectDetection():
 
     # Initialise the Object Detection Object

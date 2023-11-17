@@ -3,6 +3,7 @@ import json
 import io
 from PIL import Image
 from computer_vision.detect_rubik import ObjectDetection
+from computer_vision.detect_qr import DetectQR
 from decision_making.decision_maker import DecisionMaker
 import numpy as np
 
@@ -13,6 +14,7 @@ PORT = 2345
 
 detector = ObjectDetection()
 decider = DecisionMaker()
+qr_detector = DetectQR()
 
 def bind_socket():
     # Create a socket
@@ -35,9 +37,9 @@ def bind_socket():
 
             image = convert_bytes_to_image(parsed_data)
 
-            image_information = recognise_image(image)
+            image_information, qr_information = recognise_image(image)
 
-            robot_movements = process_information(image_information)
+            robot_movements = process_information(image_information, qr_information)
 
 
             
@@ -52,16 +54,17 @@ def recognise_image(image):
     image: The image to be processed.
     returns: Information gathered from the image during image processing.
     """
-    image_information = detector.run(image)
-    return image_information
+    opponent_information = detector.run(image)
+    qr_information = qr_detector.find_qrs_and_distances(image)
+    return opponent_information, qr_information
 
-def process_information(image_information):
+def process_information(image_information, qr_information):
     """
     Pass information gathered about an image to the decision making model.
     image_information: The information about the image.
     """
     
-    robot_movements = decider.run(image_information)
+    robot_movements = decider.run(image_information, qr_information)
     return robot_movements
 
 

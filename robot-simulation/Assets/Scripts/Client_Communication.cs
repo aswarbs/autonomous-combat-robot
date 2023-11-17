@@ -67,6 +67,7 @@ public class Client_Communication : MonoBehaviour
 
     public string CaptureScreenshot()
     {
+
         RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
         captureCamera.targetTexture = renderTexture;
         Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, true);
