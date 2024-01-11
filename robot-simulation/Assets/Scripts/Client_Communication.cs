@@ -110,8 +110,6 @@ public class Client_Communication : MonoBehaviour
         {
             if(updated_robot_movements)
             {
-                // transfer these movements to the main thread
-                Debug.Log("moving");
                 robotScript.Move(robot_movements);
                 updated_robot_movements = false;
             }
@@ -147,6 +145,8 @@ public class Client_Communication : MonoBehaviour
         lock(this)
         {
             robot_movements = serverResponse.movements;
+            /**string movements_str = float.Parse(robot_movements);
+            Debug.Log("robot movements: {0}", movements_str);*/
             updated_robot_movements = true;
         }
         

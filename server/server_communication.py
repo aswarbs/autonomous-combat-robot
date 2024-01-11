@@ -23,6 +23,8 @@ def bind_socket():
         # Bind the socket to the host and port
         s.bind((HOST, PORT))
 
+        print("listening")
+
         # Listen for incoming messages on the socket
         s.listen()
 
@@ -41,9 +43,8 @@ def bind_socket():
 
             robot_movements = process_information(image_information, qr_information)
 
-
-            
-            send_response(conn, robot_movements)
+            for movement in robot_movements:
+                send_response(conn, movement)
 
 
 

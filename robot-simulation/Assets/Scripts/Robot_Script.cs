@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Robot_Script : MonoBehaviour
-{
-    private float speed = 10.0f;
-    private float rotation_speed = 70.0f;
+{   
+    public float move_speed = 5f;
+    public float rotation_speed = 30f;
+    public float velocity_speed = 100f;
+
+    public float turning_velocity = 0.2f;
+
+    public Rigidbody rb;
+
 
     // Start is called before the first frame update
     void Start()
@@ -13,8 +19,7 @@ public class Robot_Script : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    void HandleKeyPress()
     {
         if (Input.GetKey(KeyCode.D))
         {
@@ -30,24 +35,37 @@ public class Robot_Script : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             // Move forward in the direction the object is facing
-            Vector3 moveDirection = transform.forward * speed * Time.deltaTime;
+            Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime;
             transform.position += moveDirection;
         }
         if (Input.GetKey(KeyCode.S))
         {
             // Move backward in the opposite direction
-            Vector3 moveDirection = -transform.forward * speed * Time.deltaTime;
+            Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime;
             transform.position += moveDirection;
         }
+
+        Debug.Log("Forward Direction: " + transform.forward);
+    }
+
+    
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        HandleKeyPress();
+
     }
 
     public void Move(float[] movement_and_rotation)
     {   
-        Vector3 moveDirection = transform.forward * movement_and_rotation[0] * Time.deltaTime;
-        transform.position += moveDirection;
-        transform.Rotate(Vector3.up * movement_and_rotation[1] * Time.deltaTime);
-    }
+        rb.velocity = transform.forward * movement_and_rotation[0];
+        rb.angularVelocity = Vector3.up * movement_and_rotation[1] * turning_velocity;
+        
+        
 
+    }
 
 
 }

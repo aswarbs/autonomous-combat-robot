@@ -1,11 +1,7 @@
-# detect the rubiks cube in the image
-# draw a bounding box around the rubiks cube in the image
 
-import csv
 import cv2
 from ultralytics import YOLO
 import math
-import os
 import numpy as np
 
 # Specify the folder path containing the images
@@ -202,6 +198,7 @@ class ObjectDetection():
 
         for name, contour in largest_contours:
             area = cv2.contourArea(contour)
+            print(f"area: {area}")
             x, y, w, h = cv2.boundingRect(contour)
             contour_info.append((name, area, x))
 
@@ -216,20 +213,16 @@ class ObjectDetection():
 
         # use this to estimate the orientation
 
-        if(leftmost_contour == rightmost_contour):
-            left_area = 0
+        if(leftmost_contour[1] == rightmost_contour[1]):
+            orientation = 0
         else:
             left_area = leftmost_contour[1]
+            right_area = rightmost_contour[1]
+            least_prominent_area = min(left_area, right_area)
+            orientation = (least_prominent_area) / (left_area + right_area)
 
-        right_area = rightmost_contour[1]
-
-
-        least_prominent_area = min(left_area, right_area)
-
-        orientation = (least_prominent_area) / (left_area + right_area)
-
-        if(left_area > right_area):
-            orientation *= -1
+            if(left_area > right_area):
+                orientation *= -1
 
         orientation = self.convert_orientation_to_degrees(orientation)
 
@@ -294,9 +287,6 @@ class ObjectDetection():
                 "orientation": orientation,
                 "bounding_box_area": width * height
             }
-
-        # Show the resulting image with labelled colors
-        cv2.imshow('Image', screenshot)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return
