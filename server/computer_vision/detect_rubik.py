@@ -39,7 +39,10 @@ class ObjectDetection():
         if(most_prominent_side == "blue"):
             return orientation
         elif(most_prominent_side == "green"):
-            return (180 - orientation) * -1
+            if orientation < 0:
+                return -180 - orientation
+            else:
+                return 180 - orientation
         elif(most_prominent_side == "white"):
             return orientation - 90
         elif(most_prominent_side == "yellow"):
@@ -119,6 +122,9 @@ class ObjectDetection():
     
     def detect_whole_color_contour(self, roi):
 
+        # this is returning none i think
+        # or an empty dict
+
         # Convert the isolated face to the HSV color space for better color filtering
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
 
@@ -149,7 +155,6 @@ class ObjectDetection():
                 # Add the largest face contour and its color to the dictionary
                 contours_dict[color] = approx_polygon
 
-
         if "red1" in contours_dict and "red2" in contours_dict:
             merged_red_contour = np.vstack((contours_dict["red1"], contours_dict["red2"]))
 
@@ -173,6 +178,9 @@ class ObjectDetection():
         for contour in contours_dict:
             cv2.drawContours(roi, [contours_dict[contour]], -1, (255, 0, 0), 2)
 
+        if(len(contours_dict) == 0):
+            print("contours dict is empty :(")
+        
         return contours_dict
     
 
@@ -248,6 +256,7 @@ class ObjectDetection():
 
     def run(self, screenshot):
         screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
+        print(f"size: {screenshot.shape}")
 
         # Retrieve the results from the training model detecting where the Rubik's cubes are in the image.
         results = self.predict(screenshot)
@@ -270,6 +279,9 @@ class ObjectDetection():
 
             # Send the cropped image to a colour recognition function to retrieve the colours of the sides of the Rubik's cube.
             contours_dict = self.detect_whole_color_contour(roi)
+
+            if(len(contours_dict) == 0 ):
+                return
 
             orientation = self.calculate_orientation_from_contours(contours_dict)
 

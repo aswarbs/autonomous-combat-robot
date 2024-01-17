@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 
 [Serializable]
@@ -20,6 +20,8 @@ public class ServerResponse
 {
     public string status;
     public float[] movements;
+
+    public string state;
 }
 
 public class Client_Communication : MonoBehaviour
@@ -28,6 +30,9 @@ public class Client_Communication : MonoBehaviour
     public int serverPort = 2345;
     public Camera captureCamera;
     public Robot_Script robotScript;
+
+    public Text stateLabel;
+    
 
     private TcpClient client;
     private NetworkStream stream;
@@ -43,9 +48,12 @@ public class Client_Communication : MonoBehaviour
     private float[] robot_movements = null;
     private bool updated_robot_movements = false;
 
+    private string state = "";
+
     private void Start()
     {
         timeSinceLastUpdate = updateInterval;
+        stateLabel.text = "Current State: INITIAL";
         ConnectToServer();
 
         // Start a separate thread for client communication.
@@ -75,11 +83,14 @@ public class Client_Communication : MonoBehaviour
         RenderTexture.active = renderTexture;
         screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         byte[] screenshotBytes = screenshot.EncodeToPNG();
+
+        //Debug.Log("width: " + screenshot.width + "height: " + screenshot.height);
         var jsonObject = new JSONObject { screenshotPNG = screenshotBytes };
         string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
         captureCamera.targetTexture = null;
         RenderTexture.active = null;
         Destroy(renderTexture);
+
         return jsonPayloadString;
     }
 
@@ -111,6 +122,7 @@ public class Client_Communication : MonoBehaviour
             if(updated_robot_movements)
             {
                 robotScript.Move(robot_movements);
+                stateLabel.text = "Current State: " + state;
                 updated_robot_movements = false;
             }
         }
@@ -148,6 +160,10 @@ public class Client_Communication : MonoBehaviour
             /**string movements_str = float.Parse(robot_movements);
             Debug.Log("robot movements: {0}", movements_str);*/
             updated_robot_movements = true;
+
+            // CANNOT DO THIS BECAUSE I AM NOT ON MAIN THREAD
+
+            state = serverResponse.state;
         }
         
 

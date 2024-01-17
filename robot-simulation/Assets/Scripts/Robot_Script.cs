@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Robot_Script : MonoBehaviour
 {   
     public float move_speed = 5f;
@@ -44,8 +45,6 @@ public class Robot_Script : MonoBehaviour
             Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime;
             transform.position += moveDirection;
         }
-
-        Debug.Log("Forward Direction: " + transform.forward);
     }
 
     

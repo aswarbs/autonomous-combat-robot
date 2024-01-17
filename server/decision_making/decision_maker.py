@@ -1,24 +1,31 @@
 
 
 import random
+import math
+import os
+from decision_making.decision_tree import DecisionTree
+
+
+# attack state is follow
+# defend state is run away
 
 
 class DecisionMaker():
-    """
-    Decision making class. This will be passed information about the current image and calculate the next move for the robot to take.
-    """
-
-    
 
     def __init__(self):
         """
         Initialise the decision making model.
         """
+        self.IMAGE_WIDTH = 397
+        self.IMAGE_HEIGHT = 376
+        self.HORIZONTAL_MIDPOINT = int(self.IMAGE_WIDTH / 2)
+        self.VERTICAL_MIDPOINT = 0
+        self.AREA_THRESHOLD = 1500
+        
 
-        self.MOVEMENT_CONST = 10
         self.state = "RANDOM_WALK"
 
-        pass
+        self.model = DecisionTree(self.HORIZONTAL_MIDPOINT, self.VERTICAL_MIDPOINT, self.AREA_THRESHOLD)
 
     def run(self, opponent_information, qr_information):
         """
@@ -30,42 +37,16 @@ class DecisionMaker():
         self.position = -1
         self.orientation = -1
         self.bounding_box_area = -1
+        self.qr_information = qr_information
 
-        # DETECT_RUBRIK INFORMATION CONTAINS A 0 AS FOR NOW WE ARE JUST EVALUATING THE FIRST (ONLY) CUBE
-
-        if(len(opponent_information) > 0):
+        if len(opponent_information) > 0:        
             self.position = opponent_information[0]["position"] 
             self.orientation = opponent_information[0]["orientation"]
             self.bounding_box_area = opponent_information[0]["bounding_box_area"]
-        else:
-            self.state="RANDOM_WALK"
-
-        # QR INFORMATION 
-        self.qr_information = qr_information
-
-        print(f"position: {self.position}, orientation: {self.orientation}, area: {self.bounding_box_area}, qr info: {self.qr_information}")
-
-        if(self.state == "RANDOM_WALK"):
-            rotations = self.random_walk()
-            print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(self.MOVEMENT_CONST, x) for x in rotations]
-        else:
-            return (self.MOVEMENT_CONST,0)
-    
-
-    def random_walk(self):
-
-        max_angle_change = 30.0
-
-        # Generate a random angle change for rotation
-        angle_change = random.uniform(-max_angle_change, max_angle_change)
-
-        rotations = [angle_change]
-
-        # The robot always will move forward in random walk
-        # The rotation is the random element
-        return rotations
-    
 
 
         
+
+        return self.model.run(opponent_information, qr_information, self.position, self.orientation, self.bounding_box_area)
+        
+    

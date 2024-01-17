@@ -41,10 +41,10 @@ def bind_socket():
 
             image_information, qr_information = recognise_image(image)
 
-            robot_movements = process_information(image_information, qr_information)
+            robot_movements, state = process_information(image_information, qr_information)
 
             for movement in robot_movements:
-                send_response(conn, movement)
+                send_response(conn, movement, state)
 
 
 
@@ -65,8 +65,9 @@ def process_information(image_information, qr_information):
     image_information: The information about the image.
     """
     
-    robot_movements = decider.run(image_information, qr_information)
-    return robot_movements
+    robot_movements, state = decider.run(image_information, qr_information)
+    return robot_movements, state
+
 
 
         
@@ -120,9 +121,9 @@ def convert_bytes_to_image(parsed_data):
 
 
 
-def send_response(conn, robot_movements):
+def send_response(conn, robot_movements, state):
 
-    success_response = {"status": "success", "movements": robot_movements}
+    success_response = {"status": "success", "movements": robot_movements, "state": state}
     conn.send(json.dumps(success_response).encode('utf-8') + b'\n')
 
 
