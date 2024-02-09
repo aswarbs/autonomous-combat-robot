@@ -41,20 +41,25 @@ class DecisionTree():
 
         if self.state == "RANDOM_WALK":
             rotations = self.random_walk()
-            print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(self.MOVEMENT_CONST, x) for x in rotations], self.state
+            movement = self.MOVEMENT_CONST
+            
         elif self.state =="FOLLOW":
             rotations = self.follow()
+            movement = self.MOVEMENT_CONST
             print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(self.MOVEMENT_CONST, x) for x in rotations], self.state
         elif self.state == "FLEE":
             # follow but move
             rotations = self.follow()
+            movement = -self.MOVEMENT_CONST
             print(f"sending {[(-self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(-self.MOVEMENT_CONST, x) for x in rotations], self.state
 
         else:
             print(f"state is not in valid states: {self.state}")
+            return None
+        
+        print((movement, x) for x in rotations)
+
+        return [(movement, x) for x in rotations], self.state
 
     def follow(self):
         # from self.position = the position of the robot on the screen, 
