@@ -39,7 +39,7 @@ class DecisionMaker():
         self.bounding_box_area = -1
         self.qr_information = qr_information
 
-        if len(opponent_information) > 0:        
+        if opponent_information is not None and len(opponent_information) > 0:       
             self.position = opponent_information[0]["position"] 
             self.orientation = opponent_information[0]["orientation"]
             self.bounding_box_area = opponent_information[0]["bounding_box_area"]

@@ -7,10 +7,6 @@ public class Robot_Script : MonoBehaviour
 {   
     public float move_speed = 5f;
     public float rotation_speed = 30f;
-    public float velocity_speed = 100f;
-
-    public float turning_velocity = 0.2f;
-
     public Rigidbody rb;
 
 
@@ -60,7 +56,7 @@ public class Robot_Script : MonoBehaviour
     public void Move(float[] movement_and_rotation)
     {   
         rb.velocity = transform.forward * movement_and_rotation[0];
-        rb.angularVelocity = Vector3.up * movement_and_rotation[1] * turning_velocity;
+        rb.angularVelocity = Vector3.up * movement_and_rotation[1];
         
         
 
