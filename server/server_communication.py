@@ -6,6 +6,8 @@ from computer_vision.detect_rubik import ObjectDetection
 from computer_vision.detect_qr import DetectQR
 from decision_making.decision_maker import DecisionMaker
 import numpy as np
+from picamera2 import Picamera2
+import serial   
 
 # Set host as localhost to receive messages on this machine.
 HOST = "127.0.0.1"
@@ -17,34 +19,29 @@ decider = DecisionMaker()
 qr_detector = DetectQR()
 
 def bind_socket():
-    # Create a socket
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    picam2 = Picamera2()
+    picam2.preview_configuration.main.size = (1280,720)
+    picam2.preview_configuration.main.format = "RGB888"
+    picam2.preview_configuration.align()
+    picam2.configure("preview")
+    picam2.start()
 
-        # Bind the socket to the host and port
-        s.bind((HOST, PORT))
+    ser = serial.Serial(
+    port='/dev/ttyUSB0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
+    baudrate = 9600,
+    )
 
-        print("listening")
+    while True:
+        
+        image= picam2.capture_array()
 
-        # Listen for incoming messages on the socket
-        s.listen()
 
-        # Accept the message on the socket, addr = the client host and port, conn = the connection.
-        conn, addr = s.accept()
+        image_information, qr_information = recognise_image(image)
 
-        print("connected")
+        robot_movements, state = process_information(image_information, qr_information)
 
-        while True:
-            received_data = receive_data(conn)
-            parsed_data = parse_data(received_data)
-
-            image = convert_bytes_to_image(parsed_data)
-
-            image_information, qr_information = recognise_image(image)
-
-            robot_movements, state = process_information(image_information, qr_information)
-
-            for movement in robot_movements:
-                send_response(conn, movement, state)
+        for movement in robot_movements:
+            send_response(ser, movement, state)
 
 
 
@@ -121,10 +118,11 @@ def convert_bytes_to_image(parsed_data):
 
 
 
-def send_response(conn, robot_movements, state):
+def send_response(ser, robot_movements):
 
-    success_response = {"status": "success", "movements": robot_movements, "state": state}
-    conn.send(json.dumps(success_response).encode('utf-8') + b'\n')
+    for movement in robot_movements:
+        response = {"movement": movement[0], "rotation": movement[1]}
+        ser.write(json.dumps(response))
 
 
 

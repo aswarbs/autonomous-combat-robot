@@ -3,7 +3,7 @@ import cv2
 from ultralytics import YOLO
 import math
 import numpy as np
-
+import os
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
 """image_folder = r'test_image_recognition\testing_data\output_images'
@@ -71,7 +71,7 @@ class ObjectDetection():
         
     # load the desired model
     def load_model(self):
-        model = YOLO(r'server\computer_vision\runs\detect\yolov8n_v8_50e32\weights\best.pt')
+        model = YOLO(os.getcwd()  + r'/computer_vision/runs/detect/yolov8n_v8_50e32/weights/best.pt')
         # model.fuse()
         return model
     
