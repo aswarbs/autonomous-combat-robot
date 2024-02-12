@@ -2,16 +2,17 @@
 import math 
 import random
 
-class DecisionTree():
+# the movement is a constant, either -10 or 10
+# the rotation is normalised between -1 and 1
 
-    # all the states need to be in here
+class DecisionTree():
 
     def __init__(self, horizontal_midpoint, vertical_midpoint, area_threshold):
         self.player_midpoint_x = horizontal_midpoint
         self.player_midpoint_y = vertical_midpoint
         self.area_threshold = area_threshold
         self.state = "INITIAL"
-        self.MOVEMENT_CONST = 10
+        self.MOVEMENT_CONST = 1
 
     def run(self, opponent_information, qr_information, position, orientation, area):
 
@@ -41,20 +42,21 @@ class DecisionTree():
 
         if self.state == "RANDOM_WALK":
             rotations = self.random_walk()
-            print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(self.MOVEMENT_CONST, x) for x in rotations], self.state
+            movement = self.MOVEMENT_CONST
+            
         elif self.state =="FOLLOW":
             rotations = self.follow()
-            print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(self.MOVEMENT_CONST, x) for x in rotations], self.state
+            movement = self.MOVEMENT_CONST
         elif self.state == "FLEE":
             # follow but move
             rotations = self.follow()
-            print(f"sending {[(-self.MOVEMENT_CONST, x) for x in rotations]}")
-            return [(-self.MOVEMENT_CONST, x) for x in rotations], self.state
+            movement = -self.MOVEMENT_CONST
 
         else:
             print(f"state is not in valid states: {self.state}")
+            return None
+        
+        return [(movement, x) for x in rotations], self.state
 
     def follow(self):
         # from self.position = the position of the robot on the screen, 
@@ -64,20 +66,16 @@ class DecisionTree():
         cube_midpoint_y = (self.position[1] + self.position[3]) / 2 
 
         angle_rad = math.atan2(cube_midpoint_x - self.player_midpoint_x, cube_midpoint_y - self.player_midpoint_y)
-        angle_deg = math.degrees(angle_rad)
+        angle_normalized = angle_rad / math.pi
 
-        print(f"player midpoint: {self.player_midpoint_x, self.player_midpoint_y} cube midpoint: {cube_midpoint_x, cube_midpoint_y}, angle: {angle_deg}")
-
-        rotations = [angle_deg/10]
+        rotations = [angle_normalized]
 
         return rotations
 
     def random_walk(self):
 
-        max_angle_change = 30.0
-
         # Generate a random angle change for rotation
-        angle_change = random.uniform(-max_angle_change, max_angle_change)
+        angle_change = random.uniform(-1, 1)
 
         rotations = [angle_change]
 

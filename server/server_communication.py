@@ -26,14 +26,13 @@ def bind_socket():
     picam2.configure("preview")
     picam2.start()
 
-    ser = serial.Serial(
-    port='/dev/ttyUSB0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
-    baudrate = 9600,
-    )
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    ser.reset_input_buffer()
 
     while True:
-        
-        image= picam2.capture_array()
+
+        pass
+        """image= picam2.capture_array()
 
 
         image_information, qr_information = recognise_image(image)
@@ -41,7 +40,10 @@ def bind_socket():
         robot_movements, state = process_information(image_information, qr_information)
 
         for movement in robot_movements:
-            send_response(ser, movement, state)
+            send_response(ser, movement)
+
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)"""
 
 
 
@@ -120,9 +122,9 @@ def convert_bytes_to_image(parsed_data):
 
 def send_response(ser, robot_movements):
 
-    for movement in robot_movements:
-        response = {"movement": movement[0], "rotation": movement[1]}
-        ser.write(json.dumps(response))
+    response = {"movement": robot_movements[0], "rotation": robot_movements[1]}
+    ser.write(json.dumps(response).encode('utf-8') + b'\n')
+    
 
 
 
