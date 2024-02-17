@@ -9,6 +9,8 @@ public class Robot_Script : MonoBehaviour
     public float rotation_speed = 30f;
     public Rigidbody rb;
 
+    public int movement_const = 10;
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +57,7 @@ public class Robot_Script : MonoBehaviour
 
     public void Move(float[] movement_and_rotation)
     {   
-        rb.velocity = transform.forward * movement_and_rotation[0];
+        rb.velocity = transform.forward * movement_and_rotation[0] * movement_const;
         rb.angularVelocity = Vector3.up * movement_and_rotation[1];
         
         
