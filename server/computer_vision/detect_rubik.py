@@ -3,6 +3,7 @@ import cv2
 from ultralytics import YOLO
 import math
 import numpy as np
+import os
 
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
@@ -30,6 +31,8 @@ class ObjectDetection():
             'yellow': [[35, 255, 255], [25, 150, 100]],
             'orange': [[23, 255, 255], [15, 150, 150]],
         }
+
+        self.model(None)
 
         
 
@@ -71,7 +74,7 @@ class ObjectDetection():
         
     # load the desired model
     def load_model(self):
-        model = YOLO(r'server\computer_vision\runs\detect\yolov8n_v8_50e32\weights\best.pt')
+        model = YOLO(os.getcwd() + r'\server\computer_vision\runs\detect\yolov8n_v8_50e32\weights\best.pt')
         # model.fuse()
         return model
     

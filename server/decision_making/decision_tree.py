@@ -12,13 +12,13 @@ class DecisionTree():
         self.player_midpoint_y = vertical_midpoint
         self.area_threshold = area_threshold
         self.state = "INITIAL"
-        self.MOVEMENT_CONST = 10
+        self.MOVEMENT_CONST = 1
 
     def run(self, opponent_information, qr_information, position, orientation, area):
 
         self.position = position
 
-        if(opponent_information is not None and len(opponent_information) > 0):
+        if(opponent_information is not None and len(opponent_information) > 0 and orientation is not None):
             
 
             self.state="FOLLOW"
