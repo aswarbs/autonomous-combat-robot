@@ -209,7 +209,6 @@ class ObjectDetection():
 
         for name, contour in largest_contours:
             area = cv2.contourArea(contour)
-            print(f"area: {area}")
             x, y, w, h = cv2.boundingRect(contour)
             contour_info.append((name, area, x))
 
@@ -237,10 +236,6 @@ class ObjectDetection():
 
         orientation = self.convert_orientation_to_degrees(orientation)
 
-        print(f"most prominent side: {largest_contours[0][0]}.")
-        print(f"orientation:{orientation}")
-        print(f"orientation of blue: {self.calculate_absolute_orientation(orientation, largest_contours[0][0])}")
-
 
 
         return self.calculate_absolute_orientation(orientation, largest_contours[0][0])
@@ -259,7 +254,6 @@ class ObjectDetection():
 
     def run(self, screenshot):
         screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
-        print(f"size: {screenshot.shape}")
 
         # Retrieve the results from the training model detecting where the Rubik's cubes are in the image.
         results = self.predict(screenshot)
@@ -303,8 +297,6 @@ class ObjectDetection():
                 "bounding_box_area": width * height
             }
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            return
 
         # Return the dictionary containing information for each Rubik's cube
         return rubiks_cubes_info

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
+using UnityEngine.UI;
 
 
 public class Robot_Script : MonoBehaviour
@@ -11,37 +13,68 @@ public class Robot_Script : MonoBehaviour
 
     public int movement_const = 10;
 
+    public string movement_state = "MANUAL";
+
+    public Text robot_state_label;
+
+    
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        robot_state_label.text = "Current Movement: " + movement_state;
     }
 
     void HandleKeyPress()
     {
-        if (Input.GetKey(KeyCode.D))
+
+        if(movement_state == "MANUAL")
         {
-            // Rotate right
-            transform.Rotate(Vector3.up * rotation_speed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            // Rotate left
-            transform.Rotate(Vector3.up * -rotation_speed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.D))
+            {
+                // Rotate right
+                transform.Rotate(Vector3.up * rotation_speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                // Rotate left
+                transform.Rotate(Vector3.up * -rotation_speed * Time.deltaTime);
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                // Move forward in the direction the object is facing
+                Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime;
+                transform.position += moveDirection;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                // Move backward in the opposite direction
+                Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime;
+                transform.position += moveDirection;
+            }
+
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyUp(KeyCode.Q))
         {
-            // Move forward in the direction the object is facing
-            Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime;
-            transform.position += moveDirection;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            // Move backward in the opposite direction
-            Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime;
-            transform.position += moveDirection;
+            // change mode from manual to autonomous
+
+            if(movement_state == "MANUAL")
+            {
+                movement_state = "AUTO";
+            }
+            else if(movement_state == "AUTO")
+            {
+                movement_state = "MANUAL";
+            }
+            else
+            {
+                Debug.Log("INVALID MOVEMENT STATE");
+            }
+
+            robot_state_label.text = "Current Movement: " + movement_state;
         }
     }
 
@@ -57,10 +90,11 @@ public class Robot_Script : MonoBehaviour
 
     public void Move(float[] movement_and_rotation)
     {   
-        rb.velocity = transform.forward * movement_and_rotation[0] * movement_const;
-        rb.angularVelocity = Vector3.up * movement_and_rotation[1];
-        
-        
+        if(movement_state == "AUTO")
+        {
+            rb.velocity = transform.forward * movement_and_rotation[0] * movement_const;
+            rb.angularVelocity = Vector3.up * movement_and_rotation[1];
+        }        
 
     }
 

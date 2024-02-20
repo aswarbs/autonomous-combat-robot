@@ -98,6 +98,7 @@ public class Client_Communication : MonoBehaviour
     {
         try
         {
+            Debug.Log("connecting to the server");
             client = new TcpClient(serverIP, serverPort);
             stream = client.GetStream();
         }
@@ -138,6 +139,8 @@ public class Client_Communication : MonoBehaviour
         try
         {
             byte[] data = Encoding.UTF8.GetBytes(message);
+
+
             stream.Write(data, 0, data.Length);
             HandleServerResponse(message);
         }

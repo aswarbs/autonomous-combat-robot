@@ -2,12 +2,14 @@ import socket
 import json
 import io
 from PIL import Image
+import cv2
 from computer_vision.detect_rubik import ObjectDetection
 from computer_vision.detect_qr import DetectQR
 from decision_making.decision_maker import DecisionMaker
 import numpy as np
+
 # Set host as localhost to receive messages on this machine.
-HOST = "0.0.0.0"
+HOST = "127.0.0.1"
 # Set well known port for the client to use.
 PORT = 2345
 
@@ -33,17 +35,30 @@ def bind_socket():
         print("connected")
 
         while True:
-            received_data = receive_data(conn)
-            print("received")
-            image = convert_bytes_to_image(received_data)
+
+            try:
+                received_data = receive_data(conn)
+                parsed_data = parse_data(received_data)
+
+                image = convert_bytes_to_image(parsed_data)
+
+                image_information, qr_information = recognise_image(image)
+
+                robot_movements, state = process_information(image_information, qr_information)
+
+                cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+                if cv2.waitKey(1) == 0xFF: 
+                        return  # esc to quit
 
 
-            image_information, qr_information = recognise_image(image)
+                
 
-            robot_movements, state = process_information(image_information, qr_information)
-
-            for movement in robot_movements:
-                send_response(conn, movement, state)
+                for movement in robot_movements:
+                    send_response(conn, movement, state)
+            except Exception as e:
+                print("client disconnected: ", e)
+                s.close()
+                bind_socket()
 
 
 
@@ -71,23 +86,25 @@ def process_information(image_information, qr_information):
 
         
 def receive_data(conn):
-    image_size_bytes = conn.recv(4)
-    image_size = int.from_bytes(image_size_bytes, byteorder='big')
+    # Initialize an empty byte string to accumulate data
+    received_data = b""  
 
-    # Receive the image data
-    image_data = b''
-    while len(image_data) < image_size:
-        chunk = conn.recv(min(4096, image_size - len(image_data)))
-        if not chunk:
+    while True:
+        # Receive 1024 bytes of data
+        data = conn.recv(1024)
+
+        # Append the newly received data to the current item of data being collected
+        received_data += data  
+
+        # If the message delimiter is in the message, the end of the message has been found
+        if b'\n' in data:
             break
-        image_data += chunk
-    return image_data
+    return received_data
 
 def parse_data(received_data):
     try:
         # Attempt to parse the message with JSON. Agreed encoding = UTF8
         parsed_data = json.loads(received_data.decode('utf-8'))
-
         return parsed_data
     except:
         print("failed to parse")
@@ -96,15 +113,16 @@ def parse_data(received_data):
 
 def convert_bytes_to_image(parsed_data):
     # Retrieve the screenshot field of the JSON message
+    image_data_byte_array = parsed_data['screenshotPNG']
 
     # Create a BytesIO object to work with the image data
-    image_stream = io.BytesIO(bytes(parsed_data))
+    image_stream = io.BytesIO(bytes(image_data_byte_array))
 
     # Open the image using PIL (Pillow)
     image = Image.open(image_stream)
 
     # PIL images into NumPy arrays
-    image = np.asarray(image)
+    image = np.array(image)
 
     return image
 
