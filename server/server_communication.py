@@ -69,8 +69,9 @@ def recognise_image(image):
     image: The image to be processed.
     returns: Information gathered from the image during image processing.
     """
-    opponent_information = detector.run(image)
+    
     qr_information = qr_detector.find_qrs_and_distances(image)
+    opponent_information = detector.run(image)
     return opponent_information, qr_information
 
 def process_information(image_information, qr_information):

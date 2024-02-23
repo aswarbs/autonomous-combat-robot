@@ -38,13 +38,14 @@ class DetectQR:
             for x in range(len(decoded_info)):
                 points = np.array(points, np.int32)
                 cv2.drawContours(frame, points, -1, (255, 0, 0), 2)
-                print(f"org: {points[x][0]}")
                 cv2.putText(frame, decoded_info[x], points[x][0], cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+                
                 width = self.calculate_width(points[x])
 
                 approx_distance = (self.KNOWN_WIDTH * self.FOCAL_WIDTH) / width # in centimeters
                 approx_distance = round(approx_distance, 3)
                 distances.append(approx_distance)
+                cv2.putText(frame, str(approx_distance), points[x][2], cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
         # return the list of labels and the distances for each label
 

@@ -125,9 +125,6 @@ class ObjectDetection():
     
     def detect_whole_color_contour(self, roi):
 
-        # this is returning none i think
-        # or an empty dict
-
         # Convert the isolated face to the HSV color space for better color filtering
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
 
@@ -301,42 +298,3 @@ class ObjectDetection():
         # Return the dictionary containing information for each Rubik's cube
         return rubiks_cubes_info
     
-"""   def store_bounding_boxes_in_csv(self, image_files, csv_filename):
-        # Create a list to store information about all bounding boxes
-        all_bounding_boxes_info = []
-
-        for image_file in image_files:
-            # Convert the screenshot to BGR format if needed.
-            screenshot = cv2.cvtColor(cv2.imread(image_file), cv2.COLOR_RGB2BGR)
-
-            # Retrieve the results from the object detection model.
-            results = self.predict(screenshot)
-
-            # Retrieve the image with the bounding boxes drawn and the location of the bounding boxes.
-            frames, bounding_boxes = self.draw_bounding_boxes(results, screenshot)
-
-            # For every object detected in the image.
-            for idx, box in enumerate(bounding_boxes):
-                # Retrieve the coordinates of the current bounding box
-                x1, y1, x2, y2 = box.xyxy[0]
-                x1, y1, x2, y2 = float(x1), float(y1), float(x2), float(y2)
-
-                file_name = os.path.basename(image_file)
-
-                # Append bounding box coordinates to the list
-                all_bounding_boxes_info.append([file_name, x1, y1, x2, y2])
-
-        # Save all bounding box information to a single CSV file
-        with open(csv_filename, 'w', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            csv_writer.writerow(['image', 'xmin', 'ymin', 'xmax', 'ymax'])  # Write header
-            csv_writer.writerows(all_bounding_boxes_info)
-
-# Create an instance of the ObjectDetection class
-od = ObjectDetection()
-
-# Specify the CSV filename to store all bounding box information
-csv_filename = r"test_image_recognition\testing_data\pred_bounding_boxes.csv"
-
-# Process each image and store bounding box information in the same CSV file
-od.store_bounding_boxes_in_csv(image_files, csv_filename)"""

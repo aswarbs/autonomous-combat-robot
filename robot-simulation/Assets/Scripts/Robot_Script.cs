@@ -67,6 +67,8 @@ public class Robot_Script : MonoBehaviour
             }
             else if(movement_state == "AUTO")
             {
+                rb.velocity = transform.forward * 0;
+                rb.angularVelocity =  Vector3.up * 0;
                 movement_state = "MANUAL";
             }
             else
