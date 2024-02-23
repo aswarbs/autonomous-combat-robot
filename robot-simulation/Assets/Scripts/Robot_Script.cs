@@ -95,6 +95,7 @@ public class Robot_Script : MonoBehaviour
         if(movement_state == "AUTO")
         {
             rb.velocity = transform.forward * movement_and_rotation[0] * movement_const;
+            Debug.Log(transform.forward);
             rb.angularVelocity = Vector3.up * movement_and_rotation[1];
         }        
 
