@@ -492,7 +492,7 @@ MonoBehaviour:
   serverIP: 127.0.0.1
   serverPort: 2345
   captureCamera: {fileID: 488698423}
-  robotScript: {fileID: 0}
+  robotScript: {fileID: 410196038}
   stateLabel: {fileID: 547612967}
 --- !u!4 &387453546
 Transform:
@@ -522,6 +522,7 @@ GameObject:
   - component: {fileID: 410196034}
   - component: {fileID: 410196033}
   - component: {fileID: 410196037}
+  - component: {fileID: 410196038}
   m_Layer: 0
   m_Name: robot_body
   m_TagString: Untagged
@@ -608,14 +609,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410196032}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 488698424}
-  m_Father: {fileID: 1924245897}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &410196037
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -643,6 +644,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &410196038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410196032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj_vel: 0
+  obj_ang_vel: 0
+  move_speed: 5
+  rotation_speed: 30
+  rb: {fileID: 410196037}
+  movement_const: 10
+  movement_state: AUTO
+  robot_state_label: {fileID: 267175106}
 --- !u!1 &488698421
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +723,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 20
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -1198,15 +1219,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.599998
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.600002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1532,64 +1553,13 @@ Transform:
   m_GameObject: {fileID: 1442180012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: -3.43, z: 53.13}
+  m_LocalPosition: {x: 50, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1058222145}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1924245896
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1924245897}
-  - component: {fileID: 1924245898}
-  m_Layer: 0
-  m_Name: Robot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1924245897
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924245896}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 410196036}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1924245898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924245896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  move_speed: 5
-  rotation_speed: 30
-  rb: {fileID: 410196037}
-  movement_const: 10
-  movement_state: AUTO
-  robot_state_label: {fileID: 267175106}
 --- !u!1 &2021726745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,7 +1705,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 705507995}
   - {fileID: 2100828708}
-  - {fileID: 1924245897}
+  - {fileID: 410196036}
   - {fileID: 1442180013}
   - {fileID: 322755321}
   - {fileID: 2021726749}

@@ -4,6 +4,7 @@ from ultralytics import YOLO
 import math
 import numpy as np
 import os
+from PIL import Image
 
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
@@ -250,10 +251,16 @@ class ObjectDetection():
         return mask
 
     def run(self, screenshot):
-        screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
+
+        print("predicting")
 
         # Retrieve the results from the training model detecting where the Rubik's cubes are in the image.
+        print(f"shape: {screenshot.shape}")
         results = self.predict(screenshot)
+
+        print("predicted")
+
+        screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
 
         # Create an empty dictionary to store information about each Rubik's cube
         rubiks_cubes_info = {}

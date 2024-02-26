@@ -4,12 +4,13 @@ import io
 from PIL import Image
 import cv2
 import numpy as np
-from queue import Queue
 import threading
 
 class ServerCommunication():
 
-    def __init__(self, detector, decider, qr_detector):
+    def __init__(self, detector, decider, qr_detector, localisation):
+
+        print("hello")
         
 
         # Set host as localhost to receive messages on this machine.
@@ -20,14 +21,13 @@ class ServerCommunication():
         self.detector = detector
         self.decider = decider
         self.qr_detector = qr_detector
-        self.queue=Queue()
-
-    def start_thread(self):
-
-        self.thread = threading.Thread(target=self.bind_socket)
-        self.thread.start()
+        self.localisation = localisation
 
     def bind_socket(self):
+
+        screenshot = cv2.imread(r"c:\Users\amber\Pictures\Screenshots\Screenshot 2024-02-20 160918.png")
+
+
         # Create a socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
@@ -50,27 +50,37 @@ class ServerCommunication():
                     received_data = self.receive_data(conn)
                     parsed_data = self.parse_data(received_data)
 
-                    image = self.convert_bytes_to_image(parsed_data)
+                    image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
+
+                    if(self.movement_state == "MANUAL"):
+                        print(f"setting movement: {movement} and rotation: {rotation}")
+                        self.localisation.velocity = movement
+                        self.localisation.angular_velocity = rotation
+                        self.send_response(conn, movement, "SUCCESS")
+                        continue
+
 
                     image_information, qr_information = self.recognise_image(image)
 
                     robot_movements, state = self.process_information(image_information, qr_information)
 
-                    
 
-                    #cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-                    #if cv2.waitKey(1) == 0xFF: 
-                    #        return  # esc to quit
+
+                    cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+                    if cv2.waitKey(1) == 0xFF: 
+                            continue  # esc to quit
 
 
                     
 
                     for movement in robot_movements:
-                        self.queue.put(movement)
+                        self.localisation.velocity = movement[0]
+                        self.localisation.angular_velocity = movement[1]
                         self.send_response(conn, movement, state)
                 except Exception as e:
                     print("client disconnected: ", e)
-                    self.queue.put((0,0))
+                    self.localisation.velocity = 0
+                    self.localisation.angular_velocity = 0
                     s.close()
                     self.bind_socket()
 
@@ -140,7 +150,12 @@ class ServerCommunication():
         # PIL images into NumPy arrays
         image = np.array(image)
 
-        return image
+        state = parsed_data['movementState']
+
+        movement = parsed_data['movement']
+        rotation = parsed_data['rotation']
+
+        return image, state, movement, rotation
 
     """def save_image(image):
         # Define a filename for the saved PNG image

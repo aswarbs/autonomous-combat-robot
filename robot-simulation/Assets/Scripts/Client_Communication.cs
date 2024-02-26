@@ -13,6 +13,9 @@ using UnityEngine.UI;
 public class JSONObject
 {
     public byte[] screenshotPNG;
+    public string movementState;
+    public float movement;
+    public float rotation;
 }
 
 [Serializable]
@@ -85,7 +88,7 @@ public class Client_Communication : MonoBehaviour
         byte[] screenshotBytes = screenshot.EncodeToPNG();
 
         //Debug.Log("width: " + screenshot.width + "height: " + screenshot.height);
-        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes };
+        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes, movementState = robotScript.movement_state, movement = robotScript.movement, rotation = robotScript.rotation};
         string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
         captureCamera.targetTexture = null;
         RenderTexture.active = null;
@@ -163,8 +166,6 @@ public class Client_Communication : MonoBehaviour
             /**string movements_str = float.Parse(robot_movements);
             Debug.Log("robot movements: {0}", movements_str);*/
             updated_robot_movements = true;
-
-            // CANNOT DO THIS BECAUSE I AM NOT ON MAIN THREAD
 
             state = serverResponse.state;
         }
