@@ -4,7 +4,6 @@ from ultralytics import YOLO
 import math
 import numpy as np
 import os
-from PIL import Image
 
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'

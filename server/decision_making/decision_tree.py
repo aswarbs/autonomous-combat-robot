@@ -29,7 +29,7 @@ class DecisionTree():
                 
 
             if(orientation > -45 and orientation < 45):
-                # faccing the front of the cube, defend
+                # facing the front of the cube, defend
                 print("DEFEND")
                 self.state ="FLEE"
 

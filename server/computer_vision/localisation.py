@@ -18,8 +18,7 @@ class Localisation:
         self.robot_size = 20
         self.canvas_width = 500
         self.canvas_height = 500
-        self.movement_const = 20
-        self.rotation_const = 1.5
+        self.movement_const = 2
 
         self.border_width = self.canvas_width / 10
 
@@ -61,13 +60,16 @@ class Localisation:
             
         
     def update(self):
-            self.orientation -= self.angular_velocity * self.time_interval * self.rotation_const
+            
+            self.orientation -= self.angular_velocity * self.time_interval
 
 
-            print(f"position: {self.position}")
             # Update position
             delta_x = (self.velocity * self.movement_const) * math.cos(self.orientation) * self.time_interval
             delta_y = (self.velocity * self.movement_const) * math.sin(self.orientation) * self.time_interval
+
+            print(f"position: {self.position}")
+            
             self.position = (self.position[0] + delta_x, self.position[1] + delta_y)
 
             # Update orientation
@@ -88,6 +90,8 @@ class Localisation:
             y2 = screen_y + self.robot_size/2 * math.sin(self.orientation) + self.robot_size/2 * math.cos(self.orientation)
             x3 = screen_x + self.robot_size/2 * math.cos(self.orientation) + self.robot_size/2 * math.sin(self.orientation)
             y3 = screen_y - self.robot_size/2 * math.sin(self.orientation) + self.robot_size/2 * math.cos(self.orientation)
+
+            #print(f"{x0} {y0}, {x1} {y1}, {x2} {y2}, {x3} {y3}")
 
 
             # Draw the robot

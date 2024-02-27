@@ -15,15 +15,16 @@ public class Robot_Script : MonoBehaviour
     public float move_speed = 5f;
     public float rotation_speed = 30f;
     public Rigidbody rb;
-
-    public int movement_const = 5;
-
     public string movement_state = "MANUAL";
 
     public Text robot_state_label;
 
     public float rotation = 0;
     public float movement = 0;
+
+    public int movement_const = 2;
+
+    public int difference = 50;
 
     
 
@@ -44,30 +45,31 @@ public class Robot_Script : MonoBehaviour
             {
                 // Rotate right
                 transform.Rotate(Vector3.up * rotation_speed * Time.deltaTime);
-                rotation = rotation_speed * Time.deltaTime;
+                rotation = rotation_speed * Mathf.Deg2Rad;
 
             }
             if (Input.GetKey(KeyCode.A))
             {
                 // Rotate left
                 transform.Rotate(Vector3.up * -rotation_speed * Time.deltaTime);
-                rotation = -rotation_speed * Time.deltaTime;
+                rotation = -rotation_speed * Mathf.Deg2Rad;
             }
 
             movement = 0;
             if (Input.GetKey(KeyCode.W))
             {
                 // Move forward in the direction the object is facing
-                Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime;
+                Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime * movement_const;
                 transform.position += moveDirection;
-                movement = move_speed * Time.deltaTime;
+                
+                movement = move_speed * Time.deltaTime; //* difference;
             }
             if (Input.GetKey(KeyCode.S))
             {
                 // Move backward in the opposite direction
-                Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime;
+                Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime * movement_const;
                 transform.position += moveDirection;
-                movement = -move_speed * Time.deltaTime;
+                movement = -move_speed * Time.deltaTime; //* difference;
             }
 
         }
@@ -103,7 +105,7 @@ public class Robot_Script : MonoBehaviour
 
         HandleKeyPress();
 
-        rb.velocity = transform.forward * obj_vel;  
+        rb.velocity = transform.forward * obj_vel * movement_const;  
         rb.angularVelocity = Vector3.up * obj_ang_vel;
 
         Debug.Log(rb.velocity + " " + rb.angularVelocity);
@@ -116,7 +118,7 @@ public class Robot_Script : MonoBehaviour
     {   
         if(movement_state == "AUTO")
         {
-            obj_vel = movement_and_rotation[0] * movement_const;
+            obj_vel = movement_and_rotation[0];
             obj_ang_vel = movement_and_rotation[1];
         }   
 

@@ -25,9 +25,6 @@ class ServerCommunication():
 
     def bind_socket(self):
 
-        screenshot = cv2.imread(r"c:\Users\amber\Pictures\Screenshots\Screenshot 2024-02-20 160918.png")
-
-
         # Create a socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
@@ -39,50 +36,63 @@ class ServerCommunication():
             # Listen for incoming messages on the socket
             s.listen()
 
+            print("connected")
+
             # Accept the message on the socket, addr = the client host and port, conn = the connection.
             conn, addr = s.accept()
 
-            print("connected")
-
-            while True:
-
-                try:
-                    received_data = self.receive_data(conn)
-                    parsed_data = self.parse_data(received_data)
-
-                    image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
-
-                    if(self.movement_state == "MANUAL"):
-                        print(f"setting movement: {movement} and rotation: {rotation}")
-                        self.localisation.velocity = movement
-                        self.localisation.angular_velocity = rotation
-                        self.send_response(conn, movement, "SUCCESS")
-                        continue
-
-
-                    image_information, qr_information = self.recognise_image(image)
-
-                    robot_movements, state = self.process_information(image_information, qr_information)
+            
+            self.run(conn, s)
+            
+            
 
 
 
-                    cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-                    if cv2.waitKey(1) == 0xFF: 
-                            continue  # esc to quit
+    def run(self, conn, s):
+        while True:
+            try:
+                
+                received_data = self.receive_data(conn)
+                parsed_data = self.parse_data(received_data)
 
+                image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
+
+                image_information, qr_information = self.recognise_image(image)
+
+
+                robot_movements, state = self.process_information(image_information, qr_information)
+
+                cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+                if cv2.waitKey(1) == 0xFF: 
+                        return  # esc to quit
+
+                if(self.movement_state == "MANUAL"):
+                    print(f"setting movement: {movement} and rotation: {rotation}")
+                    self.localisation.velocity = movement
+                    self.localisation.angular_velocity = rotation
+                    self.send_response(conn, movement, "SUCCESS")
+                    continue
+
+
+                
+
+
+                
+
+                for movement in robot_movements:
+                    self.localisation.velocity = movement[0]
+                    self.localisation.angular_velocity = movement[1]
+                    self.send_response(conn, movement, state)
 
                     
+            except Exception as e:
+                print("client disconnected: ", e)
+                self.localisation.velocity = 0
+                self.localisation.angular_velocity = 0
+                s.close()
+                self.bind_socket()
 
-                    for movement in robot_movements:
-                        self.localisation.velocity = movement[0]
-                        self.localisation.angular_velocity = movement[1]
-                        self.send_response(conn, movement, state)
-                except Exception as e:
-                    print("client disconnected: ", e)
-                    self.localisation.velocity = 0
-                    self.localisation.angular_velocity = 0
-                    s.close()
-                    self.bind_socket()
+    
 
 
 

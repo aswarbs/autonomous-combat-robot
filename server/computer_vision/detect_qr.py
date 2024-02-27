@@ -7,8 +7,8 @@ class DetectQR:
    
 
     def __init__(self, localisation):
-        self.KNOWN_WIDTH = 1650 # centimeters
-        self.FOCAL_WIDTH = 15 # centimeters
+        self.KNOWN_WIDTH = 2400 # centimeters
+        self.FOCAL_WIDTH = 4.74 # millimeters
         self.IMAGE_WIDTH = 517
         self.IMAGE_HEIGHT = 383
         self.QR_CODE_COORDINATE = 200
@@ -34,18 +34,20 @@ class DetectQR:
         horizontal_distance = distance * math.cos(self.localisation.orientation)
         vertical_distance = distance * math.sin(self.localisation.orientation)
 
+        print(f"distance: {distance} horizontal distance: {horizontal_distance} vertical distance: {vertical_distance}")
+
         if(name == "top_left"):
             position = (-self.QR_CODE_COORDINATE, self.QR_CODE_COORDINATE)
-            return (position[0] + horizontal_distance + self.QR_CODE_COORDINATE + self.offset, position[1] - vertical_distance + self.QR_CODE_COORDINATE + self.offset)
+            return (position[0] + horizontal_distance, position[1] - vertical_distance)
         elif(name == "top_right"):
             position = (self.QR_CODE_COORDINATE,self.QR_CODE_COORDINATE)
-            return (position[0] - horizontal_distance+ self.QR_CODE_COORDINATE + self.offset,  position[1] + vertical_distance+ self.QR_CODE_COORDINATE + self.offset)
+            return (position[0] - horizontal_distance,  position[1] + vertical_distance)
         elif(name == "bottom_left"):
             position = (-self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
-            return (position[0] + horizontal_distance+ self.QR_CODE_COORDINATE + self.offset, position[1] + vertical_distance+ self.QR_CODE_COORDINATE + self.offset)
+            return (position[0] + horizontal_distance, position[1] + vertical_distance)
         elif(name == "bottom_right"):
             position = (self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
-            return (position[0] - horizontal_distance+ self.QR_CODE_COORDINATE + self.offset, position[1] + vertical_distance+ self.QR_CODE_COORDINATE + self.offset)
+            return (position[0] - horizontal_distance, position[1] + vertical_distance)
         else:
             print(f"qr code not found: {name}")
             return
@@ -58,8 +60,6 @@ class DetectQR:
     
     def find_qrs_and_distances(self, frame):
         
-        print(f"image shape in qr: {frame.shape}")
-
         distances = []
 
     
@@ -70,6 +70,10 @@ class DetectQR:
 
             # Put the text on the image
             for x in range(len(decoded_info)):
+
+                if(decoded_info[x] == ""):
+                    continue
+
                 points = np.array(points, np.int32)
                 cv2.drawContours(frame, points, -1, (255, 0, 0), 2)
                 cv2.putText(frame, decoded_info[x], points[x][0], cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
@@ -84,13 +88,15 @@ class DetectQR:
                 # mark it on the map
 
 
-                self.localisation.position = position
+                #self.localisation.position = position
 
 
 
                 distances.append(approx_distance)
                 cv2.putText(frame, str(approx_distance), points[x][2], cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
+        if len(distances) == 0:
+            return
         # convert lists to dictionary
         labels_to_distances = {decoded_info[i]: distances[i] for i in range(len(decoded_info))}
 
