@@ -95,7 +95,7 @@ class DetectQR:
                 distances.append(approx_distance)
                 cv2.putText(frame, str(approx_distance), points[x][2], cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-        if len(distances) == 0:
+        if len(distances) == 0 or len(decoded_info) == 0:
             return
         # convert lists to dictionary
         labels_to_distances = {decoded_info[i]: distances[i] for i in range(len(decoded_info))}

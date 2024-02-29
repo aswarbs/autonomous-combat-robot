@@ -50,7 +50,7 @@ class ServerCommunication():
 
     def run(self, conn, s):
         while True:
-            try:
+            #try:
                 
                 received_data = self.receive_data(conn)
                 parsed_data = self.parse_data(received_data)
@@ -84,13 +84,13 @@ class ServerCommunication():
                     self.localisation.angular_velocity = movement[1]
                     self.send_response(conn, movement, state)
 
-                    
-            except Exception as e:
-                print("client disconnected: ", e)
-                self.localisation.velocity = 0
-                self.localisation.angular_velocity = 0
-                s.close()
-                self.bind_socket()
+                        
+                """except Exception as e:
+                    print("client disconnected: ", e)
+                    self.localisation.velocity = 0
+                    self.localisation.angular_velocity = 0
+                    s.close()
+                    self.bind_socket()"""
 
     
 
