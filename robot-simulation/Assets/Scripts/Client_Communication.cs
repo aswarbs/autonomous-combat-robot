@@ -129,6 +129,7 @@ public class Client_Communication : MonoBehaviour
                 stateLabel.text = "Current State: " + state;
                 updated_robot_movements = false;
             }
+            
         }
     }
 

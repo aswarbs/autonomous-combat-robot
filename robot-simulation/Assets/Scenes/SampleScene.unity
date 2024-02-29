@@ -1582,7 +1582,7 @@ MonoBehaviour:
   serverIP: 127.0.0.1
   serverPort: 2345
   captureCamera: {fileID: 821955877}
-  robotScript: {fileID: 1565089232}
+  robotScript: {fileID: 4542218100168583907}
   stateLabel: {fileID: 547612967}
 --- !u!4 &387453546
 Transform:
@@ -2385,7 +2385,7 @@ Transform:
   m_GameObject: {fileID: 821955874}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.55, z: 0}
+  m_LocalPosition: {x: 0, y: 1.55, z: 0.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5280,61 +5280,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526325681}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1565089230
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1565089231}
-  - component: {fileID: 1565089232}
-  m_Layer: 0
-  m_Name: temp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1565089231
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565089230}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 30}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1565089232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565089230}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obj_vel: 0
-  obj_ang_vel: 0
-  move_speed: 5
-  rotation_speed: 30
-  rb: {fileID: 0}
-  movement_state: MANUAL
-  robot_state_label: {fileID: 0}
-  rotation: 0
-  movement: 0
-  movement_const: 2
-  difference: 50
 --- !u!1 &1565175134
 GameObject:
   m_ObjectHideFlags: 0
@@ -7317,7 +7262,9 @@ MonoBehaviour:
   robot_state_label: {fileID: 267175106}
   rotation: 0
   movement: 0
-  movement_const: 1
+  movement_const: 5
+  move_multiplier: 5
+  rotation_const: 1
   difference: 50
 --- !u!1 &4821106306895749925
 GameObject:
@@ -7467,4 +7414,3 @@ SceneRoots:
   - {fileID: 387453546}
   - {fileID: 4542218100168583904}
   - {fileID: 1057892988}
-  - {fileID: 1565089231}

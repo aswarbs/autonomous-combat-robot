@@ -22,9 +22,9 @@ public class Robot_Script : MonoBehaviour
     public float rotation = 0;
     public float movement = 0;
 
-    public int movement_const = 5;
+    public int movement_const = 10;
 
-    public int move_multiplier = 30;
+    public int move_multiplier = 1;
     public float rotation_const = 10f;
 
     public int difference = 50;
@@ -118,7 +118,7 @@ public class Robot_Script : MonoBehaviour
 
     public void Move(float[] movement_and_rotation)
     {   
-        if(movement_state == "AUTO")
+        if(movement_state == "AUTO" && movement_and_rotation.Length == 2)
         {
             obj_vel = movement_and_rotation[0];
             obj_ang_vel = movement_and_rotation[1];
