@@ -161,7 +161,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773585}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -408,7 +408,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 44381278}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -514,7 +514,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 58729870}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -923,7 +923,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115856745}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1027,7 +1027,7 @@ Transform:
   m_GameObject: {fileID: 145750984}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.083, y: 0.675, z: -0.132}
+  m_LocalPosition: {x: -0.083, y: 0.01, z: -0.132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1350,7 +1350,7 @@ Transform:
   m_GameObject: {fileID: 291277600}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.71564484, y: 0.47, z: -1.3198776}
+  m_LocalPosition: {x: -0.71564484, y: 0.47, z: -1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1370,18 +1370,18 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.3
+  m_SuspensionDistance: 0
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_Mass: 100
+  m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
@@ -1436,7 +1436,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309635190}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1825,7 +1825,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595691460}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2559,7 +2559,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 843915634}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2771,7 +2771,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 863365252}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2877,7 +2877,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865530454}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2983,7 +2983,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962099618}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3301,7 +3301,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982737608}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3407,7 +3407,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011884097}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3682,7 +3682,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030010809}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4194,7 +4194,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1088572227}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4532,7 +4532,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176604704}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4653,7 +4653,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218626733}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4759,7 +4759,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336115840}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4865,7 +4865,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339680579}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5376,7 +5376,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565175134}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5588,7 +5588,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635524404}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5679,7 +5679,7 @@ Transform:
   m_GameObject: {fileID: 1646977802}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.789, y: 0.467, z: 1.475502}
+  m_LocalPosition: {x: 0.7156, y: 0.47, z: 1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5699,18 +5699,18 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.3
+  m_SuspensionDistance: 0
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_Mass: 100
+  m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
@@ -5765,7 +5765,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734561309}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5871,7 +5871,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767140888}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5977,7 +5977,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887303281}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6189,7 +6189,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903805141}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6507,7 +6507,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979292286}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6790,7 +6790,7 @@ Transform:
   m_GameObject: {fileID: 2105125693}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.71564484, y: 0.47, z: 1.475502}
+  m_LocalPosition: {x: -0.71564484, y: 0.47, z: 1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6810,18 +6810,18 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.3
+  m_SuspensionDistance: 0
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_Mass: 100
+  m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
+    m_ExtremumSlip: 10
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
@@ -6861,7 +6861,7 @@ Transform:
   m_GameObject: {fileID: 2106239150}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.71564484, y: 0.48, z: -1.3198776}
+  m_LocalPosition: {x: 0.71564484, y: 0.47, z: -1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6881,18 +6881,18 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.3
+  m_SuspensionDistance: 0
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_Mass: 100
+  m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
+    m_ExtremumSlip: 1
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
@@ -6947,7 +6947,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141385783}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b87dbd22f4d69424381281d8bea9424c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -7189,7 +7189,7 @@ GameObject:
   - component: {fileID: 4542218100168583905}
   - component: {fileID: 4542218100168583907}
   m_Layer: 0
-  m_Name: Car
+  m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7277,9 +7277,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
   serializedVersion: 4
-  m_Mass: 2000
-  m_Drag: 0.01
-  m_AngularDrag: 0.05
+  m_Mass: 5000
+  m_Drag: 0
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -7305,24 +7305,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 3765822821764542554}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9ce75380ca38184da9ebfe3e714aa72, type: 3}
+  m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputCtrl: {fileID: 1057892987}
-  WheelColliders:
-  - {fileID: 2105125695}
-  - {fileID: 1646977804}
-  - {fileID: 291277602}
-  - {fileID: 2106239152}
-  Wheels:
-  - {fileID: 1031181661440384791}
-  - {fileID: 6044454713445105440}
-  - {fileID: 4467371004798082801}
-  - {fileID: 1385331056301611530}
-  CenterOfMass: {fileID: 145750985}
-  Force: 500
-  Angle: 30
-  BrakeForce: 400
+  obj_vel: 0
+  obj_ang_vel: 0
+  move_speed: 10
+  rotation_speed: 30
+  rb: {fileID: 4542218100168583906}
+  movement_state: MANUAL
+  robot_state_label: {fileID: 267175106}
+  rotation: 0
+  movement: 0
+  movement_const: 1
+  difference: 50
 --- !u!1 &4821106306895749925
 GameObject:
   m_ObjectHideFlags: 0

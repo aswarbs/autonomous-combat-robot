@@ -24,6 +24,9 @@ public class Robot_Script : MonoBehaviour
 
     public int movement_const = 2;
 
+    public int move_multiplier = 30;
+    public float rotation_const = 10f;
+
     public int difference = 50;
 
     
@@ -44,32 +47,31 @@ public class Robot_Script : MonoBehaviour
             if (Input.GetKey(KeyCode.D))
             {
                 // Rotate right
-                transform.Rotate(Vector3.up * rotation_speed * Time.deltaTime);
+                obj_ang_vel = rotation_const;
+                obj_vel = 0;
                 rotation = rotation_speed * Mathf.Deg2Rad;
 
             }
             if (Input.GetKey(KeyCode.A))
             {
                 // Rotate left
-                transform.Rotate(Vector3.up * -rotation_speed * Time.deltaTime);
+                obj_ang_vel = -rotation_const;
+                obj_vel = 0;
                 rotation = -rotation_speed * Mathf.Deg2Rad;
             }
 
             movement = 0;
             if (Input.GetKey(KeyCode.W))
             {
-                // Move forward in the direction the object is facing
-                Vector3 moveDirection = transform.forward * move_speed * Time.deltaTime * movement_const;
-                transform.position += moveDirection;
-                
                 movement = move_speed * Time.deltaTime; //* difference;
+                obj_vel = move_multiplier;
+                obj_ang_vel = 0;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                // Move backward in the opposite direction
-                Vector3 moveDirection = -transform.forward * move_speed * Time.deltaTime * movement_const;
-                transform.position += moveDirection;
                 movement = -move_speed * Time.deltaTime; //* difference;
+                obj_vel = -move_multiplier;
+                obj_ang_vel = 0;
             }
 
         }
@@ -80,6 +82,8 @@ public class Robot_Script : MonoBehaviour
 
             if(movement_state == "MANUAL")
             {
+                obj_vel = obj_vel * 0;
+                obj_ang_vel = obj_ang_vel * 0;
                 movement_state = "AUTO";
             }
             else if(movement_state == "AUTO")

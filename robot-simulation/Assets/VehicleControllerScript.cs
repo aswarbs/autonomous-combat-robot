@@ -17,20 +17,25 @@ public class VehicleControllerScript : MonoBehaviour
     private void Start()
     {
         GetComponent<Rigidbody>().centerOfMass = CenterOfMass.localPosition;
+        
     }
 
     private void FixedUpdate()
     {
-        Steer();
-        Drive();
-        Brake();
+
+        
         UpdateWheelMovements();
+
+        Debug.Log(InputCtrl.Vertical);
     }
 	
 	//Drive forward/backward
     private void Drive()
     {
-        WheelColliders[0].motorTorque = WheelColliders[1].motorTorque = InputCtrl.Vertical * Force;
+        WheelColliders[0].motorTorque = InputCtrl.Vertical * Force;
+        WheelColliders[1].motorTorque = InputCtrl.Vertical * Force;
+
+
     }
     
 	//Steer left/right
@@ -42,7 +47,18 @@ public class VehicleControllerScript : MonoBehaviour
 	//Apply brakes
     private void Brake()
     {
-        WheelColliders[0].brakeTorque = WheelColliders[1].brakeTorque = InputCtrl.Brake * BrakeForce;
+        
+        if(InputCtrl.Brake == 1)
+        {
+            WheelColliders[0].brakeTorque = WheelColliders[1].brakeTorque = WheelColliders[2].brakeTorque = WheelColliders[3].brakeTorque = Mathf.Infinity;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            
+        }
+        else
+        {
+            WheelColliders[0].brakeTorque = WheelColliders[1].brakeTorque = WheelColliders[2].brakeTorque = WheelColliders[3].brakeTorque = 0;
+        }
     }
 
 	//imitate the wheelcollider movements onto the wheel-meshes
