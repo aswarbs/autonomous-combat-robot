@@ -22,7 +22,7 @@ public class Robot_Script : MonoBehaviour
     public float rotation = 0;
     public float movement = 0;
 
-    public int movement_const = 2;
+    public int movement_const = 5;
 
     public int move_multiplier = 30;
     public float rotation_const = 10f;
@@ -111,8 +111,6 @@ public class Robot_Script : MonoBehaviour
 
         rb.velocity = transform.forward * obj_vel * movement_const;  
         rb.angularVelocity = Vector3.up * obj_ang_vel;
-
-        Debug.Log(rb.velocity + " " + rb.angularVelocity);
 
         
 
