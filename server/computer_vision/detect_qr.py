@@ -65,6 +65,8 @@ class DetectQR:
     
         retval, decoded_info, points, straight_qrcode = self.qcd.detectAndDecodeMulti(frame)
 
+        decoded_info = [decoded_info[x] for x in range(len(decoded_info)) if decoded_info[x] != ""]
+
         if(points is not None and len(points) > 0 and decoded_info is not None and len(decoded_info) > 0):
 
 

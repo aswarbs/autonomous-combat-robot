@@ -7,7 +7,7 @@ class Localisation:
 
     def __init__(self):
         self.position = (0,0)
-        self.orientation = -math.pi # in tkinter 180 is left. in my program -90 is left.
+        self.orientation = 0 
         self.top_left_boundary = (-1,1)
         self.top_right_boundary = (1,1)
         self.bottom_left_boundary = (-1,-1)
@@ -16,11 +16,14 @@ class Localisation:
         self.velocity = 0
         self.angular_velocity = 0
         self.robot_size = 20
-        self.canvas_width = 500
-        self.canvas_height = 500
-        self.movement_const = 2
+        self.border_width = 10
+        self.canvas_width = 220 + self.border_width
+        self.canvas_height = 220 + self.border_width
+        self.movement_const = 10
+        
+        self.opponent_pos = (self.border_width + 180,self.border_width + 100)
 
-        self.border_width = self.canvas_width / 10
+        
 
 
         self.start_gui()
@@ -56,6 +59,8 @@ class Localisation:
 
             self.canvas.create_oval(center_x - corner_radius, center_y - corner_radius, center_x + corner_radius, center_y + corner_radius, outline="black", fill="red")
 
+        self.canvas.create_oval(self.opponent_pos, self.opponent_pos[0] + 10, self.opponent_pos[1] + 10, outline="black", fill="yellow")
+
 
             
         
@@ -68,7 +73,7 @@ class Localisation:
             delta_x = (self.velocity * self.movement_const) * math.cos(self.orientation) * self.time_interval
             delta_y = (self.velocity * self.movement_const) * math.sin(self.orientation) * self.time_interval
 
-            print(f"position: {self.position}")
+            #print(f"position: {self.position}")
             
             self.position = (self.position[0] + delta_x, self.position[1] + delta_y)
 

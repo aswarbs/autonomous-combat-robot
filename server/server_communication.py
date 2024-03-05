@@ -5,6 +5,7 @@ from PIL import Image
 import cv2
 import numpy as np
 import threading
+import math
 
 class ServerCommunication():
 
@@ -45,6 +46,21 @@ class ServerCommunication():
             self.run(conn, s)
             
             
+    def draw_arrow(self, orientation, bounding_box_width, bounding_box_height, image, center_x, center_y):
+        orientation = (orientation * -1) + 90 # convert to angle used in function (0 is right)
+
+        # Calculate the endpoint of the arrow
+        arrow_length = 50  # You can adjust the arrow length as needed
+
+        center_x = bounding_box_width / 2
+        center_y = bounding_box_height / 2
+
+
+        arrow_endpoint_x = int(center_x + arrow_length * math.cos(math.radians(orientation)))
+        arrow_endpoint_y = int(center_y + arrow_length * math.sin(math.radians(orientation)))
+
+        cv2.arrowedLine(image, ((int)(center_x), (int)(center_y)), (arrow_endpoint_x, arrow_endpoint_y), (0, 0, 255), 2)
+
 
 
 
@@ -57,12 +73,18 @@ class ServerCommunication():
 
                 image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
 
+                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
                 image_information, qr_information = self.recognise_image(image)
 
+                map(lambda d: self.draw_image_information(d, image), image_information if image_information is not None else [])
 
                 robot_movements, state = self.process_information(image_information, qr_information)
 
-                cv2.imshow('ROBOT POV', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
+
+
+                cv2.imshow('ROBOT POV', image)
                 if cv2.waitKey(1) == 0xFF: 
                         return  # esc to quit
 
@@ -74,25 +96,30 @@ class ServerCommunication():
                     continue
 
 
-                
-
-
-                
 
                 for movement in robot_movements:
                     self.localisation.velocity = movement[0]
                     self.localisation.angular_velocity = movement[1]
                     self.send_response(conn, movement, state)
 
-                        
-                """except Exception as e:
-                    print("client disconnected: ", e)
-                    self.localisation.velocity = 0
-                    self.localisation.angular_velocity = 0
-                    s.close()
-                    self.bind_socket()"""
+            
 
     
+    def draw_image_information(self, image_information, image):
+        (x1, y1, x2, y2) = image_information["position"]
+        orientation = image_information["orientation"]
+        bounding_box_area = image_information["bounding_box_area"]
+
+        # Calculate the width and height of the bounding box
+        width = x2 - x1
+        height = y2 - y1
+
+        center_x = (x1 + y2) / 2
+        center_y = (y1 + y2) / 2
+
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 1)
+        self.draw_arrow(orientation, width, height, image, center_x, center_y)
+
 
 
 

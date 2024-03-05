@@ -11,9 +11,6 @@ public class Robot_Script : MonoBehaviour
     public float obj_vel = 0f;
 
     public float obj_ang_vel = 0f;
-
-    public float move_speed = 5f;
-    public float rotation_speed = 30f;
     public Rigidbody rb;
     public string movement_state = "MANUAL";
 
@@ -22,13 +19,9 @@ public class Robot_Script : MonoBehaviour
     public float rotation = 0;
     public float movement = 0;
 
-    public int movement_const = 10;
+    public float rotation_speed = 5f;
 
-    public int move_multiplier = 1;
-    public float rotation_const = 10f;
-
-    public int difference = 50;
-
+    public float move_speed = 10;
     
 
 
@@ -43,11 +36,10 @@ public class Robot_Script : MonoBehaviour
 
         if(movement_state == "MANUAL")
         {
-            rotation = 0;
             if (Input.GetKey(KeyCode.D))
             {
                 // Rotate right
-                obj_ang_vel = rotation_const;
+                obj_ang_vel = rotation_speed;
                 obj_vel = 0;
                 rotation = rotation_speed * Mathf.Deg2Rad;
 
@@ -55,23 +47,32 @@ public class Robot_Script : MonoBehaviour
             if (Input.GetKey(KeyCode.A))
             {
                 // Rotate left
-                obj_ang_vel = -rotation_const;
+                obj_ang_vel = -rotation_speed;
+
                 obj_vel = 0;
                 rotation = -rotation_speed * Mathf.Deg2Rad;
             }
 
-            movement = 0;
             if (Input.GetKey(KeyCode.W))
             {
-                movement = move_speed * Time.deltaTime; //* difference;
-                obj_vel = move_multiplier;
+                movement = move_speed * Time.deltaTime;
+                obj_vel = move_speed;
                 obj_ang_vel = 0;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                movement = -move_speed * Time.deltaTime; //* difference;
-                obj_vel = -move_multiplier;
+                movement = -move_speed * Time.deltaTime;
+                obj_vel = -move_speed;
                 obj_ang_vel = 0;
+            }
+            if (Input.GetKey(KeyCode.Space))
+            {
+                // Rotate right
+                obj_ang_vel = 0;
+                obj_vel = 0;
+                movement = 0;
+                rotation = 0;
+
             }
 
         }
@@ -109,7 +110,7 @@ public class Robot_Script : MonoBehaviour
 
         HandleKeyPress();
 
-        rb.velocity = transform.forward * obj_vel * movement_const;  
+        rb.velocity = transform.forward * obj_vel;  
         rb.angularVelocity = Vector3.up * obj_ang_vel;
 
         

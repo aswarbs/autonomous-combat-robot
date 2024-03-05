@@ -1,7 +1,6 @@
 
 import cv2
 from ultralytics import YOLO
-import math
 import numpy as np
 import os
 
@@ -23,13 +22,13 @@ class ObjectDetection():
         self.class_names = self.model.model.names
 
         self.COLOUR_RANGES = {
-            'white': [[172, 30, 230], [0, 0, 100]],
-            'red1': [[10,255,255], [0, 150, 150]],
-            'red2':[[179,255,255], [160, 150, 150]],
+            'white': [[255, 255, 255], [0, 0, 180]],
+            'red1': [[10,255,255], [0, 100, 150]],
+            'red2':[[179,255,255], [160, 100, 150]],
             'green': [[89, 255, 255], [55, 100, 100]],
             'blue': [[128, 255, 255], [90, 100, 100]],
-            'yellow': [[35, 255, 255], [25, 150, 100]],
-            'orange': [[23, 255, 255], [15, 150, 150]],
+            'yellow': [[35, 255, 255], [25, 100, 100]],
+            'orange': [[23, 255, 255], [15, 100, 150]],
         }
 
         self.model(None)
@@ -54,21 +53,6 @@ class ObjectDetection():
             print("invalid colour!!")
             return
         
-    def draw_arrow(self, orientation, bounding_box_width, bounding_box_height, image):
-         # Retrieve the orientation of the Rubik's Cube (you should replace this with your actual orientation value)
-        orientation = (orientation * -1) + 90 # convert to angle used in function (0 is right)
-
-        # Calculate the endpoint of the arrow
-        arrow_length = 50  # You can adjust the arrow length as needed
-
-        center_x = bounding_box_width / 2
-        center_y = bounding_box_height / 2
-
-
-        arrow_endpoint_x = int(center_x + arrow_length * math.cos(math.radians(orientation)))
-        arrow_endpoint_y = int(center_y + arrow_length * math.sin(math.radians(orientation)))
-
-        cv2.arrowedLine(image, ((int)(center_x), (int)(center_y)), (arrow_endpoint_x, arrow_endpoint_y), (0, 0, 255), 2)
 
         
         
@@ -118,8 +102,8 @@ class ObjectDetection():
                     
                     # Display a bounding box over the detected object.
                     
-                    cv2.rectangle(screenshot, (x1, y1), (x2, y2), (0, 0, 0), 1)
-                    pass    
+                    
+                    return screenshot, bounding_boxes
 
         return screenshot, bounding_boxes
     
@@ -180,6 +164,8 @@ class ObjectDetection():
 
         if(len(contours_dict) == 0):
             print("contours dict is empty :(")
+        
+        print(f"CONTOURS: {contours_dict}")
         
         return contours_dict
     
@@ -259,7 +245,7 @@ class ObjectDetection():
 
         print("predicted")
 
-        screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
+        
 
         # Create an empty dictionary to store information about each Rubik's cube
         rubiks_cubes_info = {}
@@ -288,9 +274,6 @@ class ObjectDetection():
             # Calculate the width and height of the bounding box
             width = x2 - x1
             height = y2 - y1
-
-            if orientation is not None:
-                self.draw_arrow(orientation, width, height, roi)
 
 
             # Store information about the Rubik's cube in the dictionary
