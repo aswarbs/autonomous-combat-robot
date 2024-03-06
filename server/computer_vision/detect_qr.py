@@ -36,16 +36,16 @@ class DetectQR:
 
         print(f"distance: {distance} horizontal distance: {horizontal_distance} vertical distance: {vertical_distance}")
 
-        if(name == "top_left"):
+        if("top_left" in name):
             position = (-self.QR_CODE_COORDINATE, self.QR_CODE_COORDINATE)
             return (position[0] + horizontal_distance, position[1] - vertical_distance)
-        elif(name == "top_right"):
+        elif("top_right" in name):
             position = (self.QR_CODE_COORDINATE,self.QR_CODE_COORDINATE)
             return (position[0] - horizontal_distance,  position[1] + vertical_distance)
-        elif(name == "bottom_left"):
+        elif("bottom_left" in name):
             position = (-self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
             return (position[0] + horizontal_distance, position[1] + vertical_distance)
-        elif(name == "bottom_right"):
+        elif("bottom_right" in name):
             position = (self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
             return (position[0] - horizontal_distance, position[1] + vertical_distance)
         else:

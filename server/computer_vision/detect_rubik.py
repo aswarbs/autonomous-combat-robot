@@ -74,6 +74,8 @@ class ObjectDetection():
     screenshot: the current image to draw bounding boxes over.
     """
     def draw_bounding_boxes(self, results, screenshot):
+
+        confident_bounding_boxes = []
         # For every result,
         for result in results:
             # Retrieve the current bounding box predictions
@@ -98,14 +100,10 @@ class ObjectDetection():
                 confidence_score = bounding_box.conf[0]
 
                 # If the algorithm is reasonably confident,
-                if confidence_score > 0.5:
-                    
-                    # Display a bounding box over the detected object.
-                    
-                    
-                    return screenshot, bounding_boxes
+                if confidence_score > 0.8:
+                    confident_bounding_boxes += bounding_box
 
-        return screenshot, bounding_boxes
+        return screenshot, confident_bounding_boxes
     
     def detect_whole_color_contour(self, roi):
 

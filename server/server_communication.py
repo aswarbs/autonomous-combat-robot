@@ -137,6 +137,7 @@ class ServerCommunication():
         center_x = (x1 + y2) / 2
         center_y = (y1 + y2) / 2
 
+        
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 1)
         self.draw_arrow(orientation, width, height, image, center_x, center_y)
 

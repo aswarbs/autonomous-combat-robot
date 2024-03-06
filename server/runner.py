@@ -7,7 +7,7 @@ import threading
 
 if __name__ == "__main__":
     localisation = Localisation()
-
+    
     detector = ObjectDetection()
     qr_detector = DetectQR(localisation)
     decision_maker = DecisionMaker()

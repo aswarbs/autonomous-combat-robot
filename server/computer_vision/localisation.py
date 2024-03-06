@@ -6,17 +6,46 @@ class Localisation:
     def __init__(self):
         self.position = (0,0)
         self.orientation = 0 
-        self.top_left_boundary = (-1,1)
-        self.top_right_boundary = (1,1)
-        self.bottom_left_boundary = (-1,-1)
-        self.bottom_right_boundary = (1,-1)
+
+        self.arena_width = 250
+        self.arena_height = 250
+        self.qr_width = 30
+
+        self.arena_offset = 0 # arena is shifted 25 to the left
+
+        self.top_left_boundary = (self.arena_offset,self.arena_height + self.arena_offset)
+        self.top_right_boundary = (self.arena_width + self.arena_offset, self.arena_height + self.arena_offset)
+        self.bottom_left_boundary = (self.arena_offset,self.arena_offset)
+        self.bottom_right_boundary = (self.arena_width + self.arena_offset,self.arena_offset)
+
+        self.top_left_facing_south_position = (self.top_left_boundary[0] + (self.qr_width / 2), self.top_left_boundary[1])
+        self.top_left_facing_east_position = (self.top_left_boundary[0], self.top_left_boundary[1] - (self.qr_width / 2))
+
+        self.top_right_facing_south_position = (self.top_right_boundary[0] - (self.qr_width / 2), self.top_right_boundary[1])
+        self.top_right_facing_west_position = (self.top_right_boundary[0], self.top_right_boundary[1] - (self.qr_width / 2))
+
+        self.bottom_left_facing_north_position = (self.bottom_left_boundary[0] + (self.qr_width / 2), self.bottom_left_boundary[1])
+        self.bottom_left_facing_east_position = (self.bottom_left_boundary[0], self.bottom_left_boundary[1] + (self.qr_width / 2))
+
+        self.bottom_right_facing_north_position = (self.bottom_right_boundary[0] - (self.qr_width / 2), self.bottom_right_boundary[1])
+        self.bottom_right_facing_west_position = (self.bottom_right_boundary[0], self.bottom_right_boundary[1] + (self.qr_width / 2))
+
+        print(f"boundaries: {self.top_left_boundary}, {self.top_right_boundary}, {self.bottom_left_boundary}, {self.bottom_right_boundary}")
+
+        print(f"qrs: {self.top_left_facing_south_position}, {self.top_left_facing_east_position}, {self.top_right_facing_south_position}, {self.top_right_facing_west_position}, {self.bottom_left_facing_north_position}, {self.bottom_left_facing_east_position}, {self.bottom_right_facing_north_position}, {self.bottom_right_facing_west_position}")
+
         self.time_difference = 0
         self.velocity = 0
         self.angular_velocity = 0
         self.robot_size = 9
         self.border_width = 10
-        self.canvas_width = 225 + self.border_width
-        self.canvas_height = 225 + self.border_width
+
+        
+
+
+
+        self.canvas_width = self.arena_width + self.border_width
+        self.canvas_height = self.arena_height + self.border_width
         
         self.opponent_pos = (self.border_width + 180,self.border_width + 100)
 
@@ -41,20 +70,10 @@ class Localisation:
         self.canvas.create_rectangle(self.border_width, self.border_width, self.canvas_width - self.border_width, self.canvas_width - self.border_width, fill="green")
 
         corner_radius = 10
-        corner_coordinates = [self.top_left_boundary, self.top_right_boundary, self.bottom_left_boundary, self.bottom_right_boundary]
-        for coord in corner_coordinates:
-
-            if coord[0] == 1:
-                center_x = self.canvas_width - self.border_width
-            else:
-                center_x = self.border_width
-
-            if coord[1] == 1:
-                center_y = self.canvas_width - self.border_width
-            else:
-                center_y = self.border_width
-
-            self.canvas.create_oval(center_x - corner_radius, center_y - corner_radius, center_x + corner_radius, center_y + corner_radius, outline="black", fill="red")
+        coord = [self.top_left_boundary, self.top_right_boundary, self.bottom_left_boundary, self.bottom_right_boundary]
+        borders = [(1, -1/2), (0, -1/2), (1, 1), (0, 1)]
+        for x in range(len(coord)):
+            self.canvas.create_oval((coord[x][0] - corner_radius) + (self.border_width * borders[x][0]) , (coord[x][1] - corner_radius) + (self.border_width * borders[x][1]), (coord[x][0] + corner_radius) + (self.border_width * borders[x][0]), (coord[x][1] + corner_radius) + (self.border_width * borders[x][1]), outline="black", fill="red")
 
         self.canvas.create_oval(self.opponent_pos, self.opponent_pos[0] + 10, self.opponent_pos[1] + 10, outline="black", fill="yellow")
 
