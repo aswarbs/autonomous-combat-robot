@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using UnityEngine.UI;
+using System;
 
 
 public class Robot_Script : MonoBehaviour
 {   
 
+
     public float obj_vel = 0f;
 
-    public float obj_ang_vel = 0f;
+    public double obj_ang_vel = 0;
     public Rigidbody rb;
     public string movement_state = "MANUAL";
 
     public Text robot_state_label;
 
-    public float rotation = 0;
+    public double rotation = 0;
     public float movement = 0;
 
-    public float rotation_speed = 5f;
+    private double rotation_speed = Math.PI/16;
 
     public float move_speed = 10;
     
@@ -41,27 +43,30 @@ public class Robot_Script : MonoBehaviour
                 // Rotate right
                 obj_ang_vel = rotation_speed;
                 obj_vel = 0;
-                rotation = rotation_speed * Mathf.Deg2Rad;
+                rotation = rotation_speed;
+                movement = 0;
 
             }
             if (Input.GetKey(KeyCode.A))
             {
                 // Rotate left
                 obj_ang_vel = -rotation_speed;
-
                 obj_vel = 0;
-                rotation = -rotation_speed * Mathf.Deg2Rad;
+                rotation = -rotation_speed;
+                movement = 0;
             }
 
             if (Input.GetKey(KeyCode.W))
             {
                 movement = move_speed * Time.deltaTime;
+                rotation = 0;
                 obj_vel = move_speed;
                 obj_ang_vel = 0;
             }
             if (Input.GetKey(KeyCode.S))
             {
                 movement = -move_speed * Time.deltaTime;
+                rotation = 0;
                 obj_vel = -move_speed;
                 obj_ang_vel = 0;
             }
@@ -111,7 +116,7 @@ public class Robot_Script : MonoBehaviour
         HandleKeyPress();
 
         rb.velocity = transform.forward * obj_vel;  
-        rb.angularVelocity = Vector3.up * obj_ang_vel;
+        rb.angularVelocity = Vector3.up * (float)obj_ang_vel;
 
         
 

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import threading
 import math
+from datetime import datetime
 
 class ServerCommunication():
 
@@ -62,6 +63,16 @@ class ServerCommunication():
         cv2.arrowedLine(image, ((int)(center_x), (int)(center_y)), (arrow_endpoint_x, arrow_endpoint_y), (0, 0, 255), 2)
 
 
+    def timestamp_to_milliseconds(self, timestamp):
+
+        timestamp = str(timestamp)
+        hour, minute, secs_and_millis = timestamp.split(":")
+        second, millisecond = secs_and_millis.split(".")
+        seconds = int(hour) * 60 * 60 + int(minute) * 60 + int(second)
+        seconds += float(millisecond) / 1000
+        milliseconds = seconds * 1000
+
+        return milliseconds / 1000000
 
 
     def run(self, conn, s):
@@ -71,7 +82,10 @@ class ServerCommunication():
                 received_data = self.receive_data(conn)
                 parsed_data = self.parse_data(received_data)
 
-                image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
+                image, self.movement_state, movement, rotation, time = self.convert_bytes_to_image(parsed_data)
+
+                format = '%H:%M:%S:%f'
+                current_time = datetime.utcnow().strftime(format)[:-3]
 
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
@@ -81,6 +95,10 @@ class ServerCommunication():
 
                 robot_movements, state = self.process_information(image_information, qr_information)
 
+                
+                
+                difference = datetime.strptime(current_time, format) - datetime.strptime(time, format)
+                milliseconds = self.timestamp_to_milliseconds(difference)
 
 
 
@@ -92,6 +110,7 @@ class ServerCommunication():
                     print(f"setting movement: {movement} and rotation: {rotation}")
                     self.localisation.velocity = movement
                     self.localisation.angular_velocity = rotation
+                    self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, "SUCCESS")
                     continue
 
@@ -100,6 +119,7 @@ class ServerCommunication():
                 for movement in robot_movements:
                     self.localisation.velocity = movement[0]
                     self.localisation.angular_velocity = movement[1]
+                    self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, state)
 
             
@@ -192,7 +212,11 @@ class ServerCommunication():
         movement = parsed_data['movement']
         rotation = parsed_data['rotation']
 
-        return image, state, movement, rotation
+        time = parsed_data["time"]
+
+        
+
+        return image, state, movement, rotation, time
 
     """def save_image(image):
         # Define a filename for the saved PNG image

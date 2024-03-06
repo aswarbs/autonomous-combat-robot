@@ -1,7 +1,5 @@
 import math
 import tkinter as tk
-import threading
-import time
 
 class Localisation:
 
@@ -12,14 +10,13 @@ class Localisation:
         self.top_right_boundary = (1,1)
         self.bottom_left_boundary = (-1,-1)
         self.bottom_right_boundary = (1,-1)
-        self.time_interval = 0.1
+        self.time_difference = 0
         self.velocity = 0
         self.angular_velocity = 0
-        self.robot_size = 20
+        self.robot_size = 9
         self.border_width = 10
-        self.canvas_width = 220 + self.border_width
-        self.canvas_height = 220 + self.border_width
-        self.movement_const = 10
+        self.canvas_width = 225 + self.border_width
+        self.canvas_height = 225 + self.border_width
         
         self.opponent_pos = (self.border_width + 180,self.border_width + 100)
 
@@ -66,12 +63,12 @@ class Localisation:
         
     def update(self):
             
-            self.orientation -= self.angular_velocity * self.time_interval
+            self.orientation -= self.angular_velocity * self.time_difference
 
 
             # Update position
-            delta_x = (self.velocity * self.movement_const) * math.cos(self.orientation) * self.time_interval
-            delta_y = (self.velocity * self.movement_const) * math.sin(self.orientation) * self.time_interval
+            delta_x = self.velocity * math.cos(self.orientation)
+            delta_y = self.velocity * math.sin(self.orientation)
 
             #print(f"position: {self.position}")
             
