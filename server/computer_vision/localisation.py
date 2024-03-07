@@ -1,15 +1,24 @@
 import math
 import tkinter as tk
+import sympy as sym
 
 class Localisation:
 
     def __init__(self):
-        self.position = (0,0)
-        self.orientation = 0 
+
+        
+        self.orientation = math.pi/2
 
         self.arena_width = 250
         self.arena_height = 250
         self.qr_width = 30
+
+        self.position = (int(self.arena_width / 2),int(self.arena_height / 2))
+
+        self.lower_bound_x = 0
+        self.lower_bound_y = 0
+        self.upper_bound_x = self.arena_width
+        self.upper_bound_y = self.arena_height
 
         self.arena_offset = 0 # arena is shifted 25 to the left
 
@@ -30,15 +39,23 @@ class Localisation:
         self.bottom_right_facing_north_position = (self.bottom_right_boundary[0] - (self.qr_width / 2), self.bottom_right_boundary[1])
         self.bottom_right_facing_west_position = (self.bottom_right_boundary[0], self.bottom_right_boundary[1] + (self.qr_width / 2))
 
-        print(f"boundaries: {self.top_left_boundary}, {self.top_right_boundary}, {self.bottom_left_boundary}, {self.bottom_right_boundary}")
-
-        print(f"qrs: {self.top_left_facing_south_position}, {self.top_left_facing_east_position}, {self.top_right_facing_south_position}, {self.top_right_facing_west_position}, {self.bottom_left_facing_north_position}, {self.bottom_left_facing_east_position}, {self.bottom_right_facing_north_position}, {self.bottom_right_facing_west_position}")
-
         self.time_difference = 0
         self.velocity = 0
         self.angular_velocity = 0
         self.robot_size = 9
         self.border_width = 10
+
+        self.labels_to_coordinates = {
+            "top_left_facing_south": self.top_left_facing_south_position,
+            "top_left_facing_east": self.top_left_facing_east_position,
+            "top_right_facing_south": self.top_right_facing_south_position,
+            "top_right_facing_west": self.top_right_facing_west_position,
+            "bottom_left_facing_north": self.bottom_left_facing_north_position,
+            "bottom_left_facing_east":  self.bottom_left_facing_east_position,
+            "bottom_right_facing_north": self.bottom_right_facing_north_position,
+            "bottom_right_facing_west": self.bottom_right_facing_west_position
+        }
+
 
         
 
@@ -47,7 +64,7 @@ class Localisation:
         self.canvas_width = self.arena_width + self.border_width
         self.canvas_height = self.arena_height + self.border_width
         
-        self.opponent_pos = (self.border_width + 180,self.border_width + 100)
+        self.opponent_pos = (self.border_width + 100,self.border_width + (self.arena_height -180))
 
         
 
@@ -78,27 +95,70 @@ class Localisation:
         self.canvas.create_oval(self.opponent_pos, self.opponent_pos[0] + 10, self.opponent_pos[1] + 10, outline="black", fill="yellow")
 
 
+    def find_position(self, labels_to_distances):
+
+        points = []
+        distances = []
+
+        for key, value in labels_to_distances.items():
+            points.append(self.labels_to_coordinates[key])
+            distances.append(value)
+
+        triangulation = self.triangulate_position(points[0], points[1], distances[0], distances[1])
+
+        if(triangulation is None):
+            return 
+        
+        self.position = (self.border_width + triangulation[0],self.border_width + (self.arena_height - triangulation[1]))
+
+
+
             
+    def triangulate_position(self, p1, p2, d1, d2):
+        x,y = sym.symbols('x,y')
+        eq1 = sym.Eq((x - p1[0])**2 + (y - p1[1])**2, d1**2)
+        eq2 = sym.Eq((x - p2[0])**2 + (y - p2[1])**2, d2**2)
+        results = sym.solve([eq1,eq2],(x,y))
+
+        valid_results = []
+
+        for x,y in results:
+            if x < self.lower_bound_x or x > self.upper_bound_x:
+                continue
+            if y < self.lower_bound_y or y > self.upper_bound_y:
+                continue
+            valid_results.append((int(x), int(y)))
+
+        if(len(valid_results) == 0):
+            return
+
+        assert(len(valid_results) == 1)
+
+        result = valid_results[0]
+        print(f"\n\n\nRESULT: {result}")
+        return result
+    
+
+
         
     def update(self):
             
-            self.orientation -= self.angular_velocity * self.time_difference
+            self.orientation += self.angular_velocity * self.time_difference
+
+            print(f"velocity: {self.velocity}")
 
 
             # Update position
             delta_x = self.velocity * math.cos(self.orientation)
             delta_y = self.velocity * math.sin(self.orientation)
 
-            #print(f"position: {self.position}")
-            
-            self.position = (self.position[0] + delta_x, self.position[1] + delta_y)
+            self.position = (self.position[0] - delta_x, self.position[1] - delta_y)
+
+            screen_x = self.position[0] + delta_x + self.border_width
+            screen_y = self.position[1] + delta_y + self.border_width
 
             # Update orientation
            
-
-            # Map position to screen coordinates
-            screen_x = self.canvas_width / 2 + self.position[0] 
-            screen_y = self.canvas_height / 2 - self.position[1] 
 
             # Clear previous drawing
             self.canvas.delete("robot")
@@ -112,7 +172,6 @@ class Localisation:
             x3 = screen_x + self.robot_size/2 * math.cos(self.orientation) + self.robot_size/2 * math.sin(self.orientation)
             y3 = screen_y - self.robot_size/2 * math.sin(self.orientation) + self.robot_size/2 * math.cos(self.orientation)
 
-            #print(f"{x0} {y0}, {x1} {y1}, {x2} {y2}, {x3} {y3}")
 
 
             # Draw the robot

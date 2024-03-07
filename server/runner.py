@@ -11,17 +11,14 @@ if __name__ == "__main__":
     detector = ObjectDetection()
     qr_detector = DetectQR(localisation)
     decision_maker = DecisionMaker()
-    
-    
 
     server = ServerCommunication(detector, decision_maker, qr_detector, localisation)
 
     server_thread = threading.Thread(target=server.bind_socket)
     server_thread.start()
-
     
 
     while True: 
         localisation.root.update()
 
-    
+        

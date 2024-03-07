@@ -12,9 +12,6 @@ class ServerCommunication():
 
     def __init__(self, detector, decider, qr_detector, localisation):
 
-        print("hello")
-        
-
         # Set host as localhost to receive messages on this machine.
         self.HOST = "127.0.0.1"
         # Set well known port for the client to use.
@@ -107,7 +104,6 @@ class ServerCommunication():
                         return  # esc to quit
 
                 if(self.movement_state == "MANUAL"):
-                    print(f"setting movement: {movement} and rotation: {rotation}")
                     self.localisation.velocity = movement
                     self.localisation.angular_velocity = rotation
                     self.localisation.time_difference = milliseconds

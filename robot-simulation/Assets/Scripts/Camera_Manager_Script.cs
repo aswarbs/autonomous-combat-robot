@@ -22,9 +22,12 @@ public class CameraManager : MonoBehaviour
         SetCameraActive(current_index, true);
     }
 
+
     // Update is called once per frame
     void Update()
     {
+        
+        Debug.Log(cameras[0].GetComponent<Camera>().focalLength);
         // if escape is pressed, switch cameras
         if (Input.GetKeyDown(KeyCode.Escape))
         {

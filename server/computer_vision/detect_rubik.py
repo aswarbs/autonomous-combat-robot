@@ -4,6 +4,7 @@ from ultralytics import YOLO
 import numpy as np
 import os
 
+
 # Specify the folder path containing the images
 #image_folder = r'computer_vision\datasets\rubiks_cube_model\test\images'
 """image_folder = r'test_image_recognition\testing_data\output_images'
@@ -34,6 +35,7 @@ class ObjectDetection():
         self.model(None)
 
         
+
 
 
     def calculate_absolute_orientation(self, orientation, most_prominent_side):
@@ -100,7 +102,7 @@ class ObjectDetection():
                 confidence_score = bounding_box.conf[0]
 
                 # If the algorithm is reasonably confident,
-                if confidence_score > 0.8:
+                if confidence_score > 0.9:
                     confident_bounding_boxes += bounding_box
 
         return screenshot, confident_bounding_boxes
@@ -163,7 +165,6 @@ class ObjectDetection():
         if(len(contours_dict) == 0):
             print("contours dict is empty :(")
         
-        print(f"CONTOURS: {contours_dict}")
         
         return contours_dict
     

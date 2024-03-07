@@ -125,7 +125,6 @@ public class Client_Communication : MonoBehaviour
         if (timeSinceLastUpdate >= updateInterval)
         {
             string timestamp = DateTime.UtcNow.ToString("HH:mm:ss:fff");
-            Debug.Log(timestamp);
             lastScreenshotJson = CaptureScreenshot(timestamp);
             timeSinceLastUpdate = 0f;
         }

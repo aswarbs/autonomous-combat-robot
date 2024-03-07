@@ -1,21 +1,20 @@
 
 import cv2
 import numpy as np
-import math
+import sympy as sym
 
 class DetectQR:
    
 
     def __init__(self, localisation):
-        self.KNOWN_WIDTH = 2400 # centimeters
-        self.FOCAL_WIDTH = 4.74 # millimeters
-        self.IMAGE_WIDTH = 517
-        self.IMAGE_HEIGHT = 383
-        self.QR_CODE_COORDINATE = 200
+        self.KNOWN_WIDTH = 225 # centimeters
+        self.FOCAL_WIDTH = 36 # centimeters
         self.localisation = localisation
         self.offset = self.localisation.border_width
 
+
         self.qcd = cv2.QRCodeDetector()
+
 
 
     def calculate_width(self, points):
@@ -28,31 +27,6 @@ class DetectQR:
         return width
 
 
-
-    def calculate_position_from_object(self, distance, name):
-
-        horizontal_distance = distance * math.cos(self.localisation.orientation)
-        vertical_distance = distance * math.sin(self.localisation.orientation)
-
-        print(f"distance: {distance} horizontal distance: {horizontal_distance} vertical distance: {vertical_distance}")
-
-        if("top_left" in name):
-            position = (-self.QR_CODE_COORDINATE, self.QR_CODE_COORDINATE)
-            return (position[0] + horizontal_distance, position[1] - vertical_distance)
-        elif("top_right" in name):
-            position = (self.QR_CODE_COORDINATE,self.QR_CODE_COORDINATE)
-            return (position[0] - horizontal_distance,  position[1] + vertical_distance)
-        elif("bottom_left" in name):
-            position = (-self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
-            return (position[0] + horizontal_distance, position[1] + vertical_distance)
-        elif("bottom_right" in name):
-            position = (self.QR_CODE_COORDINATE,-self.QR_CODE_COORDINATE)
-            return (position[0] - horizontal_distance, position[1] + vertical_distance)
-        else:
-            print(f"qr code not found: {name}")
-            return
-        
-        
 
              
 
@@ -85,9 +59,6 @@ class DetectQR:
 
                 approx_distance = (self.KNOWN_WIDTH * self.FOCAL_WIDTH) / width # in centimeters
                 approx_distance = round(approx_distance, 3)
-                position = self.calculate_position_from_object(approx_distance, decoded_info[x])
-                print(f"position of player: {position}")
-                # mark it on the map
 
 
                 #self.localisation.position = position
@@ -102,6 +73,8 @@ class DetectQR:
         # convert lists to dictionary
         labels_to_distances = {decoded_info[i]: distances[i] for i in range(len(decoded_info))}
 
-        # estimate the position based on distances and angles
+
+        if(len(labels_to_distances)) == 2:
+            self.localisation.find_position(labels_to_distances)
 
         return labels_to_distances

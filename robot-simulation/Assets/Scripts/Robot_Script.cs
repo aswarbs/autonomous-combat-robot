@@ -23,7 +23,7 @@ public class Robot_Script : MonoBehaviour
 
     private double rotation_speed = Math.PI/16;
 
-    public float move_speed = 10;
+    public float move_speed = 5;
     
 
 
