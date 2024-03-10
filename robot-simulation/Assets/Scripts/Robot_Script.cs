@@ -9,6 +9,8 @@ using System;
 public class Robot_Script : MonoBehaviour
 {   
 
+    public float dist;
+
 
     public float obj_vel = 0f;
 
@@ -80,6 +82,45 @@ public class Robot_Script : MonoBehaviour
 
             }
 
+            if (Input.GetKey(KeyCode.E))
+            {
+                // Attack
+                Vector3 bPos = transform.forward * dist + transform.position;
+                bPos = new Vector3(bPos.x, bPos.y + 1.5f, bPos.z);
+
+                // if opponent rigidbody is in bpos, return true. else, return false.
+
+                // Define the radius of the sphere for the check
+                float checkRadius = 15f; // Adjust this value based on your needs
+
+                // Define the layer of the opponent to filter the check
+                // This assumes you have an opponent layer set up in your Unity project
+                int opponentLayer = LayerMask.NameToLayer("Opponent");
+                int layerMask = 1 << opponentLayer;
+
+                // Perform the overlap sphere check
+                Collider[] hitColliders = Physics.OverlapSphere(bPos, checkRadius, layerMask);
+
+                // Check if any of the colliders belong to the opponent
+                if (hitColliders.Length > 0)
+                {
+                    // At least one opponent is within the attack range
+                    // You can loop through hitColliders array to get all hit opponents if needed
+                    Debug.Log("Opponent hit!");
+                    // Return true or perform any action needed upon hitting an opponent
+                }
+                else
+                {
+                    // No opponent is within the attack range
+                    Debug.Log("Attack missed.");
+                    // Return false or handle a miss
+                }
+
+
+
+
+            }
+
         }
 
         if (Input.GetKeyUp(KeyCode.Q))
@@ -105,6 +146,8 @@ public class Robot_Script : MonoBehaviour
 
             robot_state_label.text = "Current Movement: " + movement_state;
         }
+
+
     }
 
     
@@ -128,6 +171,7 @@ public class Robot_Script : MonoBehaviour
         {
             obj_vel = movement_and_rotation[0];
             obj_ang_vel = movement_and_rotation[1];
+            // retrieve ATTACK here.
         }   
 
          

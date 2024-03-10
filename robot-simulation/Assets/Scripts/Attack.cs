@@ -42,9 +42,8 @@ public class Attack : MonoBehaviour
     {
         
         aPos = origin.position;
-        bPos = new Vector3(aPos.x, aPos.y + 1.5f, aPos.z);
+        aPos = new Vector3(aPos.x, aPos.y + 1.5f, aPos.z);
         bPos = origin.forward * dist + aPos;
-        bPos = new Vector3(bPos.x, bPos.y + 1.5f, bPos.z);
 
 
         lineRenderer.SetPosition(0, aPos);
@@ -52,13 +51,13 @@ public class Attack : MonoBehaviour
 
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {
 
         counter += 1f / lineDrawSpeed;
-
-        Debug.LogFormat("counter: {0}", counter);
         
         if(Input.GetKey(key) && autonomous == false)
         {
