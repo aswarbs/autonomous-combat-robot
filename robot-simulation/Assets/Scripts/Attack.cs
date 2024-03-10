@@ -19,7 +19,7 @@ public class Attack : MonoBehaviour
     private Vector3 bPos;
     public float lineDrawSpeed;
 
-    private float time = 2;
+    public float timeout = 2;
 
     public Color color;
     public Transform origin;
@@ -53,11 +53,16 @@ public class Attack : MonoBehaviour
 
         if (Input.GetKey(key))
         {
+            if(counter < timeout)
+            {
+                Debug.Log("INSUFFICIENT TIME BETWEEN ATTACKS");
+                return;
+            }
             counter = 0;
             updatePosition();
         }
 
-        if (counter < time)
+        if (counter < timeout)
         {
             counter += 1f / lineDrawSpeed;
 
@@ -69,11 +74,9 @@ public class Attack : MonoBehaviour
             Vector3 pointAloneLine = x * Vector3.Normalize(pointB - pointA) + pointA;
 
             lineRenderer.SetPosition(1, pointAloneLine);
-            Debug.LogFormat("counter: {0} dist: {1}", counter, dist);
         }
         else
         {
-            Debug.Log("hello");     
             lineRenderer.enabled = false;
         }
 
