@@ -3635,11 +3635,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalRotation.y
@@ -3651,7 +3651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fbd5d52471ace4a45aa1ad21d1aef42d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -5448,14 +5448,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442180012}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6903456, y: 0.15304591, z: -0.15304591, w: 0.6903456}
+  m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 100, y: 3, z: 180}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1058222145}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 25, z: 0}
+  m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!114 &1442180014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5468,11 +5468,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40511e106b8465b42bcc383dbf41d85c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 1442180015}
   lineDrawSpeed: 6
+  timeout: 2
   color: {r: 1, g: 0, b: 0, a: 1}
   origin: {fileID: 1442180013}
   destination: {fileID: 4542218100168583904}
   key: 9
+  autonomous: 1
 --- !u!120 &1442180015
 LineRenderer:
   serializedVersion: 2
@@ -8080,11 +8083,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40511e106b8465b42bcc383dbf41d85c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 4542218100168583909}
   lineDrawSpeed: 6
+  timeout: 2
   color: {r: 0, g: 1, b: 0.03705597, a: 1}
   origin: {fileID: 4542218100168583904}
   destination: {fileID: 1442180013}
   key: 101
+  autonomous: 0
 --- !u!120 &4542218100168583909
 LineRenderer:
   serializedVersion: 2
