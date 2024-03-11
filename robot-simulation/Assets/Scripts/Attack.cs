@@ -28,6 +28,10 @@ public class Attack : MonoBehaviour
     public KeyCode key;
 
     public bool autonomous;
+
+    public float checkRadius;
+
+    public int opponentLayer;
         
     // Use this for initialization
     void Start()
@@ -51,6 +55,35 @@ public class Attack : MonoBehaviour
 
     }
 
+
+    void checkAttack()
+    {
+
+        // Define the layer of the opponent to filter the check
+        // This assumes you have an opponent layer set up in your Unity project
+        int opponentLayer = LayerMask.NameToLayer("Opponent");
+        int layerMask = 1 << opponentLayer;
+
+        // Perform the overlap sphere check
+        Collider[] hitColliders = Physics.OverlapSphere(bPos, checkRadius, layerMask);
+
+        // Check if any of the colliders belong to the opponent
+        if (hitColliders.Length > 0)
+        {
+            // At least one opponent is within the attack range
+            Debug.Log("Opponent hit!");
+
+            // player.handleHit()  // opponent.handleHit()
+        }
+        else
+        {
+            // No opponent is within the attack range
+            Debug.Log("Attack missed.");
+
+            // player.handleMiss()  // opponent.handleMiss()
+        }
+    }
+
     
 
     // Update is called once per frame
@@ -68,6 +101,7 @@ public class Attack : MonoBehaviour
             }
             counter = 0;
             updatePosition();
+            checkAttack();
         }
 
         if (counter < 1)
@@ -89,12 +123,15 @@ public class Attack : MonoBehaviour
             lineRenderer.SetPosition(1, aPos);
         }
 
-        if(autonomous && counter >= timeout)
+        if(counter >= timeout)
         {
-            counter = 0;
-            updatePosition();
+            if(autonomous)
+            {
+                counter = 0;
+                updatePosition();
+            }
+            
         }
-
         
 
     }
