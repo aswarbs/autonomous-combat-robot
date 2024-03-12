@@ -123,6 +123,10 @@ class Localisation:
         valid_results = []
 
         for x,y in results:
+
+            if (not x.is_real) or (not y.is_real):
+                return
+            
             if x < self.lower_bound_x or x > self.upper_bound_x:
                 continue
             if y < self.lower_bound_y or y > self.upper_bound_y:

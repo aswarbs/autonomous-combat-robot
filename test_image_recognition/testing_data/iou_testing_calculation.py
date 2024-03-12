@@ -1,5 +1,23 @@
 import csv
 import numpy as np
+import cv2
+
+def get_data_from_coco(path):
+    # Initialize an empty list to store the data
+    data_array = []
+
+    # Read the CSV file and populate the data_array
+    with open(path, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        
+        # Skip the header row if it exists
+        header = next(csv_reader, None)
+
+        for row in csv_reader:
+            data_array.append(row)
+
+    # Now, data_array contains the contents of the CSV file as a list of lists
+    return data_array
 
 def get_data_from_csv(path):
     # annotations are stored in csv
@@ -99,7 +117,25 @@ def get_iou_array(ground_truth_array, pred_array):
 
      print("true negatives:", true_negative_arr)
      print("false positives:", false_positive_arr)
-     print("mean: ", np.mean(ious))
+
+     
+     image = cv2.imread("test_image_recognition/testing_data/output_images/frame_1.50.jpg")
+
+     ground_truth = [(433, 319), (576, 428)]
+     pred = [(425, 315), (581, 433)]
+
+
+     cv2.rectangle(image, ground_truth[0], ground_truth[1], color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
+     cv2.rectangle(image, pred[0], pred[1], color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
+
+     cv2.imshow("", image)
+
+     cv2.imwrite("0.83.jpg", image)
+
+
+     cv2.waitKey(0)
+
+     
 
 
 
