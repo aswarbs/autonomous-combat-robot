@@ -14,9 +14,6 @@ class DetectQR:
         self.offset = self.localisation.border_width
 
 
-        self.qcd = cv2.QRCodeDetector()
-
-
 
     def calculate_width(self, points):
         # Calculate Euclidean distance between points
