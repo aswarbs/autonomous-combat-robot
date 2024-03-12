@@ -12,18 +12,21 @@ class DetectQR:
         self.path=path
 
 
-        self.qcd = cv2.QRCodeDetector()
-
         
     
     def find_qrs_and_distances(self):
 
         cnt = 0
-        pyz_cnt = 0
+
+        arr = []
 
         with os.scandir(self.path) as it:
             for entry in it:
                 if entry.name.endswith(".jpg") and entry.is_file():
+
+                    cnt+=1
+
+                    current_arr = []
 
 
                     frame = cv2.imread(entry.path)
@@ -32,16 +35,23 @@ class DetectQR:
 
                     codes = pyzbar.decode(frame, [pyzbar.ZBarSymbol.QRCODE,])
                     for code in codes:
-                        print(f"{code.data.decode()} {code.rect.left} {code.rect.top} {code.rect.width} {code.rect.height}")
-                        cnt += 1
-
                         
-                    # Display the resulting frame
-                    cv2.imshow('Frame',frame)
+                        label = code.data.decode()
+                        left = code.rect.left
+                        top = code.rect.top
+                        width = code.rect.width
+                        height = code.rect.height
 
-                    #cv2.waitKey(0)
+                        if left < 0: left = 0
+                        if top < 0: top = 0
 
-        print(f"count: {cnt}")
+                        points = [left, top, left + width, top + height]
+
+                        current_arr.append(points)
+
+                    arr.append([cnt, current_arr])
+
+        return arr, cnt
             
 
 

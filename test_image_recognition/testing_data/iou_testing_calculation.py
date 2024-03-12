@@ -1,20 +1,45 @@
 import csv
 import numpy as np
 import cv2
+import os
+import json
+from predict_qr import DetectQR
 
-def get_data_from_coco(path):
+def get_data_from_coco(path, frame_len):
     # Initialize an empty list to store the data
     data_array = []
 
-    # Read the CSV file and populate the data_array
-    with open(path, 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        
-        # Skip the header row if it exists
-        header = next(csv_reader, None)
+    f = open(path)
 
-        for row in csv_reader:
-            data_array.append(row)
+    json_data = json.load(f)
+
+    annotations = json_data["annotations"]
+
+    # for annotation in annotations:
+    #     print(annotation)
+
+
+    # Assuming 'annotations' is a list of dictionaries with 'image_id' and 'bbox' keys
+    # First, find the maximum 'image_id' value
+    max_image_id = max(annotation['image_id'] for annotation in annotations)
+
+    print(f"max image:{max_image_id}")
+
+    # Initialize an empty dictionary to hold the bounding boxes grouped by 'image_id'
+    annotation_dict = {}
+
+    # Populate the dictionary
+    for index in range(1, frame_len+1): 
+        annotation_dict[index] = [annotation['bbox'] for annotation in annotations if annotation['image_id'] == index]
+
+
+    data_array = [[key, val] for key, val in annotation_dict.items()]
+
+    for x in range(len(data_array)):
+         for y in range(len(data_array[x][1])):
+            data_array[x][1][y][2] = int(data_array[x][1][y][0] + data_array[x][1][y][2])
+            data_array[x][1][y][3] = int(data_array[x][1][y][1] + data_array[x][1][y][3])
+
 
     # Now, data_array contains the contents of the CSV file as a list of lists
     return data_array
@@ -40,10 +65,8 @@ def get_data_from_csv(path):
     # Now, data_array contains the contents of the CSV file as a list of lists
     return data_array
 
-def get_iou(box_arrs):
+def get_iou(ground_truth, pred):
         # Retrieve ground truth and prediction arrays. remove the title element from the arrays.
-        ground_truth = box_arrs[0][1:]
-        pred = box_arrs[1][1:]
 
         ground_truth = [float(element) for element in ground_truth]
         pred = [float(element) for element in pred]
@@ -74,7 +97,7 @@ def get_iou(box_arrs):
         
         return iou
 
-def get_iou_array(ground_truth_array, pred_array):
+def get_iou_array(ground_truth_array, pred_array, frame_len, path):
      """
      iterate through both arrays
      compare the image names
@@ -85,65 +108,41 @@ def get_iou_array(ground_truth_array, pred_array):
      if either of these happen, compare the image names to find which is behind, and iterate through until they are the same
      """
 
-     
-     # Create dictionaries to match items based on the first value
-     ground_truth_dict = {item[0]: item for item in ground_truth_array}
-     pred_dict = {item[0]: item for item in pred_array}
+     with os.scandir(path) as it:
+          
+          cnt = 0
 
-     # Initialize lists to store matched and unmatched items
-     matched_items = []
-     true_negative_arr = []
-     false_positive_arr = []
+          for entry in it:
+               frame = cv2.imread(entry.path)
+               ground_truth = ground_truth_array[cnt][1]
+               pred = pred_array[cnt][1]
 
-    # Iterate through the first dictionary and check for matches in the second dictionary
-     for key, value in ground_truth_dict.items():
-         if key in pred_dict:
-             matched_items.append((value, pred_dict[key]))
-         else:
-             true_negative_arr.append(value)
+               for truth in ground_truth:
+                    cv2.rectangle(frame, (int(truth[0]), int(truth[1])), (int(truth[2]), int(truth[3])), color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
+                
+               for p in pred:
+                    cv2.rectangle(frame, (int(p[0]), int(p[1])), (int(p[2]), int(p[3])), color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
 
-     # Iterate through the second dictionary and check for unmatched items
-     for key, value in pred_dict.items():
-         if key not in ground_truth_dict:
-             false_positive_arr.append(value)
+                # if a ground truth intersects with a pred get the iou
+                
+                # TODO ^^
 
-     ious = []
+               cv2.imshow("", frame)
 
-     # Print the results
-     for item in matched_items:
-          iou = get_iou(item)
-          ious.append(iou)
-          print(f"{item[0]}: {iou}")
+               cv2.waitKey(0)
 
-     print("true negatives:", true_negative_arr)
-     print("false positives:", false_positive_arr)
-
-     
-     image = cv2.imread("test_image_recognition/testing_data/output_images/frame_1.50.jpg")
-
-     ground_truth = [(433, 319), (576, 428)]
-     pred = [(425, 315), (581, 433)]
-
-
-     cv2.rectangle(image, ground_truth[0], ground_truth[1], color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
-     cv2.rectangle(image, pred[0], pred[1], color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
-
-     cv2.imshow("", image)
-
-     cv2.imwrite("0.83.jpg", image)
-
-
-     cv2.waitKey(0)
-
+               cnt+=1
+               
+    
+    
      
 
+path = "testing_data/qr/output_images"
+detect_qr = DetectQR(path)
+preds, frame_len = detect_qr.find_qrs_and_distances()
 
+ground_truth_path = r"testing_data/qr/csvs/coco_moving_qr_annotations.json"
+ground_truth_data = get_data_from_coco(ground_truth_path, frame_len)
 
-ground_truth_path = r'test_image_recognition\testing_data\csvs\rubiks_sim_ground.csv'
-prediction_path = r'test_image_recognition\testing_data\csvs\rubiks_sim_pred.csv'
-
-ground_truth_data = get_data_from_csv(ground_truth_path)
-prediction_data = get_data_from_csv(prediction_path)
-
-ious = get_iou_array(ground_truth_data, prediction_data)
+ious = get_iou_array(ground_truth_data, preds, frame_len, path)
 
