@@ -97,6 +97,12 @@ def get_iou(ground_truth, pred):
         
         return iou
 
+def intersects(rec1, rec2):
+    return not (rec1[2] < rec2[0]
+                or rec1[0] > rec2[2]
+                or rec1[1] > rec2[3]
+                or rec1[3] < rec2[1])
+
 def get_iou_array(ground_truth_array, pred_array, frame_len, path):
      """
      iterate through both arrays
@@ -120,8 +126,14 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
                for truth in ground_truth:
                     cv2.rectangle(frame, (int(truth[0]), int(truth[1])), (int(truth[2]), int(truth[3])), color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
                 
-               for p in pred:
-                    cv2.rectangle(frame, (int(p[0]), int(p[1])), (int(p[2]), int(p[3])), color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
+                    for p in pred:
+                            cv2.rectangle(frame, (int(p[0]), int(p[1])), (int(p[2]), int(p[3])), color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
+
+                            if intersects(p,truth):
+                                 iou= get_iou(truth, p)
+                                 print(f"iou: {iou}")
+
+                    # if truth intersects with pred, calculate iou
 
                 # if a ground truth intersects with a pred get the iou
                 
