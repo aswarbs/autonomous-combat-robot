@@ -3,7 +3,8 @@ import numpy as np
 import cv2
 import os
 import json
-from predict_qr import DetectQR
+from predict_rubik import ObjectDetection
+from shapely.geometry import Polygon
 
 def get_data_from_coco(path, frame_len):
     # Initialize an empty list to store the data
@@ -18,6 +19,15 @@ def get_data_from_coco(path, frame_len):
     # for annotation in annotations:
     #     print(annotation)
 
+    i2l = {
+         1: "red",
+         2: "orange",
+         3: "green",
+         4: "blue",
+         5: "yellow",
+         6: "white"
+    }
+
 
     # Assuming 'annotations' is a list of dictionaries with 'image_id' and 'bbox' keys
     # First, find the maximum 'image_id' value
@@ -30,18 +40,20 @@ def get_data_from_coco(path, frame_len):
 
     # Populate the dictionary
     for index in range(1, frame_len+1): 
-        annotation_dict[index] = [annotation['bbox'] for annotation in annotations if annotation['image_id'] == index]
+        annotation_dict[index] = [[annotation['segmentation'], i2l[annotation['category_id']]] for annotation in annotations if annotation['image_id'] == index]
 
 
     data_array = [[key, val] for key, val in annotation_dict.items()]
 
     for x in range(len(data_array)):
          for y in range(len(data_array[x][1])):
-            data_array[x][1][y][2] = int(data_array[x][1][y][0] + data_array[x][1][y][2])
-            data_array[x][1][y][3] = int(data_array[x][1][y][1] + data_array[x][1][y][3])
+            
+            data_array[x][1][y][0] = [[int(data_array[x][1][y][0][0][0]), int(data_array[x][1][y][0][0][1])], [int(data_array[x][1][y][0][0][2]), int(data_array[x][1][y][0][0][3])],  [int(data_array[x][1][y][0][0][4]), int(data_array[x][1][y][0][0][5])],  [int(data_array[x][1][y][0][0][6]), int(data_array[x][1][y][0][0][7])]]
 
 
     # Now, data_array contains the contents of the CSV file as a list of lists
+            
+
     return data_array
 
 def get_data_from_csv(path):
@@ -65,37 +77,13 @@ def get_data_from_csv(path):
     # Now, data_array contains the contents of the CSV file as a list of lists
     return data_array
 
-def get_iou(ground_truth, pred):
-        # Retrieve ground truth and prediction arrays. remove the title element from the arrays.
-
-        ground_truth = [float(element) for element in ground_truth]
-        pred = [float(element) for element in pred]
-
-        # coordinates of the area of intersection.
-        ix1 = np.maximum(ground_truth[0], pred[0])
-        iy1 = np.maximum(ground_truth[1], pred[1])
-        ix2 = np.minimum(ground_truth[2], pred[2])
-        iy2 = np.minimum(ground_truth[3], pred[3])
-        
-        # Intersection height and width.
-        i_height = np.maximum(iy2 - iy1 + 1, np.array(0.))
-        i_width = np.maximum(ix2 - ix1 + 1, np.array(0.))
-        
-        area_of_intersection = i_height * i_width
-        
-        # Ground Truth dimensions.
-        gt_height = ground_truth[3] - ground_truth[1] + 1
-        gt_width = ground_truth[2] - ground_truth[0] + 1
-        
-        # Prediction dimensions.
-        pd_height = pred[3] - pred[1] + 1
-        pd_width = pred[2] - pred[0] + 1
-        
-        area_of_union = gt_height * gt_width + pd_height * pd_width - area_of_intersection
-        
-        iou = area_of_intersection / area_of_union
-        
-        return iou
+def get_iou(polygon1, polygon2):
+    
+    intersect = polygon1.intersection(polygon2).area
+    union = polygon1.union(polygon2).area
+    iou = intersect / union
+    print(iou)  
+    return iou
 
 def intersects(rec1, rec2):
     return not (rec1[2] < rec2[0]
@@ -114,47 +102,139 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
      if either of these happen, compare the image names to find which is behind, and iterate through until they are the same
      """
 
+     ious = []
+     segments = []
+
+     print(pred_array)
+
+     cnt = 0
+     for p in preds:
+        if(p[1] != []):
+             cnt+=1
+     print(f"pred count: {cnt}")
+
+     cnt = 0
+     for p in ground_truth_array:
+        if(p[1] != []):
+             cnt+=1
+     print(f"pred count: {cnt}")
+
+
+          
+
      with os.scandir(path) as it:
           
-          cnt = 0
+          cnt = -1
+
+          #print(preds)
+
+          print(ground_truth_array)
 
           for entry in it:
+               cnt+=1
+               print("here")
                frame = cv2.imread(entry.path)
-               ground_truth = ground_truth_array[cnt][1]
-               pred = pred_array[cnt][1]
+               ground_truth = ground_truth_array[cnt]
+               pred = pred_array[cnt]
+               if pred[1] == []:
+                    print(f"exited: {pred}")
+                    continue
+               pred[1] = pred[1][0]
+               
+
+               ground_truth = ground_truth[1]
+               pred = pred[1]
 
                for truth in ground_truth:
-                    cv2.rectangle(frame, (int(truth[0]), int(truth[1])), (int(truth[2]), int(truth[3])), color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
-                
+                    colour = truth[1]
+                    coords = truth[0]
+
+                    print(f"truth colour: {colour}")
+                    print(f"truth coords: {coords}")
+
+                    pts = np.array(coords,np.int32)
+                    
+                    cv2.polylines(frame, [pts], True, (203,192,255), 2)
+                    cv2.putText(frame, colour, coords[0], cv2.FONT_HERSHEY_COMPLEX, 1, (203,192,255), 1, cv2.LINE_AA, False)
+
+                    colour_counter = 0
+                    
                     for p in pred:
-                            cv2.rectangle(frame, (int(p[0]), int(p[1])), (int(p[2]), int(p[3])), color=(0,0,255), thickness=1, lineType=cv2.LINE_AA)
+                            pcolour = p[1]
+                            pcoords = p[0]
 
-                            if intersects(p,truth):
-                                 iou= get_iou(truth, p)
-                                 print(f"iou: {iou}")
+                            print(f"p colour: {pcolour}")
+                            print(f"p coords: {pcoords}")
+                                    
+                            pts = np.array(pcoords,np.int32)
 
-                    # if truth intersects with pred, calculate iou
+                            colours = [0,0,0]
+                            colours[colour_counter] = 255
+                            colour_counter += 1
+                            
+                            cv2.polylines(frame, [pts], True, tuple(colours), 2)
+                            cv2.putText(frame, pcolour, pcoords[0], cv2.FONT_HERSHEY_COMPLEX, 1, tuple(colours), 1, cv2.LINE_AA, False)
+                            
+                            tuple_truth = tuple(tuple(inner_list) for inner_list in coords)
+                            tuple_pred = tuple(tuple(inner_list) for inner_list in pcoords)
 
-                # if a ground truth intersects with a pred get the iou
-                
-                # TODO ^^
+                            if len(tuple_pred) < 3:
+                                 continue
+                            
+                            polygon1 = Polygon(tuple_truth)
+                            polygon2 = Polygon(tuple_pred)
 
+                            intersect = polygon1.intersection(polygon2).area
+
+                            if (intersect == 0):
+                                 continue
+                            
+                            print(f"colour: {colour} pcolour: {pcolour}")
+                            segments.append(colour == pcolour)
+                            iou = get_iou(polygon1, polygon2)
+                            ious.append(iou)
+
+
+
+
+               frame = cv2.resize(frame, (900, 600))
                cv2.imshow("", frame)
 
                cv2.waitKey(0)
 
-               cnt+=1
+     print(f"mean: {np.mean(ious)}")
+     print(f"stddev: {np.std(ious)}")
+     print(f"correct segs: {sum(segments) / len(segments)}")
+
                
     
-    
      
+# Specify the folder path containing the images
+image_folder = r'test_image_recognition\testing_data\rubik\output_images_faces'
 
-path = "testing_data/qr/output_images"
-detect_qr = DetectQR(path)
-preds, frame_len = detect_qr.find_qrs_and_distances()
+# Create a list of image files in the folder
+image_files = [os.path.join(image_folder, filename) for filename in os.listdir(image_folder) if filename.endswith(('.jpg', '.png'))]
 
-ground_truth_path = r"testing_data/qr/csvs/coco_moving_qr_annotations.json"
-ground_truth_data = get_data_from_coco(ground_truth_path, frame_len)
+detect_rubik = ObjectDetection()
 
-ious = get_iou_array(ground_truth_data, preds, frame_len, path)
+preds = []
+
+cnt = 1
+
+ground_truth_path = r"test_image_recognition\testing_data\rubik\csvs\face_annotations.json"
+ground_truth_data = get_data_from_coco(ground_truth_path, len(image_files))
+
+for f in image_files:
+
+    f = cv2.imread(f)
+    contours_dict = detect_rubik.run(f, cnt)
+    print(f"after execution: {contours_dict}")
+    preds.append(contours_dict)
+
+    cnt += 1
+    
+
+
+
+ious = get_iou_array(ground_truth_data, preds, len(image_files), r"test_image_recognition\testing_data\rubik\output_images_faces")
 
