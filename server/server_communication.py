@@ -4,7 +4,6 @@ import io
 from PIL import Image
 import cv2
 import numpy as np
-import threading
 import math
 from datetime import datetime
 
@@ -17,10 +16,10 @@ class ServerCommunication():
         # Set well known port for the client to use.
         self.PORT = 2345
 
-        self.detector = detector
-        self.decider = decider
+        """self.detector = detector
+        self.decider = decider"""
         self.qr_detector = qr_detector
-        self.localisation = localisation
+        #self.localisation = localisation
 
     def bind_socket(self):
 
@@ -64,7 +63,12 @@ class ServerCommunication():
 
         timestamp = str(timestamp)
         hour, minute, secs_and_millis = timestamp.split(":")
-        second, millisecond = secs_and_millis.split(".")
+
+        if("." not in secs_and_millis):
+            second = secs_and_millis
+            millisecond = 0
+        else:
+            second, millisecond = secs_and_millis.split(".")
         seconds = int(hour) * 60 * 60 + int(minute) * 60 + int(second)
         seconds += float(millisecond) / 1000
         milliseconds = seconds * 1000
@@ -86,14 +90,14 @@ class ServerCommunication():
 
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-                image_information, qr_information = self.recognise_image(image)
+                self.recognise_image(image)
+
+                """image_information, qr_information = self.recognise_image(image)
 
                 map(lambda d: self.draw_image_information(d, image), image_information if image_information is not None else [])
 
-                robot_movements, state = self.process_information(image_information, qr_information)
+                robot_movements, state = self.process_information(image_information, qr_information)"""
 
-                
-                
                 difference = datetime.strptime(current_time, format) - datetime.strptime(time, format)
                 milliseconds = self.timestamp_to_milliseconds(difference)
 
@@ -104,19 +108,19 @@ class ServerCommunication():
                         return  # esc to quit
 
                 if(self.movement_state == "MANUAL"):
-                    self.localisation.velocity = movement
-                    self.localisation.angular_velocity = rotation
+                    self.localisation.set_velocity(movement)
+                    self.localisation.set_angular_velocity(rotation)
                     self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, "SUCCESS")
                     continue
 
 
 
-                for movement in robot_movements:
+                """for movement in robot_movements:
                     self.localisation.velocity = movement[0]
                     self.localisation.angular_velocity = movement[1]
                     self.localisation.time_difference = milliseconds
-                    self.send_response(conn, movement, state)
+                    self.send_response(conn, movement, state)"""
 
             
 
@@ -149,8 +153,8 @@ class ServerCommunication():
         """
         
         qr_information = self.qr_detector.find_qrs_and_distances(image)
-        opponent_information = self.detector.run(image)
-        return opponent_information, qr_information
+        #opponent_information = self.detector.run(image)
+        #return opponent_information, qr_information
 
     def process_information(self, image_information, qr_information):
         """

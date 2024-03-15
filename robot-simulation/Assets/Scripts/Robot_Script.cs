@@ -60,14 +60,14 @@ public class Robot_Script : MonoBehaviour
 
             if (Input.GetKey(KeyCode.W))
             {
-                movement = move_speed * Time.deltaTime;
+                movement = move_speed;
                 rotation = 0;
                 obj_vel = move_speed;
                 obj_ang_vel = 0;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                movement = -move_speed * Time.deltaTime;
+                movement = -move_speed;
                 rotation = 0;
                 obj_vel = -move_speed;
                 obj_ang_vel = 0;

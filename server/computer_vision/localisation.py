@@ -45,6 +45,8 @@ class Localisation:
         self.robot_size = 9
         self.border_width = 10
 
+        self.frame_rate = 0.1
+
         self.labels_to_coordinates = {
             "top_left_facing_south": self.top_left_facing_south_position,
             "top_left_facing_east": self.top_left_facing_east_position,
@@ -139,7 +141,6 @@ class Localisation:
         assert(len(valid_results) == 1)
 
         result = valid_results[0]
-        print(f"\n\n\nRESULT: {result}")
         return result
     
 
@@ -147,9 +148,7 @@ class Localisation:
         
     def update(self):
             
-            self.orientation += self.angular_velocity * self.time_difference
-
-            print(f"velocity: {self.velocity}")
+            self.orientation += self.angular_velocity
 
 
             # Update position
@@ -167,14 +166,14 @@ class Localisation:
             # Clear previous drawing
             self.canvas.delete("robot")
 
-            x0 = screen_x + self.robot_size/2 * math.cos(self.orientation) - self.robot_size/2 * math.sin(self.orientation)
-            y0 = screen_y - self.robot_size/2 * math.sin(self.orientation) - self.robot_size/2 * math.cos(self.orientation)
-            x1 = screen_x - self.robot_size/2 * math.cos(self.orientation) - self.robot_size/2 * math.sin(self.orientation)
-            y1 = screen_y + self.robot_size/2 * math.sin(self.orientation) - self.robot_size/2 * math.cos(self.orientation)
-            x2 = screen_x - self.robot_size/2 * math.cos(self.orientation) + self.robot_size/2 * math.sin(self.orientation)
-            y2 = screen_y + self.robot_size/2 * math.sin(self.orientation) + self.robot_size/2 * math.cos(self.orientation)
-            x3 = screen_x + self.robot_size/2 * math.cos(self.orientation) + self.robot_size/2 * math.sin(self.orientation)
-            y3 = screen_y - self.robot_size/2 * math.sin(self.orientation) + self.robot_size/2 * math.cos(self.orientation)
+            x0 = screen_x + self.robot_size/2 * math.cos(-self.orientation) - self.robot_size/2 * math.sin(-self.orientation)
+            y0 = screen_y - self.robot_size/2 * math.sin(-self.orientation) - self.robot_size/2 * math.cos(-self.orientation)
+            x1 = screen_x - self.robot_size/2 * math.cos(-self.orientation) - self.robot_size/2 * math.sin(-self.orientation)
+            y1 = screen_y + self.robot_size/2 * math.sin(-self.orientation) - self.robot_size/2 * math.cos(-self.orientation)
+            x2 = screen_x - self.robot_size/2 * math.cos(-self.orientation) + self.robot_size/2 * math.sin(-self.orientation)
+            y2 = screen_y + self.robot_size/2 * math.sin(-self.orientation) + self.robot_size/2 * math.cos(-self.orientation)
+            x3 = screen_x + self.robot_size/2 * math.cos(-self.orientation) + self.robot_size/2 * math.sin(-self.orientation)
+            y3 = screen_y - self.robot_size/2 * math.sin(-self.orientation) + self.robot_size/2 * math.cos(-self.orientation)
 
 
 
@@ -193,10 +192,10 @@ class Localisation:
         return self.orientation
 
     def set_velocity(self, velocity):
-        self.velocity = velocity
+        self.velocity = velocity * self.frame_rate
 
     def set_angular_velocity(self, angular_velocity):
-        self.angular_velocity = angular_velocity
+        self.angular_velocity = angular_velocity * self.frame_rate
 
 
 if __name__ == "__main__":

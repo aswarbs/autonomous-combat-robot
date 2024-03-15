@@ -64,6 +64,8 @@ class DetectQR:
             approx_distance = round(approx_distance, 3)
 
             distances.append(approx_distance)
+
+            print(f"qr distance: {approx_distance}")
             cv2.putText(frame, str(approx_distance), (points[3], points[4]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
             labels_to_distances[label] = approx_distance

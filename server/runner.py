@@ -7,12 +7,15 @@ import threading
 
 if __name__ == "__main__":
     localisation = Localisation()
+    qr_detector = DetectQR(localisation)
     
-    detector = ObjectDetection()
+    """detector = ObjectDetection()
     qr_detector = DetectQR(localisation)
     decision_maker = DecisionMaker()
 
-    server = ServerCommunication(detector, decision_maker, qr_detector, localisation)
+    server = ServerCommunication(detector, decision_maker, qr_detector, localisation)"""
+
+    server = ServerCommunication(None, None, qr_detector, localisation)
 
     server_thread = threading.Thread(target=server.bind_socket)
     server_thread.start()

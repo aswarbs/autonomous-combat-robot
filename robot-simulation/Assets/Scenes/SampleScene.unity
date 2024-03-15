@@ -8042,6 +8042,7 @@ GameObject:
   - component: {fileID: 4542218100168583907}
   - component: {fileID: 4542218100168583908}
   - component: {fileID: 4542218100168583909}
+  - component: {fileID: 4542218100168583910}
   m_Layer: 0
   m_Name: Robot
   m_TagString: Untagged
@@ -8158,7 +8159,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
   m_Name: 
@@ -8298,6 +8299,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4542218100168583910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3765822821764542554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a9c3847e81b3b44ac62e823387012c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj_vel: 5
+  obj_ang_vel: 0
+  rb: {fileID: 4542218100168583906}
 --- !u!1 &4821106306895749925
 GameObject:
   m_ObjectHideFlags: 0
