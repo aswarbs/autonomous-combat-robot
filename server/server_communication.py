@@ -19,7 +19,7 @@ class ServerCommunication():
         """self.detector = detector
         self.decider = decider"""
         self.qr_detector = qr_detector
-        #self.localisation = localisation
+        self.localisation = localisation
 
     def bind_socket(self):
 

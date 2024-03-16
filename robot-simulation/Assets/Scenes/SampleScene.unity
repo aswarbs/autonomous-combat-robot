@@ -5474,7 +5474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 1442180015}
-  lineDrawSpeed: 6
+  lineDrawSpeed: 60
   timeout: 2
   color: {r: 1, g: 0, b: 0, a: 1}
   origin: {fileID: 1442180013}
@@ -8092,7 +8092,7 @@ Transform:
   m_GameObject: {fileID: 3765822821764542554}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 125, y: 0, z: 125}
+  m_LocalPosition: {x: 15, y: 0, z: 125}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8159,7 +8159,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
   m_Name: 
@@ -8186,7 +8186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 4542218100168583909}
-  lineDrawSpeed: 6
+  lineDrawSpeed: 60
   timeout: 2
   color: {r: 0, g: 1, b: 0.03705597, a: 1}
   origin: {fileID: 4542218100168583904}
@@ -8306,13 +8306,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a9c3847e81b3b44ac62e823387012c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj_vel: 5
-  obj_ang_vel: 0
+  movement_state: MANUAL
+  movement: 0
+  rotation: 0
   rb: {fileID: 4542218100168583906}
 --- !u!1 &4821106306895749925
 GameObject:

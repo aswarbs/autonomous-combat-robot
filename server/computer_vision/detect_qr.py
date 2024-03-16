@@ -8,17 +8,18 @@ class DetectQR:
    
 
     def __init__(self, localisation):
-        self.KNOWN_WIDTH = 225 # centimeters
-        self.FOCAL_WIDTH = 36 # centimeters
+        self.KNOWN_WIDTH = 342 # centimeters
+        self.FOCAL_WIDTH = 50 # centimeters
         self.localisation = localisation
         self.offset = self.localisation.border_width
 
 
 
     def calculate_width(self, points):
+
         # Calculate Euclidean distance between points
-        dist_1 = np.linalg.norm(points[1] - points[2])  # Distance between point 0 and point 1
-        dist_2 = np.linalg.norm(points[3] - points[4])  # Distance between point 1 and point 2
+        dist_1 = np.linalg.norm(points[1] - points[3])  # Distance between point 0 and point 1
+        dist_2 = np.linalg.norm(points[2] - points[4])  # Distance between point 1 and point 2
 
         # Take the average of the distances to estimate the width
         width = (dist_1 + dist_2) / 2.0
@@ -38,8 +39,6 @@ class DetectQR:
         decoded_info_list = pyzbar.decode(frame, [pyzbar.ZBarSymbol.QRCODE,])
         # Put the text on the image
         for decoded_info in decoded_info_list:
-
-            print(f"{decoded_info.data.decode()} {decoded_info.rect.left} {decoded_info.rect.top} {decoded_info.rect.width} {decoded_info.rect.height}")
 
             label = decoded_info.data.decode()
 
