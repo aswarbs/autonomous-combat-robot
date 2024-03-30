@@ -8,6 +8,7 @@ from decision_making.decision_maker import DecisionMaker
 import numpy as np
 from picamera2 import Picamera2
 import serial   
+import keyboard
 
 # Set host as localhost to receive messages on this machine.
 HOST = "127.0.0.1"
@@ -17,6 +18,11 @@ PORT = 2345
 detector = ObjectDetection()
 decider = DecisionMaker()
 qr_detector = DetectQR()
+
+# handle autonomous / manual here
+
+movement_mode = "MANUAL"
+manual_movements = [0,0]
 
 def bind_socket():
     picam2 = Picamera2()
@@ -31,19 +37,55 @@ def bind_socket():
 
     while True:
 
-        pass
-        """image= picam2.capture_array()
+        image= picam2.capture_array()
+
+        print("listening")
+
+        if movement_mode == "AUTO":
+            image_information, qr_information = recognise_image(image)
+            robot_movements, state = process_information(image_information, qr_information)
+
+        elif movement_mode == "MANUAL":
+
+            if keyboard.is_pressed("w"):
+                print(f"move forward")
+
+            if keyboard.is_pressed("a"):
+                print(f"turn left")
+
+            if keyboard.is_pressed("s"):
+                print(f"move back")
+
+            if keyboard.is_pressed("d"):
+                print(f"turn right")
+
+            if keyboard.is_pressed(" "):
+                print(f"stop")
+
+            if keyboard.is_pressed("q"):
+                print(f"change modes")
 
 
-        image_information, qr_information = recognise_image(image)
 
-        robot_movements, state = process_information(image_information, qr_information)
+
+            # move forward: w = 1 0
+            # move backward: s = -1 0
+            # rotate left: a = 0 -0.5
+            # rotate right: d = 0 0.5
+            # stop: space = 0 0
+
+
+            # change modes: q 
+
+            robot_movements = manual_movements
+
+            
 
         for movement in robot_movements:
             send_response(ser, movement)
 
         line = ser.readline().decode('utf-8').rstrip()
-        print(line)"""
+        print(line)
 
 
 
@@ -122,7 +164,7 @@ def convert_bytes_to_image(parsed_data):
 
 def send_response(ser, robot_movements):
 
-    response = {"movement": robot_movements[0], "rotation": robot_movements[1]}
+    response = {"movement": robot_movements[0], "rotation": robot_movements[1], "state": movement_mode}
     ser.write(json.dumps(response).encode('utf-8') + b'\n')
     
 
