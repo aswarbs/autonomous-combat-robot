@@ -1,5 +1,5 @@
 import socket
-HOST = '0.0.0.0'
+HOST = '192.168.1.121'
 PORT = 9999
 from picamera2 import Picamera2
 import serial  
@@ -25,26 +25,15 @@ def bind_socket():
     # Create a socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
-        # Bind the socket to the host and port
-        s.bind((HOST, PORT))
-
-        print("listening")
-
-        # Listen for incoming messages on the socket
-        s.listen()
-
-        # Accept the message on the socket, addr = the client host and port, conn = the connection.
-        conn, addr = s.accept()
-
-        print("connected")
+        s.connect((HOST, PORT))
 
         while True:
             image= picam2.capture_array()
-            send_response(conn)
+            send_response(s)
 
-def send_response(conn):
-    success_response = b"hello from server"
-    conn.send(success_response)
+def send_response(s):
+    success_response = b"hello from server\n"
+    s.send(success_response)
 
 def send_response_arduino(movement, state):
     response = {"movement": movement[0], "rotation": movement[1], "state": state}
