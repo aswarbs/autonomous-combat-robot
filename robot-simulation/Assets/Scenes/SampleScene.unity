@@ -1477,7 +1477,7 @@ MonoBehaviour:
   serverIP: 127.0.0.1
   serverPort: 2345
   captureCamera: {fileID: 821955877}
-  robotScript: {fileID: 4542218100168583907}
+  robotScript: {fileID: 4542218100168583910}
   stateLabel: {fileID: 547612967}
 --- !u!4 &387453546
 Transform:
@@ -8091,8 +8091,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 55, y: 0, z: 200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 125, y: 0, z: 125}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8103,7 +8103,7 @@ Transform:
   - {fileID: 821955875}
   - {fileID: 1933386253}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4542218100168583905
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8159,7 +8159,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbe24b2a1a3df0d4683aa383e9f48590, type: 3}
   m_Name: 
@@ -8306,7 +8306,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765822821764542554}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a9c3847e81b3b44ac62e823387012c, type: 3}
   m_Name: 

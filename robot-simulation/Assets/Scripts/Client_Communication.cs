@@ -35,9 +35,9 @@ public class Client_Communication : MonoBehaviour
     public string serverIP = "127.0.0.1";
     public int serverPort = 2345;
     public Camera captureCamera;
-    public Robot_Script robotScript;
+    //public Robot_Script robotScript;
 
-    //public robot_script_test robotScript;
+    public robot_script_test robotScript;
 
     public Text stateLabel;
     

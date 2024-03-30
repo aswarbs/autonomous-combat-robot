@@ -90,7 +90,7 @@ class ServerCommunication():
 
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-                self.recognise_image(image)
+                #self.recognise_image(image)
 
                 """image_information, qr_information = self.recognise_image(image)
 
