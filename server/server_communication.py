@@ -6,14 +6,13 @@ from computer_vision.detect_rubik import ObjectDetection
 from computer_vision.detect_qr import DetectQR
 from decision_making.decision_maker import DecisionMaker
 import numpy as np
-from picamera2 import Picamera2
-import serial   
 import keyboard
+import test_pi_communication as pi
 
 # Set host as localhost to receive messages on this machine.
-HOST = "127.0.0.1"
+HOST = "192.168.1.121"
 # Set well known port for the client to use.
-PORT = 2345
+PORT = 9999
 
 detector = ObjectDetection()
 decider = DecisionMaker()
@@ -25,67 +24,66 @@ movement_mode = "MANUAL"
 manual_movements = [0,0]
 
 def bind_socket():
-    picam2 = Picamera2()
-    picam2.preview_configuration.main.size = (1280,720)
-    picam2.preview_configuration.main.format = "RGB888"
-    picam2.preview_configuration.align()
-    picam2.configure("preview")
-    picam2.start()
 
-    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-    ser.reset_input_buffer()
 
-    while True:
+    # Create a socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
-        image= picam2.capture_array()
+        # Bind the socket to the host and port
+        s.bind((HOST, PORT))
 
         print("listening")
 
-        if movement_mode == "AUTO":
-            image_information, qr_information = recognise_image(image)
-            robot_movements, state = process_information(image_information, qr_information)
+        # Listen for incoming messages on the socket
+        s.listen()
 
-        elif movement_mode == "MANUAL":
+        print("connected")
 
-            if keyboard.is_pressed("w"):
-                print(f"move forward")
-
-            if keyboard.is_pressed("a"):
-                print(f"turn left")
-
-            if keyboard.is_pressed("s"):
-                print(f"move back")
-
-            if keyboard.is_pressed("d"):
-                print(f"turn right")
-
-            if keyboard.is_pressed(" "):
-                print(f"stop")
-
-            if keyboard.is_pressed("q"):
-                print(f"change modes")
+        # Accept the message on the socket, addr = the client host and port, conn = the connection.
+        conn, addr = s.accept()
 
 
+        while True:
+
+            received_data = receive_data(conn)
+            parsed_data = parse_data(received_data)
+
+            image = convert_bytes_to_image(parsed_data)
 
 
-            # move forward: w = 1 0
-            # move backward: s = -1 0
-            # rotate left: a = 0 -0.5
-            # rotate right: d = 0 0.5
-            # stop: space = 0 0
+            if movement_mode == "AUTO":
+                image_information, qr_information = recognise_image(image)
+                robot_movements, state = process_information(image_information, qr_information)
+
+            elif movement_mode == "MANUAL":
+
+                if keyboard.is_pressed("w"):
+                    print(f"move forward")
+
+                if keyboard.is_pressed("a"):
+                    print(f"turn left")
+
+                if keyboard.is_pressed("s"):
+                    print(f"move back")
+
+                if keyboard.is_pressed("d"):
+                    print(f"turn right")
+
+                if keyboard.is_pressed(" "):
+                    print(f"stop")
+
+                if keyboard.is_pressed("q"):
+                    print(f"change modes")
 
 
-            # change modes: q 
+                robot_movements = manual_movements
 
-            robot_movements = manual_movements
+                
+
+            for movement in robot_movements:
+                pi.send_response_arduino(movement, state)
 
             
-
-        for movement in robot_movements:
-            send_response(ser, movement)
-
-        line = ser.readline().decode('utf-8').rstrip()
-        print(line)
 
 
 
