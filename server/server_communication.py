@@ -7,12 +7,12 @@ from computer_vision.detect_qr import DetectQR
 from decision_making.decision_maker import DecisionMaker
 import numpy as np
 import keyboard
-import test_pi_communication as pi
-
+import base64
 # Set host as localhost to receive messages on this machine.
 HOST = "192.168.1.121"
 # Set well known port for the client to use.
 PORT = 9999
+import cv2
 
 detector = ObjectDetection()
 decider = DecisionMaker()
@@ -81,7 +81,8 @@ def bind_socket():
                 
 
             for movement in robot_movements:
-                pi.send_response_arduino(movement, state)
+                
+                send_response(conn, movement, movement_mode)
 
             
 
@@ -137,19 +138,32 @@ def parse_data(received_data):
    
 
 def convert_bytes_to_image(parsed_data):
-    # Retrieve the screenshot field of the JSON message
-    image_data_byte_array = parsed_data['screenshotPNG']
+    # Retrieve the base64-encoded image data
+    base64_image_data = parsed_data['screenshotPNG']
 
-    # Create a BytesIO object to work with the image data
-    image_stream = io.BytesIO(bytes(image_data_byte_array))
+    # Decode the base64 string to bytes
+    image_data_bytes = base64.b64decode(base64_image_data)
+
+    # Create a BytesIO object from the decoded bytes
+    image_stream = io.BytesIO(image_data_bytes)
 
     # Open the image using PIL (Pillow)
     image = Image.open(image_stream)
 
-    # PIL images into NumPy arrays
-    image = np.asarray(image)
+    # Convert the PIL Image to a NumPy array
+    image_array = np.array(image)
 
-    return image
+    # Convert RGB to BGR (this step is necessary only if your image is in color)
+    image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
+
+    cv2.imshow("", image_array)
+    cv2.waitKey(0)
+
+    # Convert PIL images into NumPy arrays if needed
+    # If you just need to display or save the image, you can use image.show() or image.save() directly
+    image_np = np.asarray(image)
+
+    return image_np
 
 """def save_image(image):
     # Define a filename for the saved PNG image
@@ -158,12 +172,10 @@ def convert_bytes_to_image(parsed_data):
     # Save the image as a PNG file
     image.save(filename, 'PNG')"""
 
+def send_response(conn, robot_movements, state):
 
-
-def send_response(ser, robot_movements):
-
-    response = {"movement": robot_movements[0], "rotation": robot_movements[1], "state": movement_mode}
-    ser.write(json.dumps(response).encode('utf-8') + b'\n')
+        success_response = {"status": "success", "movements": robot_movements, "state": state}
+        conn.send(json.dumps(success_response).encode('utf-8') + b'\n')
     
 
 
