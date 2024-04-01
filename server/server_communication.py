@@ -157,10 +157,8 @@ def convert_bytes_to_image(parsed_data):
     image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
 
     cv2.imshow("", image_array)
-    cv2.waitKey(0)
+    cv2.waitKey(1)
 
-    # Convert PIL images into NumPy arrays if needed
-    # If you just need to display or save the image, you can use image.show() or image.save() directly
     image_np = np.asarray(image)
 
     return image_np
