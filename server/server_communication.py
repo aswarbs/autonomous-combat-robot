@@ -9,17 +9,16 @@ from datetime import datetime
 
 class ServerCommunication():
 
-    def __init__(self, detector, decider, qr_detector, localisation):
+    def __init__(self, detector, decider, qr_detector, localisation, HOST, PORT):
 
-        # Set host as localhost to receive messages on this machine.
-        self.HOST = "127.0.0.1"
-        # Set well known port for the client to use.
-        self.PORT = 2345
+        
+        self.HOST = HOST
+        self.PORT = PORT
 
         """self.detector = detector
-        self.decider = decider"""
+        self.decider = decider
         self.qr_detector = qr_detector
-        self.localisation = localisation
+        self.localisation = localisation"""
 
     def bind_socket(self):
 
@@ -83,6 +82,8 @@ class ServerCommunication():
                 received_data = self.receive_data(conn)
                 parsed_data = self.parse_data(received_data)
 
+                if parsed_data is None: continue
+
                 image, self.movement_state, movement, rotation, time = self.convert_bytes_to_image(parsed_data)
 
                 format = '%H:%M:%S:%f'
@@ -96,10 +97,10 @@ class ServerCommunication():
 
                 map(lambda d: self.draw_image_information(d, image), image_information if image_information is not None else [])
 
-                robot_movements, state = self.process_information(image_information, qr_information)"""
+                robot_movements, state = self.process_information(image_information, qr_information)
 
                 difference = datetime.strptime(current_time, format) - datetime.strptime(time, format)
-                milliseconds = self.timestamp_to_milliseconds(difference)
+                milliseconds = self.timestamp_to_milliseconds(difference)"""
 
 
 
@@ -107,12 +108,12 @@ class ServerCommunication():
                 if cv2.waitKey(1) == 0xFF: 
                         return  # esc to quit
 
-                if(self.movement_state == "MANUAL"):
+                """if(self.movement_state == "MANUAL"):
                     self.localisation.set_velocity(movement)
                     self.localisation.set_angular_velocity(rotation)
-                    self.localisation.time_difference = milliseconds
+                    #self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, "SUCCESS")
-                    continue
+                    continue"""
 
 
 
@@ -152,7 +153,7 @@ class ServerCommunication():
         returns: Information gathered from the image during image processing.
         """
         
-        qr_information = self.qr_detector.find_qrs_and_distances(image)
+        #qr_information = self.qr_detector.find_qrs_and_distances(image)
         #opponent_information = self.detector.run(image)
         #return opponent_information, qr_information
 
@@ -199,14 +200,23 @@ class ServerCommunication():
         # Retrieve the screenshot field of the JSON message
         image_data_byte_array = parsed_data['screenshotPNG']
 
+        if self.PORT == 9999:
+            import base64
+            image_data_byte_array = base64.b64decode(image_data_byte_array)
+
         # Create a BytesIO object to work with the image data
         image_stream = io.BytesIO(bytes(image_data_byte_array))
+
+
 
         # Open the image using PIL (Pillow)
         image = Image.open(image_stream)
 
         # PIL images into NumPy arrays
         image = np.array(image)
+
+        if self.PORT == 9999:
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
         state = parsed_data['movementState']
 
