@@ -39,7 +39,7 @@ def send_response(s):
     with open("file.png", 'rb') as image_file:
         encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
     
-    json_data = json.dumps({"screenshotPNG": encoded_string}) + "\n"
+    json_data = json.dumps({"screenshotPNG": encoded_string, "movementState": "ERROR", "movement": 0, "rotation": 0, "time": 0}) + "\n"
     # Encode your JSON data to bytes, then concatenate b"\n" to signify the end of the message
     final_data = json_data.encode('utf-8')
     
