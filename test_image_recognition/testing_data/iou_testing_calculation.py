@@ -1,3 +1,5 @@
+
+
 import csv
 import numpy as np
 import cv2
@@ -5,6 +7,16 @@ import os
 import json
 from predict_rubik import ObjectDetection
 from shapely.geometry import Polygon
+
+i2l = {
+     1: "cube",
+     2: "red",
+     3: "orange",
+     4: "yellow",
+     5: "green",
+     6: "blue",
+     7: "white"
+}     
 
 def get_data_from_coco(path, frame_len):
     # Initialize an empty list to store the data
@@ -19,14 +31,6 @@ def get_data_from_coco(path, frame_len):
     # for annotation in annotations:
     #     print(annotation)
 
-    i2l = {
-         1: "red",
-         2: "orange",
-         3: "green",
-         4: "blue",
-         5: "yellow",
-         6: "white"
-    }
 
 
     # Assuming 'annotations' is a list of dictionaries with 'image_id' and 'bbox' keys
@@ -39,8 +43,18 @@ def get_data_from_coco(path, frame_len):
     annotation_dict = {}
 
     # Populate the dictionary
-    for index in range(1, frame_len+1): 
-        annotation_dict[index] = [[annotation['segmentation'], i2l[annotation['category_id']]] for annotation in annotations if annotation['image_id'] == index]
+    for index in range(1, frame_len+1):
+        annotation_dict[index] = []
+        for annotation in annotations:
+             if annotation['image_id'] == index:
+                  if annotation['segmentation'] == []:
+                    found = annotation['bbox']
+                    found = [[found[0], found[1], found[0] + found[2], found[1], found[0] + found[2], found[1] + found[3], found[0], found[1] + found[3]]]
+                    annotation_dict[index].append([found, i2l[annotation['category_id']]])
+                  else:
+                    annotation_dict[index].append([annotation['segmentation'], i2l[annotation['category_id']]])
+        for item in annotation_dict[index]:
+            print(item)
 
 
     data_array = [[key, val] for key, val in annotation_dict.items()]
@@ -48,6 +62,8 @@ def get_data_from_coco(path, frame_len):
     for x in range(len(data_array)):
          for y in range(len(data_array[x][1])):
             
+            if data_array[x][1][y][0] == []: continue
+
             data_array[x][1][y][0] = [[int(data_array[x][1][y][0][0][0]), int(data_array[x][1][y][0][0][1])], [int(data_array[x][1][y][0][0][2]), int(data_array[x][1][y][0][0][3])],  [int(data_array[x][1][y][0][0][4]), int(data_array[x][1][y][0][0][5])],  [int(data_array[x][1][y][0][0][6]), int(data_array[x][1][y][0][0][7])]]
 
 
@@ -133,6 +149,7 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
           for entry in it:
                cnt+=1
                print("here")
+               print(f"cnt: {cnt}")
                frame = cv2.imread(entry.path)
                ground_truth = ground_truth_array[cnt]
                pred = pred_array[cnt]
@@ -152,6 +169,8 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
                     print(f"truth colour: {colour}")
                     print(f"truth coords: {coords}")
 
+                    if coords == []: continue
+
                     pts = np.array(coords,np.int32)
                     
                     cv2.polylines(frame, [pts], True, (203,192,255), 2)
@@ -169,7 +188,7 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
                             pts = np.array(pcoords,np.int32)
 
                             colours = [0,0,0]
-                            colours[colour_counter] = 255
+                            colours[colour_counter % 3] = 255
                             colour_counter += 1
                             
                             cv2.polylines(frame, [pts], True, tuple(colours), 2)
@@ -190,9 +209,15 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
                                  continue
                             
                             print(f"colour: {colour} pcolour: {pcolour}")
-                            segments.append(colour == pcolour)
-                            iou = get_iou(polygon1, polygon2)
-                            ious.append(iou)
+                            if colour == 'cube' or pcolour == 'cube':
+                              # ignore
+                              pass
+                            else:
+                                segments.append(colour == pcolour)
+                              
+                            if colour == pcolour:
+                              iou = get_iou(polygon1, polygon2)
+                              ious.append(iou)
 
 
 
@@ -210,7 +235,7 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
     
      
 # Specify the folder path containing the images
-image_folder = r'test_image_recognition\testing_data\rubik\output_images_faces'
+image_folder = r'test_image_recognition\testing_data\rubik\output_real_faces'
 
 # Create a list of image files in the folder
 image_files = [os.path.join(image_folder, filename) for filename in os.listdir(image_folder) if filename.endswith(('.jpg', '.png'))]
@@ -221,7 +246,7 @@ preds = []
 
 cnt = 1
 
-ground_truth_path = r"test_image_recognition\testing_data\rubik\csvs\face_annotations.json"
+ground_truth_path = r"test_image_recognition\testing_data\rubik\csvs\real_cubes.json"
 ground_truth_data = get_data_from_coco(ground_truth_path, len(image_files))
 
 for f in image_files:
@@ -236,5 +261,4 @@ for f in image_files:
 
 
 
-ious = get_iou_array(ground_truth_data, preds, len(image_files), r"test_image_recognition\testing_data\rubik\output_images_faces")
-
+ious = get_iou_array(ground_truth_data, preds, len(image_files), r"test_image_recognition\testing_data\rubik\output_real_faces")

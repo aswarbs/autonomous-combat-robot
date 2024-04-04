@@ -35,16 +35,16 @@ public class Client_Communication : MonoBehaviour
     public string serverIP = "127.0.0.1";
     public int serverPort = 2345;
     public Camera captureCamera;
-    //public Robot_Script robotScript;
+    public Robot_Script robotScript;
 
-    public robot_script_test robotScript;
+    //public robot_script_test robotScript;
 
     public Text stateLabel;
     
 
     private TcpClient client;
     private NetworkStream stream;
-    private float updateInterval = 0.3f;
+    private float updateInterval = 0.1f;
     private float timeSinceLastUpdate = 0f;
 
     private Thread clientThread;
@@ -153,7 +153,6 @@ public class Client_Communication : MonoBehaviour
 
         try
         {
-            
             byte[] data = Encoding.UTF8.GetBytes(message);
 
 

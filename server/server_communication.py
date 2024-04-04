@@ -14,6 +14,7 @@ class ServerCommunication():
         
         self.HOST = HOST
         self.PORT = PORT
+        self.differences = []
 
         """self.detector = detector
         self.decider = decider
@@ -33,13 +34,17 @@ class ServerCommunication():
             # Listen for incoming messages on the socket
             s.listen()
 
-            print("connected")
+            
 
             # Accept the message on the socket, addr = the client host and port, conn = the connection.
             conn, addr = s.accept()
 
+            print("connected")
+
             
             self.run(conn, s)
+
+            print(self.differences)
             
             
     def draw_arrow(self, orientation, bounding_box_width, bounding_box_height, image, center_x, center_y):
@@ -76,13 +81,19 @@ class ServerCommunication():
 
 
     def run(self, conn, s):
+
+        import time as t
+
+        start_time = t.time()
         while True:
-            #try:
                 
                 received_data = self.receive_data(conn)
                 parsed_data = self.parse_data(received_data)
 
-                if parsed_data is None: continue
+                if parsed_data is None: 
+                    continue
+
+
 
                 image, self.movement_state, movement, rotation, time = self.convert_bytes_to_image(parsed_data)
 
@@ -107,6 +118,8 @@ class ServerCommunication():
                 cv2.imshow('ROBOT POV', image)
                 if cv2.waitKey(1) == 0xFF: 
                         return  # esc to quit
+                
+                self.send_response(conn, [0,0], "SUCCESS")
 
                 """if(self.movement_state == "MANUAL"):
                     self.localisation.set_velocity(movement)
@@ -177,6 +190,8 @@ class ServerCommunication():
         while True:
             # Receive 1024 bytes of data
             data = conn.recv(1024)
+
+            # client is not sending data if gets stuck here
 
             # Append the newly received data to the current item of data being collected
             received_data += data  

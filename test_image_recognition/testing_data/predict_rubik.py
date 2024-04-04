@@ -20,12 +20,12 @@ class ObjectDetection():
 
         self.COLOUR_RANGES = {
             #'white': [[255, 255, 255], [0, 0, 230]],
-            'red1': [[10,255,255], [0, 100, 150]],
-            'red2':[[179,255,255], [160, 100, 150]],
+            'red1': [[5,255,255], [0, 100, 100]],
+            'red2':[[179,255,255], [170, 100, 100]],
             'green': [[89, 255, 255], [55, 100, 100]],
-            'blue': [[128, 255, 255], [90, 100, 100]],
+            'blue': [[128, 255, 255], [90, 50, 50]],
             #'yellow': [[35, 255, 255], [25, 100, 100]],
-            'orange': [[23, 255, 255], [15, 100, 150]],
+            'orange': [[30, 255, 255], [6, 100, 100]],
         }
 
         self.model(None)
@@ -180,11 +180,20 @@ class ObjectDetection():
 
          # retrieve the image with the bounding boxes drawn, and the location of the bounding boxes, from the screenshot
         frames, bounding_boxes = self.draw_bounding_boxes(results, screenshot)
+        #contours[1].append(bounding_boxes)
+        print(f"bounding box: {bounding_boxes}")
 
         # For every object detected in the image.
         for idx, box in enumerate(bounding_boxes):
             # Retrieve the coordinates of the current bounding box
             x1, y1, x2, y2 = box.xyxy[0]
+
+            box = np.array([[x1, y1], [x2,y1], [x2,y2], [x1, y2]], np.int32)
+
+            l = []
+
+            l.append([box, 'cube'])
+
             # Convert the coordinates to integers
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
@@ -193,7 +202,10 @@ class ObjectDetection():
 
             # Send the cropped image to a colour recognition function to retrieve the colours of the sides of the Rubik's cube.
             contour = self.detect_whole_color_contour(roi, count, x1, y1, x2, y2)
-            contours[1].append(contour)
+            for c in contour:
+                l.append(c)
+
+            contours[1].append(l)
 
         return contours
 
