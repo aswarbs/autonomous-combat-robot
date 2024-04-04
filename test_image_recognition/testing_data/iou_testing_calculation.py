@@ -119,6 +119,7 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
      """
 
      ious = []
+     cube_ious = []
      segments = []
 
      print(pred_array)
@@ -214,10 +215,16 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
                               pass
                             else:
                                 segments.append(colour == pcolour)
-                              
-                            if colour == pcolour:
-                              iou = get_iou(polygon1, polygon2)
-                              ious.append(iou)
+
+                            if colour == 'cube' and pcolour == 'cube':
+                                   cube_iou = get_iou(polygon1, polygon2)
+                                   print(f"CUBE IOU: {cube_iou}")
+                                   cube_ious.append(cube_iou)
+                            else:
+                                 if colour == pcolour:
+                                   iou = get_iou(polygon1, polygon2)
+                                   print(f"FACE IOU: {iou}")
+                                   ious.append(iou)
 
 
 
@@ -227,7 +234,9 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
 
                cv2.waitKey(0)
 
-     print(f"mean: {np.mean(ious)}")
+     print(f"mean, cube: {np.mean(cube_ious)}")
+     print(f"mean, colour: {np.mean(ious)}")
+     print(f"stddev cube: {np.std(cube_ious)}")
      print(f"stddev: {np.std(ious)}")
      print(f"correct segs: {sum(segments) / len(segments)}")
 
