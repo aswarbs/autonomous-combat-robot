@@ -180,8 +180,6 @@ class Localisation:
             # Draw the robot
             self.canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, fill="blue", tags="robot", outline="black")
 
-            print(f"{round(self.position[0],2)} {round(self.position[1],2)} {round(math.degrees(self.orientation - math.pi/2),2)}")
-
             # the y position decreases instead of increases. to work with it, (in qr localisation), should 
 
             # 125 + 25 -> 125 - 25 = 100.. find the difference between starting and current and then minus it

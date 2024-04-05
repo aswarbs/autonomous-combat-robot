@@ -16,10 +16,12 @@ class ServerCommunication():
         self.PORT = PORT
         self.differences = []
 
-        """self.detector = detector
+        self.detector = detector
         self.decider = decider
         self.qr_detector = qr_detector
-        self.localisation = localisation"""
+        self.localisation = localisation
+
+        self.received_data = b""  
 
     def bind_socket(self):
 
@@ -82,9 +84,6 @@ class ServerCommunication():
 
     def run(self, conn, s):
 
-        import time as t
-
-        start_time = t.time()
         while True:
                 
                 received_data = self.receive_data(conn)
@@ -93,8 +92,6 @@ class ServerCommunication():
                 if parsed_data is None: 
                     continue
 
-
-
                 image, self.movement_state, movement, rotation, time = self.convert_bytes_to_image(parsed_data)
 
                 format = '%H:%M:%S:%f'
@@ -102,16 +99,14 @@ class ServerCommunication():
 
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-                #self.recognise_image(image)
-
-                """image_information, qr_information = self.recognise_image(image)
+                image_information, qr_information = self.recognise_image(image)
 
                 map(lambda d: self.draw_image_information(d, image), image_information if image_information is not None else [])
 
                 robot_movements, state = self.process_information(image_information, qr_information)
 
                 difference = datetime.strptime(current_time, format) - datetime.strptime(time, format)
-                milliseconds = self.timestamp_to_milliseconds(difference)"""
+                milliseconds = self.timestamp_to_milliseconds(difference)
 
 
 
@@ -121,20 +116,20 @@ class ServerCommunication():
                 
                 self.send_response(conn, [0,0], "SUCCESS")
 
-                """if(self.movement_state == "MANUAL"):
+                if(self.movement_state == "MANUAL"):
                     self.localisation.set_velocity(movement)
                     self.localisation.set_angular_velocity(rotation)
                     #self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, "SUCCESS")
-                    continue"""
+                    continue
 
 
 
-                """for movement in robot_movements:
+                for movement in robot_movements:
                     self.localisation.velocity = movement[0]
                     self.localisation.angular_velocity = movement[1]
                     self.localisation.time_difference = milliseconds
-                    self.send_response(conn, movement, state)"""
+                    self.send_response(conn, movement, state)
 
             
 
@@ -166,9 +161,9 @@ class ServerCommunication():
         returns: Information gathered from the image during image processing.
         """
         
-        #qr_information = self.qr_detector.find_qrs_and_distances(image)
-        #opponent_information = self.detector.run(image)
-        #return opponent_information, qr_information
+        qr_information = self.qr_detector.find_qrs_and_distances(image)
+        opponent_information = self.detector.run(image)
+        return opponent_information, qr_information
 
     def process_information(self, image_information, qr_information):
         """
@@ -185,29 +180,33 @@ class ServerCommunication():
             
     def receive_data(self, conn):
         # Initialize an empty byte string to accumulate data
-        received_data = b""  
+        
 
         while True:
             # Receive 1024 bytes of data
             data = conn.recv(1024)
-
-            # client is not sending data if gets stuck here
-
-            # Append the newly received data to the current item of data being collected
-            received_data += data  
-
+            
             # If the message delimiter is in the message, the end of the message has been found
             if b'\n' in data:
-                break
-        return received_data
+                # Split the data at the newline, keeping part before the newline and the remainder
+                complete_message, leftover_data = data.split(b'\n', 1)
+                message = self.received_data + complete_message
+                self.received_data = leftover_data
+                return message
+            
+            # Append the newly received data to the current item of data being collected
+            self.received_data += data  
+
 
     def parse_data(self, received_data):
-        try:
-            # Attempt to parse the message with JSON. Agreed encoding = UTF8
-            parsed_data = json.loads(received_data.decode('utf-8'))
-            return parsed_data
-        except:
-            print("failed to parse")
+        #try:
+        # Attempt to parse the message with JSON. Agreed encoding = UTF8
+        parsed_data = json.loads(received_data.decode('utf-8'))
+        return parsed_data
+        """except Exception as e:
+            print(e)
+            
+            print("failed to parse")"""
 
     
 

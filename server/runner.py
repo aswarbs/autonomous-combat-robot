@@ -5,35 +5,31 @@ from decision_making.decision_maker import DecisionMaker
 from server_communication import ServerCommunication
 import threading
 
-"""
+
 # SIM
 HOST = "127.0.0.1"
 PORT = 2345
+
+
 """
-
-
 # REAL
 HOST = "192.168.107.65"
 PORT = 9999
-
+"""
 
 if __name__ == "__main__":
     localisation = Localisation()
-    """qr_detector = DetectQR(localisation)
+    qr_detector = DetectQR(localisation)
     
     detector = ObjectDetection()
     qr_detector = DetectQR(localisation)
     decision_maker = DecisionMaker()
 
-    server = ServerCommunication(detector, decision_maker, qr_detector, localisation)"""
-
-    server = ServerCommunication(None, None, None, None, HOST, PORT)
+    server = ServerCommunication(detector, decision_maker, qr_detector, localisation, HOST, PORT)
 
     server_thread = threading.Thread(target=server.bind_socket)
     server_thread.start()
     
 
-    #while True: 
-    #    localisation.root.update()
-
-        
+    while True: 
+        localisation.root.update()

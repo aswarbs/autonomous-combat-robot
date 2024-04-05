@@ -240,7 +240,6 @@ def get_iou_array(ground_truth_array, pred_array, frame_len, path):
      print(f"stddev: {np.std(ious)}")
      print(f"correct segs: {sum(segments) / len(segments)}")
 
-               
     
      
 # Specify the folder path containing the images
