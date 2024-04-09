@@ -7,16 +7,43 @@ import random
 
 class DecisionTree():
 
-    def __init__(self, horizontal_midpoint, vertical_midpoint, area_threshold):
+    def __init__(self, horizontal_midpoint, vertical_midpoint, area_threshold, boundary_threshold, boundary_corners, localisation):
         self.player_midpoint_x = horizontal_midpoint
         self.player_midpoint_y = vertical_midpoint
         self.area_threshold = area_threshold
         self.state = "INITIAL"
         self.MOVEMENT_CONST = 1
+        self.boundary_threshold = boundary_threshold
+        self.boundary_corners = boundary_corners
+        self.localisation = localisation
 
-    def run(self, opponent_information, qr_information, position, orientation, area):
+    def calculate_boundary_distance(self):
+        # return the distance
+        # return the orientation e.g. LEFT, RIGHT, UP, DOWN
+
+        lower_bound, upper_bound = self.boundary_corners
+        x, y = self.player_position
+
+        possible_distances = [[x - lower_bound, "LEFT"], [upper_bound - x, "RIGHT"], [y - lower_bound, "UP"], [upper_bound - y, "DOWN"]]
+
+        # Find and return the element with the lowest first element
+        result = min(possible_distances, key=lambda item: item[0])
+        return result
+
+
+
+
+    def run(self, opponent_information, qr_information, position, orientation, area, player_position):
 
         self.position = position
+        self.player_position = player_position
+
+        print("RUNNING DECISION TREE")
+
+        closest_boundary = self.calculate_boundary_distance()
+        if closest_boundary[0] < self.boundary_threshold:
+            print(f"\n\nNEAR BOUNDARY ON [{closest_boundary}]")
+            self.localisation.print_message(f"CLOSE TO {closest_boundary[1]}: {closest_boundary[0]}m AWAY")
 
         if(opponent_information is not None and len(opponent_information) > 0 and orientation is not None):
             

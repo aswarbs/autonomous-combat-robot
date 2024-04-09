@@ -171,7 +171,7 @@ class ServerCommunication():
         image_information: The information about the image.
         """
         
-        robot_movements, state = self.decider.run(image_information, qr_information)
+        robot_movements, state = self.decider.run(image_information, qr_information, self.localisation.position)
 
         return robot_movements, state
 
@@ -199,14 +199,14 @@ class ServerCommunication():
 
 
     def parse_data(self, received_data):
-        #try:
-        # Attempt to parse the message with JSON. Agreed encoding = UTF8
-        parsed_data = json.loads(received_data.decode('utf-8'))
-        return parsed_data
-        """except Exception as e:
+        try:
+            # Attempt to parse the message with JSON. Agreed encoding = UTF8
+            parsed_data = json.loads(received_data.decode('utf-8'))
+            return parsed_data
+        except Exception as e:
             print(e)
             
-            print("failed to parse")"""
+            print("failed to parse")
 
     
 

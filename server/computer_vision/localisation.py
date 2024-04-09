@@ -9,6 +9,8 @@ class Localisation:
         
         self.orientation = math.pi/2
 
+        self.text = ""
+
         self.arena_width = 250
         self.arena_height = 250
         self.qr_width = 30
@@ -26,6 +28,8 @@ class Localisation:
         self.top_right_boundary = (self.arena_width + self.arena_offset, self.arena_height + self.arena_offset)
         self.bottom_left_boundary = (self.arena_offset,self.arena_offset)
         self.bottom_right_boundary = (self.arena_width + self.arena_offset,self.arena_offset)
+
+        self.boundary_corners = [self.lower_bound_x, self.upper_bound_x]
 
         self.top_left_facing_south_position = (self.top_left_boundary[0] + (self.qr_width / 2), self.top_left_boundary[1])
         self.top_left_facing_east_position = (self.top_left_boundary[0], self.top_left_boundary[1] - (self.qr_width / 2))
@@ -96,56 +100,33 @@ class Localisation:
 
         self.canvas.create_oval(self.opponent_pos, self.opponent_pos[0] + 10, self.opponent_pos[1] + 10, outline="black", fill="yellow")
 
-
-    def find_position(self, labels_to_distances):
-
-        points = []
-        distances = []
-
-        for key, value in labels_to_distances.items():
-            points.append(self.labels_to_coordinates[key])
-            distances.append(value)
-
-        triangulation = self.triangulate_position(points[0], points[1], distances[0], distances[1])
-
-        if(triangulation is None):
-            return 
-        
-        self.position = (self.border_width + triangulation[0],self.border_width + (self.arena_height - triangulation[1]))
+        self.text_id = self.canvas.create_text(130, 50, text=self.text, fill="red", font=('Helvetica', 10, 'bold'))
 
 
 
-            
-    def triangulate_position(self, p1, p2, d1, d2):
-        x,y = sym.symbols('x,y')
-        eq1 = sym.Eq((x - p1[0])**2 + (y - p1[1])**2, d1**2)
-        eq2 = sym.Eq((x - p2[0])**2 + (y - p2[1])**2, d2**2)
-        results = sym.solve([eq1,eq2],(x,y))
-
-        valid_results = []
-
-        for x,y in results:
-
-            if (not x.is_real) or (not y.is_real):
-                return
-            
-            if x < self.lower_bound_x or x > self.upper_bound_x:
-                continue
-            if y < self.lower_bound_y or y > self.upper_bound_y:
-                continue
-            valid_results.append((int(x), int(y)))
-
-        if(len(valid_results) == 0):
-            return
-
-        assert(len(valid_results) == 1)
-
-        result = valid_results[0]
-        return result
     
 
+    def find_orientation(self, labels_to_distances):
 
+        pos = []
+        for k in labels_to_distances:
+            pos.append(self.labels_to_coordinates[k])
+
+
+        midpoint_x = pos[0][0] + pos[1][0] / 2
+        midpoint_y = pos[0][1] + pos[1][1] / 2
+
+        # find the angle between position and pos
+        angle = math.atan2(midpoint_y-self.position[1], midpoint_x-self.position[0]) + math.pi
+        #adjusted_angle = (-angle) % (2 * math.pi)  # Ensure the angle is within 0 to 2π
+        #if angle < 0:
+        #    angle += math.pi
+        self.orientation = -angle
+
+    def print_message(self, text):
+        self.text = text
         
+
     def update(self):
             
             self.orientation += self.angular_velocity
@@ -180,11 +161,8 @@ class Localisation:
             # Draw the robot
             self.canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, fill="blue", tags="robot", outline="black")
 
-            # the y position decreases instead of increases. to work with it, (in qr localisation), should 
-
-            # 125 + 25 -> 125 - 25 = 100.. find the difference between starting and current and then minus it
-            # 150 .. difference = +25 .. position = 125 - difference = 100
-            # 100 .. difference = -25 .. position = 125 - difference = 150
+            
+            self.canvas.itemconfig(self.text_id, text=self.text)
 
         
             self.root.after(100,self.update)

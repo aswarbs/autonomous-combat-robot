@@ -103,13 +103,22 @@ class DetectQR:
 
     def calculate_width(self, points):
 
+        # if you are directly in front of it the width == the height
+        # if you are skewed then the width < the height
+        # ratio of 1: direct
+        # ratio of 1.5: width > height: never?
+        # ratio of 0.5: width < height: skewed
+
         # Calculate Euclidean distance between points
         dist_1 = np.linalg.norm(points[1] - points[3])  # Distance between point 0 and point 1
         dist_2 = np.linalg.norm(points[2] - points[4])  # Distance between point 1 and point 2
 
         # Take the average of the distances to estimate the width
         width = (dist_1 + dist_2) / 2.0
-        return width
+
+        print(f"width: {dist_1}")
+        print(f"height: {dist_2}")
+        return width * (dist_2 / dist_1)
 
 
 
@@ -127,7 +136,7 @@ class DetectQR:
         if(triangulation is None):
             return 
         
-        position = (self.border_width + triangulation[0],self.border_width + (self.arena_height - triangulation[1]))
+        position = [self.border_width + triangulation[0],self.border_width + (self.arena_height - triangulation[1])]
 
         return position
              
@@ -180,7 +189,14 @@ class DetectQR:
         if(len(labels_to_distances)) == 2:
             #self.localisation.find_position(labels_to_distances)
             position = self.find_position(labels_to_distances)
+            
             if position is not None:
+
+                position[1] = 250 - position[1]
+                position = tuple(position)
+
+                self.localisation.position = position
+                self.localisation.find_orientation(labels_to_distances)
                 cv2.putText(frame, f"position: {position[0]} {position[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
         return labels_to_distances

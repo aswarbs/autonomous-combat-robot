@@ -23,7 +23,7 @@ if __name__ == "__main__":
     
     detector = ObjectDetection()
     qr_detector = DetectQR(localisation)
-    decision_maker = DecisionMaker()
+    decision_maker = DecisionMaker(localisation.boundary_corners, localisation)
 
     server = ServerCommunication(detector, decision_maker, qr_detector, localisation, HOST, PORT)
 

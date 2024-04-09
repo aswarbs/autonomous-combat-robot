@@ -12,7 +12,7 @@ from decision_making.decision_tree import DecisionTree
 
 class DecisionMaker():
 
-    def __init__(self):
+    def __init__(self, boundary_corners, localisation):
         """
         Initialise the decision making model.
         """
@@ -21,13 +21,16 @@ class DecisionMaker():
         self.HORIZONTAL_MIDPOINT = int(self.IMAGE_WIDTH / 2)
         self.VERTICAL_MIDPOINT = 0
         self.AREA_THRESHOLD = 1500
+        self.BOUNDARY_THRESHOLD = 50
+        self.boundary_corners = boundary_corners
+        self.localisation = localisation
         
 
         self.state = "RANDOM_WALK"
 
-        self.model = DecisionTree(self.HORIZONTAL_MIDPOINT, self.VERTICAL_MIDPOINT, self.AREA_THRESHOLD)
+        self.model = DecisionTree(self.HORIZONTAL_MIDPOINT, self.VERTICAL_MIDPOINT, self.AREA_THRESHOLD, self. BOUNDARY_THRESHOLD, self.boundary_corners, self.localisation)
 
-    def run(self, opponent_information, qr_information):
+    def run(self, opponent_information, qr_information, player_position):
         """
         Run the decision making algorithm.
         opponent_information: Useful information about the image, retrieved from computer vision model.
@@ -47,6 +50,6 @@ class DecisionMaker():
 
         
 
-        return self.model.run(opponent_information, qr_information, self.position, self.orientation, self.bounding_box_area)
+        return self.model.run(opponent_information, qr_information, self.position, self.orientation, self.bounding_box_area, player_position)
         
     

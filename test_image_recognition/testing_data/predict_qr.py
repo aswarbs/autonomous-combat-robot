@@ -55,6 +55,6 @@ class DetectQR:
             
 
 
-path = "testing_data/qr/output_images"
+path = "test_image_recognition/testing_data/qr/real_world/output_images"
 detect_qr = DetectQR(path)
 detect_qr.find_qrs_and_distances()
