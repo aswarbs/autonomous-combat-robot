@@ -13,9 +13,10 @@ PORT = 2345
 
 """
 # REAL
-HOST = "192.168.107.65"
+HOST = "192.168.0.14"
 PORT = 9999
 """
+
 
 if __name__ == "__main__":
     localisation = Localisation()

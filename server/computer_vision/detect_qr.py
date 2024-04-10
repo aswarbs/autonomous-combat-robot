@@ -33,22 +33,17 @@ class DetectQR:
 
         self.arena_offset = 0 # arena is shifted 25 to the left
 
-        self.top_left_boundary = (self.arena_offset,self.arena_height + self.arena_offset)
-        self.top_right_boundary = (self.arena_width + self.arena_offset, self.arena_height + self.arena_offset)
-        self.bottom_left_boundary = (self.arena_offset,self.arena_offset)
-        self.bottom_right_boundary = (self.arena_width + self.arena_offset,self.arena_offset)
+        self.top_left_facing_south_position = (15 + self.arena_offset, 0+ self.arena_offset)
+        self.top_left_facing_east_position = (0+ self.arena_offset, 15+ self.arena_offset)
 
-        self.top_left_facing_south_position = (15, 0)
-        self.top_left_facing_east_position = (0, 15)
+        self.top_right_facing_south_position = (235+ self.arena_offset, 0+ self.arena_offset)
+        self.top_right_facing_west_position = (250+ self.arena_offset, 15+ self.arena_offset)
 
-        self.top_right_facing_south_position = (235, 0)
-        self.top_right_facing_west_position = (250, 15)
+        self.bottom_left_facing_north_position = (15+ self.arena_offset, 250+ self.arena_offset)
+        self.bottom_left_facing_east_position = (0+ self.arena_offset, 235+ self.arena_offset)
 
-        self.bottom_left_facing_north_position = (15, 250)
-        self.bottom_left_facing_east_position = (0, 15)
-
-        self.bottom_right_facing_north_position = (235, 250)
-        self.bottom_right_facing_west_position = (250, 235)
+        self.bottom_right_facing_north_position = (235+ self.arena_offset, 250+ self.arena_offset)
+        self.bottom_right_facing_west_position = (250+ self.arena_offset, 235+ self.arena_offset)
 
         self.time_difference = 0
         self.velocity = 0
@@ -122,12 +117,17 @@ class DetectQR:
 
 
 
-    def find_position(self, labels_to_distances):
+    def find_position(self, labels_to_distances, frame):
 
         points = []
         distances = []
 
+        # print the distances
+
         for key, value in labels_to_distances.items():
+
+            print(f"point: {self.labels_to_coordinates[key]}")
+            print(f"distance: {value}")
             points.append(self.labels_to_coordinates[key])
             distances.append(value)
 
@@ -136,7 +136,11 @@ class DetectQR:
         if(triangulation is None):
             return 
         
-        position = [self.border_width + triangulation[0],self.border_width + (self.arena_height - triangulation[1])]
+
+        # this is it
+        position = [triangulation[0], (self.arena_height - triangulation[1])]
+
+        cv2.putText(frame, f"position: {triangulation[0]} {triangulation[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
         return position
              
@@ -156,19 +160,19 @@ class DetectQR:
 
             left = decoded_info.rect.left
             top = decoded_info.rect.top
-            width = decoded_info.rect.width
-            height = decoded_info.rect.height
+            _width = decoded_info.rect.width
+            _height = decoded_info.rect.height
 
             if left < 0: left = 0
             if top < 0: top = 0
 
-            points = [label, left, top, left + width, top + height]
+            points = [label, left, top, left + _width, top + _height]
 
             cv2.rectangle(frame, (points[1], points[2]), (points[3], points[4]), color=(255,0,0), thickness=1, lineType=cv2.LINE_AA)
             
             cv2.putText(frame, label, (points[1], points[2]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
             
-            width = self.calculate_width(points)
+            width = _height
             
 
             approx_distance = (self.KNOWN_WIDTH * self.FOCAL_WIDTH) / width # in centimeters
@@ -188,7 +192,7 @@ class DetectQR:
             
         if(len(labels_to_distances)) == 2:
             #self.localisation.find_position(labels_to_distances)
-            position = self.find_position(labels_to_distances)
+            position = self.find_position(labels_to_distances, frame)
             
             if position is not None:
 
@@ -197,6 +201,6 @@ class DetectQR:
 
                 self.localisation.position = position
                 self.localisation.find_orientation(labels_to_distances)
-                cv2.putText(frame, f"position: {position[0]} {position[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+                #cv2.putText(frame, f"position: {position[0]} {position[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
         return labels_to_distances
