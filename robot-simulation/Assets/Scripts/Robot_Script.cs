@@ -20,10 +20,10 @@ public class Robot_Script : MonoBehaviour
 
     public Text robot_state_label;
 
-    public double rotation = 0;
+    public float rotation = 0;
     public float movement = 0;
 
-    private double rotation_speed = Math.PI/16;
+    private float rotation_speed = (float)Math.PI/16;
 
     public float move_speed = 5;
     
@@ -32,7 +32,7 @@ public class Robot_Script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        robot_state_label.text = "Current Movement: " + movement_state;
+        robot_state_label.text = "Current Movement: " + "AUTO";
     }
 
     void HandleKeyPress()

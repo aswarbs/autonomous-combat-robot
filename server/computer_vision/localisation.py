@@ -73,7 +73,7 @@ class Localisation:
         self.canvas_width = self.arena_width + self.border_width
         self.canvas_height = self.arena_height + self.border_width
         
-        self.opponent_pos = (self.border_width + 100,self.border_width + (self.arena_height -180))
+        self.opponent_pos = (self.border_width + 22,self.border_width + (self.arena_height -202))
 
         
 

@@ -15,8 +15,7 @@ public class JSONObject
     public byte[] screenshotPNG;
     public string movementState;
     public float movement;
-    public double rotation;
-    public string time;
+    public float rotation;
 }
 
 [Serializable]
@@ -26,8 +25,6 @@ public class ServerResponse
     public float[] movements;
 
     public string state;
-
-    
 }
 
 public class Client_Communication : MonoBehaviour
@@ -37,14 +34,12 @@ public class Client_Communication : MonoBehaviour
     public Camera captureCamera;
     public Robot_Script robotScript;
 
-    //public robot_script_test robotScript;
-
     public Text stateLabel;
     
 
     private TcpClient client;
     private NetworkStream stream;
-    private float updateInterval = 0.3f;
+    private float updateInterval = 0.4f;
     private float timeSinceLastUpdate = 0f;
 
     private Thread clientThread;
@@ -58,15 +53,11 @@ public class Client_Communication : MonoBehaviour
 
     private string state = "";
 
-    public System.DateTime start_time;
-    public System.DateTime end_time;
-
-
     private void Start()
     {
-        start_time = System.DateTime.Now;
         timeSinceLastUpdate = updateInterval;
         stateLabel.text = "Current State: INITIAL";
+        //stateLabel.text = "";
         ConnectToServer();
 
         // Start a separate thread for client communication.
@@ -86,7 +77,7 @@ public class Client_Communication : MonoBehaviour
         }
     }
 
-    public string CaptureScreenshot(string timestamp)
+    public string CaptureScreenshot()
     {
 
         RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
@@ -97,7 +88,8 @@ public class Client_Communication : MonoBehaviour
         screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         byte[] screenshotBytes = screenshot.EncodeToPNG();
 
-        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes, movementState = robotScript.movement_state, movement = robotScript.movement, rotation = robotScript.rotation, time = timestamp};
+        //Debug.Log("width: " + screenshot.width + "height: " + screenshot.height);
+        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes, movementState = robotScript.movement_state, movement = robotScript.movement, rotation = robotScript.rotation};
         string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
         captureCamera.targetTexture = null;
         RenderTexture.active = null;
@@ -126,8 +118,7 @@ public class Client_Communication : MonoBehaviour
 
         if (timeSinceLastUpdate >= updateInterval)
         {
-            string timestamp = DateTime.UtcNow.ToString("HH:mm:ss:fff");
-            lastScreenshotJson = CaptureScreenshot(timestamp);
+            lastScreenshotJson = CaptureScreenshot();
             timeSinceLastUpdate = 0f;
         }
 
@@ -135,12 +126,11 @@ public class Client_Communication : MonoBehaviour
         {
             if(updated_robot_movements)
             {
-                // time between sending the last message and sending the current message
                 robotScript.Move(robot_movements);
                 stateLabel.text = "Current State: " + state;
+                //stateLabel.text="";
                 updated_robot_movements = false;
             }
-            
         }
     }
 
@@ -157,7 +147,6 @@ public class Client_Communication : MonoBehaviour
 
 
             stream.Write(data, 0, data.Length);
-            
             HandleServerResponse(message);
         }
         catch (Exception ex)

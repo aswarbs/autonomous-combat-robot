@@ -43,7 +43,7 @@ class DecisionTree():
         closest_boundary = self.calculate_boundary_distance()
         if closest_boundary[0] < self.boundary_threshold:
             print(f"\n\nNEAR BOUNDARY ON [{closest_boundary}]")
-            self.localisation.print_message(f"CLOSE TO {closest_boundary[1]}: {closest_boundary[0]}m AWAY")
+            self.localisation.print_message(f"CLOSE TO {closest_boundary[1]}: {round(closest_boundary[0],2)}m AWAY")
 
         if(opponent_information is not None and len(opponent_information) > 0 and orientation is not None):
             

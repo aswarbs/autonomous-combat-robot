@@ -7,7 +7,68 @@ import numpy as np
 import math
 from datetime import datetime
 
+
+
 class ServerCommunication():
+
+    def run_on_vid(self):
+        vid = r"c:\Users\amber\Videos\demo\phonevid.mp4"
+        # Open the video file
+        cap = cv2.VideoCapture(vid)
+        images = []
+
+        # Check if the video was opened successfully
+        if not cap.isOpened():
+            print("Error: Could not open video.")
+        else:
+            # Read and display frame by frame
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    print("Reached the end of the video or error in reading the video.")
+                    break
+                frame = self.run_on_frame(frame)
+                images.append(frame)
+
+
+                
+        video_name = 'real1.mp4'
+        frame_rate = 24  # frames per second
+
+        # Determine the width and height from the first image
+        height, width, layers = images[0].shape
+
+        # Initialize video writer
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Codec used to create the video
+        video = cv2.VideoWriter(video_name, fourcc, frame_rate, (width, height))
+
+        # Create video
+        for img in images:
+            video.write(img)  # Add each image to the video
+
+        video.release()
+        cv2.destroyAllWindows()
+
+    def run_on_frame(self, image):
+            
+            #image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+            image_information, qr_information = self.recognise_image(image)
+
+            if image_information is not None and len(image_information) > 0:
+                self.draw_image_information(image_information[0], image)
+
+            robot_movements, state = self.process_information(image_information, qr_information)
+
+
+            #cv2.imshow('ROBOT POV', image)
+            #if cv2.waitKey(1) == 0xFF: 
+            #        return  # esc to quit
+            return image
+            
+            
+
+
 
     def __init__(self, detector, decider, qr_detector, localisation, HOST, PORT):
 
@@ -21,9 +82,12 @@ class ServerCommunication():
         self.qr_detector = qr_detector
         self.localisation = localisation
 
-        self.received_data = b""  
+        self.received_data = b"" 
 
     def bind_socket(self):
+
+        self.run_on_vid()
+        return
 
         # Create a socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -50,14 +114,14 @@ class ServerCommunication():
             
             
     def draw_arrow(self, orientation, bounding_box_width, bounding_box_height, image, center_x, center_y):
+
+        if orientation is None: return
         orientation = (orientation * -1) + 90 # convert to angle used in function (0 is right)
 
         # Calculate the endpoint of the arrow
         arrow_length = 50  # You can adjust the arrow length as needed
 
-        center_x = bounding_box_width / 2
-        center_y = bounding_box_height / 2
-
+        # fix the arrow spawn
 
         arrow_endpoint_x = int(center_x + arrow_length * math.cos(math.radians(orientation)))
         arrow_endpoint_y = int(center_y + arrow_length * math.sin(math.radians(orientation)))
@@ -92,7 +156,7 @@ class ServerCommunication():
                 if parsed_data is None: 
                     continue
 
-                image, self.movement_state, movement, rotation, time = self.convert_bytes_to_image(parsed_data)
+                image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
 
                 format = '%H:%M:%S:%f'
                 current_time = datetime.utcnow().strftime(format)[:-3]
@@ -101,40 +165,37 @@ class ServerCommunication():
 
                 image_information, qr_information = self.recognise_image(image)
 
-                map(lambda d: self.draw_image_information(d, image), image_information if image_information is not None else [])
-
+                if image_information is not None and len(image_information) > 0:
+                    self.draw_image_information(image_information[0], image)
                 robot_movements, state = self.process_information(image_information, qr_information)
-
-                difference = datetime.strptime(current_time, format) - datetime.strptime(time, format)
-                milliseconds = self.timestamp_to_milliseconds(difference)
-
 
 
                 cv2.imshow('ROBOT POV', image)
                 if cv2.waitKey(1) == 0xFF: 
                         return  # esc to quit
                 
-                self.send_response(conn, [0,0], "SUCCESS")
-
                 if(self.movement_state == "MANUAL"):
                     self.localisation.set_velocity(movement)
                     self.localisation.set_angular_velocity(rotation)
                     #self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, "SUCCESS")
                     continue
+                else:
+                    for movement in robot_movements:
+                        self.send_response(conn, movement, state)
 
 
 
                 for movement in robot_movements:
                     self.localisation.velocity = movement[0]
                     self.localisation.angular_velocity = movement[1]
-                    self.localisation.time_difference = milliseconds
                     self.send_response(conn, movement, state)
 
             
 
     
     def draw_image_information(self, image_information, image):
+        print(image_information)
         (x1, y1, x2, y2) = image_information["position"]
         orientation = image_information["orientation"]
         bounding_box_area = image_information["bounding_box_area"]
@@ -143,7 +204,7 @@ class ServerCommunication():
         width = x2 - x1
         height = y2 - y1
 
-        center_x = (x1 + y2) / 2
+        center_x = (x1 + x2) / 2
         center_y = (y1 + y2) / 2
 
         
@@ -237,11 +298,9 @@ class ServerCommunication():
         movement = parsed_data['movement']
         rotation = parsed_data['rotation']
 
-        time = parsed_data["time"]
-
         
 
-        return image, state, movement, rotation, time
+        return image, state, movement, rotation
 
     """def save_image(image):
         # Define a filename for the saved PNG image

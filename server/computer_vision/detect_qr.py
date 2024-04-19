@@ -90,8 +90,6 @@ class DetectQR:
         if(len(valid_results) == 0):
             return
 
-        assert(len(valid_results) == 1)
-
         result = valid_results[0]
         return result
     
@@ -181,7 +179,7 @@ class DetectQR:
             distances.append(approx_distance)
 
             print(f"qr distance: {approx_distance}")
-            cv2.putText(frame, str(approx_distance), (points[3], points[4]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+            cv2.putText(frame, "distance: " + str(approx_distance), (points[3], points[4]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
             labels_to_distances[label] = approx_distance
 

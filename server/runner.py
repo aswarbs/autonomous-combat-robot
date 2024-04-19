@@ -11,12 +11,13 @@ HOST = "127.0.0.1"
 PORT = 2345
 
 
+
 """
 # REAL
 HOST = "192.168.0.14"
 PORT = 9999
 """
-
+ 
 
 if __name__ == "__main__":
     localisation = Localisation()
@@ -33,4 +34,4 @@ if __name__ == "__main__":
     
 
     while True: 
-        localisation.root.update()
+       localisation.root.update()
