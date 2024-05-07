@@ -86,9 +86,6 @@ class ServerCommunication():
 
     def bind_socket(self):
 
-        self.run_on_vid()
-        return
-
         # Create a socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
@@ -167,7 +164,7 @@ class ServerCommunication():
 
                 if image_information is not None and len(image_information) > 0:
                     self.draw_image_information(image_information[0], image)
-                robot_movements, state = self.process_information(image_information, qr_information)
+                robot_movements, state, attack = self.process_information(image_information, qr_information)
 
 
                 cv2.imshow('ROBOT POV', image)
@@ -178,20 +175,14 @@ class ServerCommunication():
                     self.localisation.set_velocity(movement)
                     self.localisation.set_angular_velocity(rotation)
                     #self.localisation.time_difference = milliseconds
-                    self.send_response(conn, movement, "SUCCESS")
+                    self.send_response(conn, movement, "SUCCESS", attack)
                     continue
                 else:
                     for movement in robot_movements:
-                        self.send_response(conn, movement, state)
+                        self.send_response(conn, movement, state, attack)
 
 
 
-                for movement in robot_movements:
-                    self.localisation.velocity = movement[0]
-                    self.localisation.angular_velocity = movement[1]
-                    self.send_response(conn, movement, state)
-
-            
 
     
     def draw_image_information(self, image_information, image):
@@ -232,9 +223,9 @@ class ServerCommunication():
         image_information: The information about the image.
         """
         
-        robot_movements, state = self.decider.run(image_information, qr_information, self.localisation.position)
+        robot_movements, state, attack = self.decider.run(image_information, qr_information, self.localisation.position)
 
-        return robot_movements, state
+        return robot_movements, state, attack
 
 
 
@@ -311,7 +302,8 @@ class ServerCommunication():
 
 
 
-    def send_response(self, conn, robot_movements, state):
+    def send_response(self, conn, robot_movements, state, attack):
 
-        success_response = {"status": "success", "movements": robot_movements, "state": state}
+        success_response = {"status": "success", "movements": robot_movements, "state": state, "attack": attack}
+        print(f"sending: {success_response}")
         conn.send(json.dumps(success_response).encode('utf-8') + b'\n')

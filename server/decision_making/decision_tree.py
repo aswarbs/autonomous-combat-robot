@@ -37,6 +37,7 @@ class DecisionTree():
 
         self.position = position
         self.player_position = player_position
+        attack = False
 
         print("RUNNING DECISION TREE")
 
@@ -53,6 +54,7 @@ class DecisionTree():
             if((orientation < -135 and orientation > -180) or (orientation > 135 and orientation < 180)):
                 # facing the back of the cube, attack
                 print("ATTACK")
+                attack = True
                 
 
             if(orientation > -45 and orientation < 45):
@@ -69,17 +71,15 @@ class DecisionTree():
 
         if self.state == "RANDOM_WALK":
             rotations = self.random_walk()
-            movement = self.MOVEMENT_CONST
+            movement = random.uniform(0, self.MOVEMENT_CONST)
             
         elif self.state =="FOLLOW":
             rotations = self.follow()
-            movement = self.MOVEMENT_CONST
-            print(f"sending {[(self.MOVEMENT_CONST, x) for x in rotations]}")
+            movement = random.uniform(0, self.MOVEMENT_CONST)
         elif self.state == "FLEE":
             # follow but move
             rotations = self.follow()
-            movement = -self.MOVEMENT_CONST
-            print(f"sending {[(-self.MOVEMENT_CONST, x) for x in rotations]}")
+            movement = random.uniform(-self.MOVEMENT_CONST, 0)
 
         else:
             print(f"state is not in valid states: {self.state}")
@@ -89,7 +89,7 @@ class DecisionTree():
         for x in rotations:
             print(movement, x)
             
-        return [(movement, x) for x in rotations], self.state
+        return [(movement, x) for x in rotations], self.state, attack
 
     def follow(self):
         # from self.position = the position of the robot on the screen, 

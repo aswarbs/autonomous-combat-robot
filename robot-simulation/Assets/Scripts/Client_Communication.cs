@@ -25,6 +25,8 @@ public class ServerResponse
     public float[] movements;
 
     public string state;
+
+    public bool attack;
 }
 
 public class Client_Communication : MonoBehaviour
@@ -52,6 +54,7 @@ public class Client_Communication : MonoBehaviour
     private bool updated_robot_movements = false;
 
     private string state = "";
+    private bool attack = false;
 
     private void Start()
     {
@@ -126,7 +129,7 @@ public class Client_Communication : MonoBehaviour
         {
             if(updated_robot_movements)
             {
-                robotScript.Move(robot_movements);
+                robotScript.Move(robot_movements, attack);
                 stateLabel.text = "Current State: " + state;
                 //stateLabel.text="";
                 updated_robot_movements = false;
@@ -165,11 +168,11 @@ public class Client_Communication : MonoBehaviour
         lock(this)
         {
             robot_movements = serverResponse.movements;
-            /**string movements_str = float.Parse(robot_movements);
-            Debug.Log("robot movements: {0}", movements_str);*/
             updated_robot_movements = true;
 
             state = serverResponse.state;
+            Debug.Log(state);
+            attack = serverResponse.attack;
         }
         
 

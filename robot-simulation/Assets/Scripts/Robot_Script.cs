@@ -11,6 +11,8 @@ public class Robot_Script : MonoBehaviour
 
     public float dist;
 
+    public Attack attack_script;
+
 
     public float obj_vel = 0f;
 
@@ -86,7 +88,7 @@ public class Robot_Script : MonoBehaviour
             {
 
 
-
+                attack_script.ExecuteAttack();
 
             }
 
@@ -134,13 +136,17 @@ public class Robot_Script : MonoBehaviour
 
     }
 
-    public void Move(float[] movement_and_rotation)
+    public void Move(float[] movement_and_rotation, bool attack)
     {   
         if(movement_state == "AUTO" && movement_and_rotation.Length == 2)
         {
-            obj_vel = movement_and_rotation[0];
-            obj_ang_vel = movement_and_rotation[1];
+            obj_vel = movement_and_rotation[0] * move_speed;
+            obj_ang_vel = movement_and_rotation[1] * rotation_speed * 2;
             // retrieve ATTACK here.
+            if(attack)
+            {
+                attack_script.ExecuteAttack();
+            }
         }   
 
          

@@ -45,9 +45,9 @@ public class Attack : MonoBehaviour
     void updatePosition()
     {
         
-        aPos = origin.position;
+        aPos = transform.position;
         aPos = new Vector3(aPos.x, aPos.y + 1.5f, aPos.z);
-        bPos = origin.forward * dist + aPos;
+        bPos = transform.forward * dist + aPos;
 
 
         lineRenderer.SetPosition(0, aPos);
@@ -84,6 +84,18 @@ public class Attack : MonoBehaviour
         }
     }
 
+    public void ExecuteAttack()
+    {
+        if(counter < timeout)
+        {
+            Debug.Log("INSUFFICIENT TIME BETWEEN ATTACKS");
+            return;
+        }
+        counter = 0;
+        updatePosition();
+        checkAttack();
+    }
+
     
 
     // Update is called once per frame
@@ -92,17 +104,6 @@ public class Attack : MonoBehaviour
 
         counter += 1f / lineDrawSpeed;
         
-        if(Input.GetKey(key) && autonomous == false)
-        {
-            if(counter < timeout)
-            {
-                Debug.Log("INSUFFICIENT TIME BETWEEN ATTACKS");
-                return;
-            }
-            counter = 0;
-            updatePosition();
-            checkAttack();
-        }
 
         if (counter < 1)
         {
