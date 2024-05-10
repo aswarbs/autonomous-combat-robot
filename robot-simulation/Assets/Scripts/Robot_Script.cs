@@ -28,7 +28,11 @@ public class Robot_Script : MonoBehaviour
     private float rotation_speed = (float)Math.PI/16;
 
     public float move_speed = 5;
+
+    public float ang = 0;
     
+    public float x = 125;
+    public float y = 125;
 
 
     // Start is called before the first frame update
@@ -128,12 +132,21 @@ public class Robot_Script : MonoBehaviour
     {
 
         HandleKeyPress();
+        getVals();
 
         rb.velocity = transform.forward * obj_vel;  
         rb.angularVelocity = Vector3.up * (float)obj_ang_vel;
+        
 
         
 
+    }
+
+    public void getVals()
+    {
+        x = transform.position.x;
+        y = transform.position.z;
+        ang = transform.localRotation.eulerAngles.y;
     }
 
     public void Move(float[] movement_and_rotation, bool attack)

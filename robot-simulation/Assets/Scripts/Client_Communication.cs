@@ -16,6 +16,8 @@ public class JSONObject
     public string movementState;
     public float movement;
     public float rotation;
+
+    public float angle;
 }
 
 [Serializable]
@@ -27,6 +29,7 @@ public class ServerResponse
     public string state;
 
     public bool attack;
+
 }
 
 public class Client_Communication : MonoBehaviour
@@ -92,7 +95,7 @@ public class Client_Communication : MonoBehaviour
         byte[] screenshotBytes = screenshot.EncodeToPNG();
 
         //Debug.Log("width: " + screenshot.width + "height: " + screenshot.height);
-        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes, movementState = robotScript.movement_state, movement = robotScript.movement, rotation = robotScript.rotation};
+        var jsonObject = new JSONObject { screenshotPNG = screenshotBytes, movementState = robotScript.movement_state, movement = robotScript.x, rotation = robotScript.y, angle = robotScript.ang};
         string jsonPayloadString = JsonUtility.ToJson(jsonObject) + "\n";
         captureCamera.targetTexture = null;
         RenderTexture.active = null;

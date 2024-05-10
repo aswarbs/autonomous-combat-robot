@@ -153,7 +153,7 @@ class ServerCommunication():
                 if parsed_data is None: 
                     continue
 
-                image, self.movement_state, movement, rotation = self.convert_bytes_to_image(parsed_data)
+                image, self.movement_state, movement, rotation, ang = self.convert_bytes_to_image(parsed_data)
 
                 format = '%H:%M:%S:%f'
                 current_time = datetime.utcnow().strftime(format)[:-3]
@@ -165,21 +165,15 @@ class ServerCommunication():
                 if image_information is not None and len(image_information) > 0:
                     self.draw_image_information(image_information[0], image)
                 robot_movements, state, attack = self.process_information(image_information, qr_information)
+                self.localisation.set_vels(movement, rotation, ang)
 
 
                 cv2.imshow('ROBOT POV', image)
                 if cv2.waitKey(1) == 0xFF: 
                         return  # esc to quit
                 
-                if(self.movement_state == "MANUAL"):
-                    self.localisation.set_velocity(movement)
-                    self.localisation.set_angular_velocity(rotation)
-                    #self.localisation.time_difference = milliseconds
-                    self.send_response(conn, movement, "SUCCESS", attack)
-                    continue
-                else:
-                    for movement in robot_movements:
-                        self.send_response(conn, movement, state, attack)
+                for movement in robot_movements:
+                    self.send_response(conn, movement, state, attack)
 
 
 
@@ -288,10 +282,11 @@ class ServerCommunication():
 
         movement = parsed_data['movement']
         rotation = parsed_data['rotation']
+        ang = parsed_data["angle"]
 
         
 
-        return image, state, movement, rotation
+        return image, state, movement, rotation, ang
 
     """def save_image(image):
         # Define a filename for the saved PNG image

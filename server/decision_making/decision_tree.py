@@ -42,14 +42,24 @@ class DecisionTree():
         print("RUNNING DECISION TREE")
 
         closest_boundary = self.calculate_boundary_distance()
+
+        self.state = "RANDOM_WALK"
+
+        print(f"opponent info: {opponent_information}, orientation: {orientation}")
+
+        
         if closest_boundary[0] < self.boundary_threshold:
             print(f"\n\nNEAR BOUNDARY ON [{closest_boundary}]")
             self.localisation.print_message(f"CLOSE TO {closest_boundary[1]}: {round(closest_boundary[0],2)}m AWAY")
+            self.state = "BOUNDARY"
 
-        if(opponent_information is not None and len(opponent_information) > 0 and orientation is not None):
+
+        elif(opponent_information is not None and len(opponent_information) > 0 and orientation is not None):
             
 
             self.state="FOLLOW"
+
+        
 
             if((orientation < -135 and orientation > -180) or (orientation > 135 and orientation < 180)):
                 # facing the back of the cube, attack
@@ -65,11 +75,11 @@ class DecisionTree():
             if(area < self.area_threshold):
                 self.state = "RANDOM_WALK"
 
-            
-        else:
-            self.state="RANDOM_WALK"
 
-        if self.state == "RANDOM_WALK":
+        
+        if self.state == "BOUNDARY":
+            movement, rotations = self.boundary_avoidance(player_position, closest_boundary)
+        elif self.state == "RANDOM_WALK":
             rotations = self.random_walk()
             movement = random.uniform(0, self.MOVEMENT_CONST)
             
@@ -90,6 +100,10 @@ class DecisionTree():
             print(movement, x)
             
         return [(movement, x) for x in rotations], self.state, attack
+    
+    def boundary_avoidance(self, position, closest_boundary):
+        print(f"position: {position}. closest boundary: {closest_boundary}")
+        return -1, [0]
 
     def follow(self):
         # from self.position = the position of the robot on the screen, 

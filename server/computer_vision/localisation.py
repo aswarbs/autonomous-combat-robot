@@ -117,7 +117,10 @@ class Localisation:
         self.text_id = self.canvas.create_text(130, 50, text=self.text, fill="red", font=('Helvetica', 10, 'bold'))
 
 
-
+    def set_vels(self, x, y, ang):
+        print(f"POTATO {x} {y}")
+        self.position = (x, self.arena_height - y)
+        self.orientation = ang
     
 
     def find_orientation(self, labels_to_distances):

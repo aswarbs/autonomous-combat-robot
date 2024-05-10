@@ -197,8 +197,8 @@ class DetectQR:
                 position[1] = 250 - position[1]
                 position = tuple(position)
 
-                self.localisation.position = position
-                self.localisation.find_orientation(labels_to_distances)
+                #self.localisation.position = position
+                #self.localisation.find_orientation(labels_to_distances)
                 #cv2.putText(frame, f"position: {position[0]} {position[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
         return labels_to_distances
