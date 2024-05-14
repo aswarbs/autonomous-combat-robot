@@ -47,7 +47,17 @@ public class Attack : MonoBehaviour
         
         aPos = transform.position;
         aPos = new Vector3(aPos.x, aPos.y + 1.5f, aPos.z);
-        bPos = transform.forward * dist + aPos;
+        if(autonomous)
+        {
+            Vector3 customTransform = transform.forward;
+            customTransform.z -= 3 * (float)Math.PI / 2;
+            bPos = customTransform * dist + aPos;
+        }
+        else
+        {
+            bPos = transform.forward * dist + aPos;
+        }
+       
 
 
         lineRenderer.SetPosition(0, aPos);

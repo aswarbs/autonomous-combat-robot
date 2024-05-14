@@ -4,6 +4,7 @@ import numpy as np
 import sympy as sym
 from pyzbar import pyzbar
 import math
+from functools import lru_cache
 
 class DetectQR:
 
@@ -138,7 +139,7 @@ class DetectQR:
         # this is it
         position = [triangulation[0], (self.arena_height - triangulation[1])]
 
-        cv2.putText(frame, f"position: {triangulation[0]} {triangulation[1]}", (10,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.putText(frame, f"position: {triangulation[0]} {triangulation[1]}", (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
 
         return position
              

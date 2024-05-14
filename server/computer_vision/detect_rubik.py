@@ -3,6 +3,7 @@ import cv2
 from ultralytics import YOLO
 import numpy as np
 import os
+from functools import lru_cache
 
 
 # Specify the folder path containing the images
@@ -234,16 +235,12 @@ class ObjectDetection():
 
         return mask
 
+
+    
     def run(self, screenshot):
 
-        print("predicting")
-
         # Retrieve the results from the training model detecting where the Rubik's cubes are in the image.
-        print(f"shape: {screenshot.shape}")
         results = self.predict(screenshot)
-
-        print("predicted")
-
         
 
         # Create an empty dictionary to store information about each Rubik's cube

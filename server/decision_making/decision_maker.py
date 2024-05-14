@@ -21,16 +21,17 @@ class DecisionMaker():
         self.HORIZONTAL_MIDPOINT = int(self.IMAGE_WIDTH / 2)
         self.VERTICAL_MIDPOINT = 0
         self.AREA_THRESHOLD = 1500
-        self.BOUNDARY_THRESHOLD = 50
+        self.BOUNDARY_THRESHOLD = 35
         self.boundary_corners = boundary_corners
         self.localisation = localisation
+        self.state = "MANUAL"
         
 
-        self.state = "RANDOM_WALK"
+        self.movement_state = "RANDOM_WALK"
 
         self.model = DecisionTree(self.HORIZONTAL_MIDPOINT, self.VERTICAL_MIDPOINT, self.AREA_THRESHOLD, self. BOUNDARY_THRESHOLD, self.boundary_corners, self.localisation)
 
-    def run(self, opponent_information, qr_information, player_position):
+    def run(self, opponent_information, qr_information, player_position, player_orientation):
         """
         Run the decision making algorithm.
         opponent_information: Useful information about the image, retrieved from computer vision model.
@@ -48,8 +49,12 @@ class DecisionMaker():
             self.bounding_box_area = opponent_information[0]["bounding_box_area"]
 
 
-        
+        movement_and_rotation, self.movement_state, attack = self.model.run(opponent_information, qr_information, self.position, self.orientation, self.bounding_box_area, player_position, player_orientation)
 
-        return self.model.run(opponent_information, qr_information, self.position, self.orientation, self.bounding_box_area, player_position)
+        if self.state == "AUTO":
+            self.localisation.velocity = movement_and_rotation[0][0] * 1.5
+            self.localisation.angular_velocity = movement_and_rotation[0][1] * 0.05
+
+        return movement_and_rotation, self.movement_state, attack
         
     

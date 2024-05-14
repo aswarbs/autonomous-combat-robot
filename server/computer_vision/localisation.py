@@ -9,6 +9,8 @@ class Localisation:
         
         self.orientation = math.pi/2
 
+        self.absolute_orientation = 0
+
         self.text = ""
 
         self.arena_width = 250
@@ -73,7 +75,7 @@ class Localisation:
         self.canvas_width = self.arena_width + self.border_width
         self.canvas_height = self.arena_height + self.border_width
         
-        self.opponent_pos = (self.border_width + 22,self.border_width + (self.arena_height -202))
+        self.opponent_pos = (self.border_width + 100,self.border_width + (self.arena_height -180))
 
         
 
@@ -118,9 +120,9 @@ class Localisation:
 
 
     def set_vels(self, x, y, ang):
-        print(f"POTATO {x} {y}")
         self.position = (x, self.arena_height - y)
-        self.orientation = ang
+        self.absolute_orientation = math.radians(ang)
+        self.orientation = self.absolute_orientation + math.pi/2
     
 
     def find_orientation(self, labels_to_distances):

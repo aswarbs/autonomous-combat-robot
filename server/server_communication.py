@@ -7,6 +7,7 @@ import numpy as np
 import math
 from datetime import datetime
 
+from functools import lru_cache
 
 
 class ServerCommunication():
@@ -141,17 +142,15 @@ class ServerCommunication():
         milliseconds = seconds * 1000
 
         return milliseconds / 1000000
+    
 
-
-    def run(self, conn, s):
-
-        while True:
-                
+    def run_inference(self, conn, s):
+        
                 received_data = self.receive_data(conn)
                 parsed_data = self.parse_data(received_data)
 
                 if parsed_data is None: 
-                    continue
+                     return
 
                 image, self.movement_state, movement, rotation, ang = self.convert_bytes_to_image(parsed_data)
 
@@ -174,6 +173,14 @@ class ServerCommunication():
                 
                 for movement in robot_movements:
                     self.send_response(conn, movement, state, attack)
+
+    
+    def run(self, conn, s):
+
+        while True:
+                
+
+                self.run_inference(conn, s)
 
 
 
@@ -198,7 +205,7 @@ class ServerCommunication():
 
 
 
-
+    
     def recognise_image(self,image):
         """
         Pass the image retrieved from the client to the computer vision model.
@@ -217,7 +224,7 @@ class ServerCommunication():
         image_information: The information about the image.
         """
         
-        robot_movements, state, attack = self.decider.run(image_information, qr_information, self.localisation.position)
+        robot_movements, state, attack = self.decider.run(image_information, qr_information, self.localisation.position, self.localisation.absolute_orientation)
 
         return robot_movements, state, attack
 
@@ -255,7 +262,7 @@ class ServerCommunication():
             print("failed to parse")
 
     
-
+    
     def convert_bytes_to_image(self, parsed_data):
         # Retrieve the screenshot field of the JSON message
         image_data_byte_array = parsed_data['screenshotPNG']
@@ -279,6 +286,7 @@ class ServerCommunication():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
         state = parsed_data['movementState']
+        self.decider.state = state
 
         movement = parsed_data['movement']
         rotation = parsed_data['rotation']
